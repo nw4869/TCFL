@@ -1,4 +1,4 @@
-package com.nightwind.tcfl;//package com.nightwind.tcfl;
+package com.nightwind.tcfl.adapter;//package com.nightwind.tcfl;
 //
 //import android.app.Activity;
 //import android.graphics.drawable.ColorDrawable;

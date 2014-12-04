@@ -1,14 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    android:paddingTop="16dp"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:orientation="horizontal">
+    android:orientation="vertical">
+
 
     <RelativeLayout
+        android:id="@+id/authItem"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="16dp">
+
+        <TextView
+            android:id="@+id/title0"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:text="Title" />
+
+        <ImageView
+            android:id="@+id/head"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/title0"
+            android:layout_marginTop="16dp"
+            android:src="@drawable/conan1" />
+
+        <TextView
+            android:id="@+id/username0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/head"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_toEndOf="@+id/head"
+            android:layout_toRightOf="@+id/head"
+            android:text="Username" />
+
+        <TextView
+            android:id="@+id/datetime0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/head"
+            android:layout_alignLeft="@+id/username0"
+            android:layout_alignStart="@+id/username0"
+            android:text="DateTime" />
+
+
+        <LinearLayout
+            android:id="@+id/contentLayout0"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/head"
+            android:layout_marginTop="16dp"
+            android:orientation="vertical" >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="HELLO WORLD"/>
+
+         </LinearLayout>
+
+        <!--<LinearLayout-->
+        <!--android:id="@+id/commentLayout"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="16dp"-->
+        <!--android:orientation="vertical"-->
+        <!--android:layout_below="@+id/contentLayout"-->
+        <!--android:layout_alignParentLeft="true"-->
+        <!--android:layout_alignParentStart="true">-->
+        <!--</LinearLayout>-->
+
+
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/head"
+        android:background="#1e000000" />
+
+
+    <RelativeLayout
+        android:id="@+id/commentItem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_tab"
+        android:clickable="true"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="40dp"
@@ -59,8 +152,7 @@
             android:id="@+id/imageView1"
             android:layout_alignTop="@+id/username"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginRight="16dp" />
+            android:layout_alignParentEnd="true" />
 
         <ImageView
             android:layout_width="20dp"
@@ -72,7 +164,6 @@
             android:layout_marginRight="32dp"/>
 
         <View
-            android:id="@+id/divider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#1E000000"

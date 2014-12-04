@@ -1,10 +1,12 @@
 package com.nightwind.tcfl.tool;
 
 
+import com.nightwind.tcfl.bean.ChatMsgEntity;
 import com.nightwind.tcfl.bean.CommentItem;
 import com.nightwind.tcfl.bean.MyListItem;
 import com.nightwind.tcfl.bean.NewsClassify;
 import com.nightwind.tcfl.bean.NewsEntity;
+import com.nightwind.tcfl.bean.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,9 +63,9 @@ public class Constants {
 			news.setReadStatus(false);
 			news.setNewsCategory("推荐");
 			news.setNewsCategoryId(1);
-			news.setTitle("可以用谷歌眼镜做的10件酷事：导航、玩游戏");
-			List<String> url_list = new ArrayList<String>();
-			if(i%2 == 1){
+                news.setTitle("可以用谷歌眼镜做的10件酷事：导航、玩游戏");
+                List<String> url_list = new ArrayList<String>();
+                if(i%2 == 1){
 				String url1 = "http://infopic.gtimg.com/qq_news/digi/pics/102/102066/102066094_400_640.jpg";
 				String url2 = "http://infopic.gtimg.com/qq_news/digi/pics/102/102066/102066096_400_640.jpg";
 				String url3 = "http://infopic.gtimg.com/qq_news/digi/pics/102/102066/102066099_400_640.jpg";
@@ -104,8 +106,32 @@ public class Constants {
 		return newsList;
 	}
 
-    private static ArrayList<MyListItem> mListItems;
+    private static String[] IMGURLLIST;
 
+    private static String[] SLIDEIMGURLLIST;
+
+    public static String[] getImgURLList() {
+        if (IMGURLLIST == null) {
+            ArrayList<String> imgList = new ArrayList<>();
+            for (int i = 1; i <= 8; i++) {
+                imgList.add("http://192.168.1.123/img/conan" + i + ".jpg");
+            }
+            IMGURLLIST = imgList.toArray(new String[imgList.size()]);
+        }
+        return IMGURLLIST;
+    }
+    public static String[] getSlideImgURLList() {
+        if (SLIDEIMGURLLIST == null) {
+            ArrayList<String> imgList = new ArrayList<>();
+            for (int i = 1; i <= 8; i++) {
+                imgList.add("http://192.168.1.123/img/slide/" + i + ".jpg");
+            }
+            SLIDEIMGURLLIST = imgList.toArray(new String[imgList.size()]);
+        }
+        return SLIDEIMGURLLIST;
+    }
+
+    private static ArrayList<MyListItem> mListItems;
     public static ArrayList<MyListItem> getMyListItem() {
 
         if (mListItems != null) {
@@ -116,14 +142,15 @@ public class Constants {
 
         final int NUM_ITEM = 30;
 
-        for (int i = 0; i < NUM_ITEM; i++) {
+        //0可能是滚动图片
+        for (int i = 1; i <= NUM_ITEM; i++) {
             MyListItem listItem = new MyListItem();
 
-            listItem.setTitle("Title " + (i + 1));
-            listItem.setNewsAbstract("Abstract " + (i + 1));
-            listItem.setContent("Content " + (i + 1));
-            listItem.setUsername("UserName " + (i + 1));
-            listItem.setDateTime((i + 1) + "min ago");
+            listItem.setTitle("Title " + (i));
+            listItem.setNewsAbstract("Abstract " + (i));
+            listItem.setContent("Content " + (i));
+            listItem.setUsername("UserName " + (i));
+            listItem.setDateTime((i) + "min ago");
 //            listItem.setCommentNum((i + 1));
 
 //                Bitmap bitmap;
@@ -138,8 +165,9 @@ public class Constants {
             //评论：
             Random random = new Random();
             int n = random.nextInt(10);
-            CommentItem[] commentItems = new CommentItem[n];
-            for (int j = 0; j < n; j++) {
+            //0是帖子内容
+            CommentItem[] commentItems = new CommentItem[n+1];
+            for (int j = 1; j <= n; j++) {
                 CommentItem commentItem = new CommentItem();
                 commentItem.setUsername("User" + random.nextInt(10));
                 commentItem.setDateTime(random.nextInt(10) + "min age");
@@ -154,6 +182,77 @@ public class Constants {
         return mListItems;
     }
 
+    static private ArrayList<User> users;
+    static public ArrayList<User> getUsersList() {
+        if (users != null) {
+            return users;
+        } else {
+            users = new ArrayList<>();
+
+            Random random = new Random();
+            for (int i = 1; i <= 8; i++) {
+                User user = new User();
+                user.setUid(i);
+                user.setUsername("user" + user.getUid());
+                user.setLevel(random.nextInt(100) + 1);
+                user.setAge(random.nextInt(60) + 1);
+                user.setInfo("Hello World");
+                user.setSex(random.nextInt(2));
+                user.setEdu(random.nextInt(4));
+                user.setHobby("Programming");
+
+                users.add(user);
+            }
+        }
+        return users;
+    }
+
+    private static ArrayList<ChatMsgEntity> msgs;
+    public static ArrayList<ChatMsgEntity> getMsg(int mUid1, int mUid2) {
+        if (msgs != null) {
+            return msgs;
+        } else {
+            msgs = new ArrayList<>();
+
+            String[] msgArray = new String[]{"  孩子们，要好好学习，天天向上！要好好听课，不要翘课！不要挂科，多拿奖学金！三等奖学金的争取拿二等，二等的争取拿一等，一等的争取拿励志！",
+                    "姚妈妈还有什么吩咐...",
+                    "还有，明天早上记得跑操啊，不来的就扣德育分！",
+                    "德育分是什么？扣了会怎么样？",
+                    "德育分会影响奖学金评比，严重的话，会影响毕业",
+                    "哇！学院那么不人道？",
+                    "你要是你不听话，我当场让你不能毕业！",
+                    "姚妈妈，我知错了(- -我错在哪了...)"};
+
+            String[]dataArray = new String[]{"2012-09-01 18:00", "2012-09-01 18:10",
+                    "2012-09-01 18:11", "2012-09-01 18:12",
+                    "2012-09-01 18:14", "2012-09-01 18:35",
+                    "2012-09-01 18:40", "2012-09-01 18:50"};
+            final int COUNT = 8;
+
+
+            for(int i = 0; i < COUNT; i++) {
+                ChatMsgEntity entity = new ChatMsgEntity();
+                entity.setDate(dataArray[i]);
+                if (i % 2 == 0)
+                {
+                    entity.setName("姚妈妈");
+                    entity.setMsgType(true);
+                }else{
+                    entity.setName("Shamoo");
+                    entity.setMsgType(false);
+                }
+
+                entity.setText(msgArray[i]);
+                msgs.add(entity);
+            }
+        }
+        return msgs;
+    }
+
+
+
+
+
 
 	
 	/** mark=0 ：推荐 */
@@ -166,4 +265,5 @@ public class Constants {
 	public final static int mark_exclusive = 3;
 	/** mark=4 ：收藏 */
 	public final static int mark_favor = 4;
+
 }

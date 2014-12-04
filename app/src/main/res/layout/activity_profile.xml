@@ -1,0 +1,269 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.nightwind.tcfl.activity.ProfileActivity">
+
+    <include layout="@layout/toolbar"
+        android:id="@+id/toolbar"/>
+
+    <RelativeLayout
+        android:id="@+id/item0"
+        android:layout_below="@id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+        <ImageView
+            android:id="@+id/head"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/conan1"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+        <TextView
+            android:id="@+id/username"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nightwind"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_toRightOf="@+id/head"
+            android:layout_toEndOf="@+id/head" />
+        <TextView
+            android:id="@+id/sign"
+            style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="HelloWorld"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:singleLine="false"
+            android:layout_below="@id/username"
+            android:layout_alignLeft="@+id/username"
+            android:layout_alignStart="@+id/username" />
+
+    </RelativeLayout>
+    <View
+        android:id="@+id/divider1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/item0"
+        android:background="#1e000000" />
+
+
+    <RelativeLayout
+        android:id="@+id/item1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/divider1"
+        android:background="@drawable/background_tab"
+        android:padding="16dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+        <TextView
+            android:id="@+id/tv_name1"
+            style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="等级"
+            android:gravity="center_horizontal"/>
+        <TextView
+            android:id="@+id/tv_data1"
+            style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="7级"
+            android:gravity="center_horizontal"
+            android:layout_marginLeft="80dp" />
+    </RelativeLayout>
+    <!--分隔符-->
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/item1"
+        android:background="#1e000000" />
+
+    <RelativeLayout
+        android:id="@+id/item2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/divider2"
+        android:background="@drawable/background_tab"
+        android:padding="16dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+        <TextView
+            android:id="@+id/tv_name2"
+            style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="年龄"
+            android:gravity="center_horizontal" />
+        <TextView
+            android:id="@+id/tv_data2"
+            style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="20岁"
+            android:gravity="center_horizontal"
+            android:layout_marginLeft="80dp" />
+    </RelativeLayout>
+    <!--分隔符-->
+    <View
+        android:id="@+id/divider3"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/item2"
+        android:background="#1e000000" />
+
+    <RelativeLayout
+        android:id="@+id/item3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/divider3"
+        android:background="@drawable/background_tab"
+        android:padding="16dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+        <TextView
+            android:id="@+id/tv_name3"
+            style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="性别"
+            android:gravity="center_horizontal" />
+        <TextView
+            android:id="@+id/tv_data3"
+            style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="男"
+            android:gravity="center_horizontal"
+            android:layout_marginLeft="80dp" />
+    </RelativeLayout>
+    <!--分隔符-->
+    <View
+        android:id="@+id/divider4"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/item3"
+        android:background="#1e000000" />
+
+    <RelativeLayout
+        android:id="@+id/item4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/divider4"
+        android:background="@drawable/background_tab"
+        android:padding="16dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+        <TextView
+            android:id="@+id/tv_name4"
+            style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="职业"
+            android:gravity="center_horizontal" />
+        <TextView
+            android:id="@+id/tv_data4"
+            style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="IT"
+            android:gravity="center_horizontal"
+            android:layout_marginLeft="80dp" />
+    </RelativeLayout>
+    <!--分隔符-->
+    <View
+        android:id="@+id/divider5"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/item4"
+        android:background="#1e000000" />
+
+
+    <RelativeLayout
+        android:id="@+id/item5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/divider5"
+        android:background="@drawable/background_tab"
+        android:padding="16dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+        <TextView
+            android:id="@+id/tv_name5"
+            style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="学历"
+            android:gravity="center_horizontal" />
+        <TextView
+            android:id="@+id/tv_data5"
+            style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="本科"
+            android:gravity="center_horizontal"
+            android:layout_marginLeft="80dp" />
+    </RelativeLayout>
+    <!--分隔符-->
+    <View
+        android:id="@+id/divider6"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/item5"
+        android:background="#1e000000" />
+
+    <RelativeLayout
+        android:id="@+id/item6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/divider6"
+        android:background="@drawable/background_tab"
+        android:padding="16dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+        <TextView
+            android:id="@+id/tv_name6"
+            style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="爱好"
+            android:gravity="center_horizontal" />
+        <TextView
+            android:id="@+id/tv_data6"
+            style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="女"
+            android:gravity="center_horizontal"
+            android:layout_marginLeft="80dp" />
+    </RelativeLayout>
+    <!--分隔符-->
+    <View
+        android:id="@+id/divider7"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/item6"
+        android:background="#1e000000" />
+
+</RelativeLayout>

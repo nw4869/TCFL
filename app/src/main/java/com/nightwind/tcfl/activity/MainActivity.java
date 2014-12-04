@@ -1,4 +1,4 @@
-package com.nightwind.tcfl;
+package com.nightwind.tcfl.activity;
 
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
@@ -22,6 +22,10 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.widget.Toast;
 
+import com.nightwind.tcfl.R;
+import com.nightwind.tcfl.fragment.MyRecyclerFragment;
+import com.nightwind.tcfl.fragment.PersonCenterFragment;
+import com.nightwind.tcfl.fragment.SuperAwesomeCardFragment;
 import com.nightwind.tcfl.widget.PagerSlidingTabStrip;
 
 public class MainActivity extends ActionBarActivity implements PersonCenterFragment.OnFragmentInteractionListener{
@@ -220,7 +224,7 @@ public class MainActivity extends ActionBarActivity implements PersonCenterFragm
     /* ***************FragmentPagerAdapter***************** */
 	public class MyPagerAdapter extends FragmentPagerAdapter {
 
-		private final String[] TITLES = { "分类", "主页", "热门推荐", "热门收藏", "本月热榜", "今日热榜", "专栏", "随机" };
+		private final String[] TITLES = { "主页", "热门推荐", "热门收藏", "本月热榜", "今日热榜", "专栏", "科技", "随机" };
 
 		public MyPagerAdapter(FragmentManager fm) {
 			super(fm);
@@ -238,10 +242,17 @@ public class MainActivity extends ActionBarActivity implements PersonCenterFragm
 
 		@Override
 		public Fragment getItem(int position) {
-            if (position == 1) {
-                return MyRecyclerFragment.newInstance(position);
+//            if (position == 1) {
+//                return MyRecyclerFragment.newInstance(position);
+//            }
+//			return SuperAwesomeCardFragment.newInstance(position);
+            int type;
+            if (position == 0) {
+                type = MyRecyclerFragment.TYPE_WITH_SLIDE_IMAGE;
+            } else {
+                type = MyRecyclerFragment.TYPE_NORMAL;
             }
-			return SuperAwesomeCardFragment.newInstance(position);
+            return MyRecyclerFragment.newInstance(position, type);
 		}
 
 	}

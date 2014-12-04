@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.nightwind.tcfl.MainActivity" >
+    tools:context="com.nightwind.tcfl.activity.MainActivity" >
 
     <include layout="@layout/toolbar" />
 
@@ -54,7 +54,7 @@
             android:layout_gravity="start"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:name="com.nightwind.tcfl.PersonCenterFragment"
+            android:name="com.nightwind.tcfl.fragment.PersonCenterFragment"
             android:id="@+id/drawer_view"
             tools:layout="@layout/fragment_person_center" />
 

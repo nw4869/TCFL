@@ -6,6 +6,7 @@ package com.nightwind.tcfl.bean;
 public class User {
     private int uid, level, age, sex, edu;
     private String username, password, salt, email, work, info, school, tel;
+    private String hobby;
 
     public int getUid() {
         return uid;
@@ -109,5 +110,13 @@ public class User {
 
     public void setTel(String tel) {
         this.tel = tel;
+    }
+
+    public String getHobby() {
+        return hobby;
+    }
+
+    public void setHobby(String hobby) {
+        this.hobby = hobby;
     }
 }

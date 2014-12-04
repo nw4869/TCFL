@@ -1,12 +1,18 @@
-package com.nightwind.tcfl;
+package com.nightwind.tcfl.fragment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
+
+import com.nightwind.tcfl.activity.FriendsActivity;
+import com.nightwind.tcfl.activity.ProfileActivity;
+import com.nightwind.tcfl.R;
 
 
 /**
@@ -61,24 +67,27 @@ public class PersonCenterFragment extends Fragment implements View.OnClickListen
         // Inflate the layout for this fragment
         View v =  inflater.inflate(R.layout.fragment_person_center, container, false);
 
+        ImageView head = (ImageView) v.findViewById(R.id.head);
+        RelativeLayout menu0 = (RelativeLayout) v.findViewById(R.id.menu0);
         RelativeLayout menu1 = (RelativeLayout) v.findViewById(R.id.menu1);
         RelativeLayout menu2 = (RelativeLayout) v.findViewById(R.id.menu2);
         RelativeLayout menu3 = (RelativeLayout) v.findViewById(R.id.menu3);
         RelativeLayout menu4 = (RelativeLayout) v.findViewById(R.id.menu4);
+        RelativeLayout menu5 = (RelativeLayout) v.findViewById(R.id.menu5);
+        RelativeLayout menu6 = (RelativeLayout) v.findViewById(R.id.menu6);
+        RelativeLayout menu7 = (RelativeLayout) v.findViewById(R.id.menu7);
+
+        head.setOnClickListener(this);
+        menu0.setOnClickListener(this);
         menu1.setOnClickListener(this);
         menu2.setOnClickListener(this);
         menu3.setOnClickListener(this);
         menu4.setOnClickListener(this);
+        menu5.setOnClickListener(this);
+        menu6.setOnClickListener(this);
+        menu7.setOnClickListener(this);
 
         return v;
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onListPressed(int id) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(id);
-
-        }
     }
 
     @Override
@@ -98,10 +107,33 @@ public class PersonCenterFragment extends Fragment implements View.OnClickListen
         mListener = null;
     }
 
+    // TODO: Rename method, update argument and hook method into UI event
+    public void onListPressed(int id) {
+        if (mListener != null) {
+            getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+            if (id == 0) {
+                Intent intent = new Intent(getActivity(), ProfileActivity.class);
+                startActivity(intent);
+            } else if (id == 1) {
+                Intent intent = new Intent(getActivity(), FriendsActivity.class);
+                startActivity(intent);
+            } else {
+
+                mListener.onFragmentInteraction(id);
+            }
+
+
+        }
+    }
+
     @Override
     public void onClick(View v) {
         int id;
         switch (v.getId()) {
+            case R.id.head:
+            case R.id.menu0:
+                id = 0;
+                break;
             case R.id.menu1:
                 id = 1;
                 break;
@@ -113,6 +145,15 @@ public class PersonCenterFragment extends Fragment implements View.OnClickListen
                 break;
             case R.id.menu4:
                 id = 4;
+                break;
+            case R.id.menu5:
+                id = 5;
+                break;
+            case R.id.menu6:
+                id = 6;
+                break;
+            case R.id.menu7:
+                id = 7;
                 break;
             default:
                 id = -1;

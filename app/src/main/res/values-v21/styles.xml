@@ -4,6 +4,32 @@
 
         <!-- 底部导航栏颜色 -->
         <!--<item name="android:navigationBarColor">#4876FF</item>-->
+
+        <!-- <item name="android:windowAnimationStyle">@style/Animation.Activity.Style</item> -->
+        <item name="android:windowAnimationStyle">@style/Animation.Activity.Translucent.Style</item>
+        <!--<item name="android:windowBackground">@android:color/transparent</item>-->
+        <item name="android:windowIsTranslucent">true</item>
     </style>
 
-</resources>
+
+    <style name="Animation.Activity.Style" parent="@android:style/Animation.Activity">
+    <item name="android:activityOpenEnterAnimation">@anim/slide_right_in</item>
+    <!--<item name="android:activityOpenExitAnimation">@anim/base_stay_orig</item>-->
+    <!--<item name="android:activityCloseEnterAnimation">@anim/base_stay_orig</item>-->
+    <item name="android:activityCloseExitAnimation">@anim/slide_left_out</item>
+    <item name="android:taskOpenEnterAnimation">@anim/slide_right_in</item>
+    <!--<item name="android:taskOpenExitAnimation">@anim/base_stay_orig</item>-->
+    <!--<item name="android:taskCloseEnterAnimation">@anim/base_stay_orig</item>-->
+    <item name="android:taskCloseExitAnimation">@anim/slide_left_out</item>
+    <item name="android:taskToFrontEnterAnimation">@anim/slide_right_in</item>
+    <!--<item name="android:taskToFrontExitAnimation">@anim/base_stay_orig</item>-->
+    <!--<item name="android:taskToBackEnterAnimation">@anim/base_stay_orig</item>-->
+    <item name="android:taskToBackExitAnimation">@anim/slide_left_out</item>
+    </style>
+
+    <style name="Animation.Activity.Translucent.Style" parent="@android:style/Animation.Translucent">
+    <item name="android:windowEnterAnimation">@anim/slide_right_in</item>
+    <item name="android:windowExitAnimation">@anim/slide_left_out</item>
+</style>
+
+    </resources>

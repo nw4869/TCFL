@@ -1,44 +1,30 @@
-package com.nightwind.tcfl;
+package com.nightwind.tcfl.activity;
 
-import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.nightwind.tcfl.bean.MyListItem;
-import com.nightwind.tcfl.tool.Constants;
-
-import java.util.Random;
+import com.nightwind.tcfl.R;
 
 
-public class ContentActivity extends ActionBarActivity implements View.OnTouchListener, GestureDetector.OnGestureListener {
-
-    private MyListItem mMylistItem;
-
-    //Comment Items
-    private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
+public class ProfileActivity extends ActionBarActivity implements View.OnTouchListener, GestureDetector.OnGestureListener {
 
     private Toolbar mToolbar;
-
     private GestureDetector mGestureDetector;
 
     private final int verticalMinDistance = 50;
     private final int minVelocity         = 0;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_content);
+        setContentView(R.layout.activity_profile);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         // toolbar.setLogo(R.drawable.ic_launcher);
@@ -47,47 +33,16 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        int id = getIntent().getIntExtra("id", 0);
-        mMylistItem = Constants.getMyListItem().get(id);
+        overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
 
-        Random random = new Random();
-        for (int i = 0; i < mMylistItem.getCommentNum(); i++) {
-            mMylistItem.getCommentItems()[i].setImg(Constants.getMyListItem().get(random.nextInt(mMylistItem.getCommentNum())).getImg());
-        }
-
-        TextView tvUsername = (TextView) findViewById(R.id.username);
-        TextView tvDateTime = (TextView) findViewById(R.id.datetime);
-        TextView tvTitle = (TextView) findViewById(R.id.title);
-        LinearLayout contentLayout = (LinearLayout) findViewById(R.id.contentLayout);
-        TextView tvContent = new TextView(this);
-
-
-        tvUsername.setText(mMylistItem.getUsername());
-        tvTitle.setText(mMylistItem.getTitle());
-        tvDateTime.setText(mMylistItem.getDateTime());
-
-        tvContent.setText(mMylistItem.getContent());
-        contentLayout.addView(tvContent);
-
-
-        mRecyclerView = (RecyclerView) findViewById(R.id.comment_recycler_view);
-        mRecyclerView.setHasFixedSize(true);
-
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-
-        mAdapter = new CommentAdapter(this, mMylistItem.getCommentItems());
-        mRecyclerView.setAdapter(mAdapter);
-
-        mGestureDetector = new GestureDetector(this, (GestureDetector.OnGestureListener) this);
-
+        mGestureDetector = new GestureDetector(this, this);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_content, menu);
+        getMenuInflater().inflate(R.menu.menu_profile, menu);
         return true;
     }
 
@@ -104,9 +59,10 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
         } else if (id == android.R.id.home) {
             finish();
         }
-
         return super.onOptionsItemSelected(item);
     }
+
+
 
 
 

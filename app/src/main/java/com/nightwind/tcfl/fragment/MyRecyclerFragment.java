@@ -1,7 +1,6 @@
-package com.nightwind.tcfl;
+package com.nightwind.tcfl.fragment;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
@@ -16,6 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.nightwind.tcfl.adapter.MyAdapter;
+import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.bean.MyListItem;
 import com.nightwind.tcfl.tool.Constants;
 
@@ -25,14 +26,18 @@ import java.util.ArrayList;
 public class MyRecyclerFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
     private static final String ARG_POSITION = "position";
+    private static final String ARG_TYPE = "type";
+
+    public static final int TYPE_NORMAL = 0;
+    public static final int TYPE_WITH_SLIDE_IMAGE = 1;
+
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     private int position;
+    private int type;
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -52,10 +57,11 @@ public class MyRecyclerFragment extends Fragment {
      * @return A new instance of fragment MyCardFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static MyRecyclerFragment newInstance(int position) {
+    public static MyRecyclerFragment newInstance(int position, int type) {
         MyRecyclerFragment fragment = new MyRecyclerFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_POSITION, position);
+        args.putInt(ARG_TYPE, type);
         fragment.setArguments(args);
         return fragment;
     }
@@ -70,6 +76,7 @@ public class MyRecyclerFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             position = getArguments().getInt(ARG_POSITION);
+            type = getArguments().getInt(ARG_TYPE);
         }
         initData();
     }
@@ -117,7 +124,7 @@ public class MyRecyclerFragment extends Fragment {
 
 //        mAdapter = new MyAdapter(getActivity(), myDataset, bitmaps);
 //        mAdapter = new MyAdapter(getActivity(), listItems);
-        mAdapter = new MyAdapter(getActivity(), myListItems.toArray(new MyListItem[myListItems.size()]));
+        mAdapter = new MyAdapter(getActivity(), myListItems.toArray(new MyListItem[myListItems.size()]), type);
         mRecyclerView.setAdapter(mAdapter);
 
         return v;
@@ -159,7 +166,9 @@ public class MyRecyclerFragment extends Fragment {
         }
 
         Bitmap output = Bitmap.createBitmap(width,
-                height, Bitmap.Config.ARGB_8888);
+                height,
+//                Bitmap.Config.ARGB_8888);
+                Bitmap.Config.RGB_565);
         Canvas canvas = new Canvas(output);
 
         final int color = 0xff424242;
@@ -181,48 +190,21 @@ public class MyRecyclerFragment extends Fragment {
 
 
     private void initData() {
-//        newsList = Constants.getNewsList();
-
-//        myListItems = Constants.getMyListItem();
-
-        final int NUM_ITEM = 30;
-
         myListItems = Constants.getMyListItem();
 
-        for (int i = 0; i < NUM_ITEM; i++) {
-//            MyListItem listItem = new MyListItem();
-//
-//            listItem.setTitle("Title " + (i + 1));
-//            listItem.setNewsAbstract("Abstract " + (i + 1));
-//            listItem.setUsername("UserName " + (i + 1));
-//            listItem.setDateTime((i+1) + "min ago");
-//            listItem.setCommentNum((i + 1));
 
-            Bitmap bitmap;
-            if (i < 8) {
-                bitmap = toRoundBitmap(BitmapFactory.decodeResource(getResources(), drawables[i % 8]));
-            } else {
-//                bitmap = listItems[i % 8].getImg();
-                bitmap = myListItems.get(i%8).getImg();
-            }
-//            listItem.setImg(bitmap);
-
-            myListItems.get(i).setImg(bitmap);
-
-//            //评论：
-//            Random random = new Random();
-//            int n = random.nextInt(10);
-//            for (int j = 0; j < n; j++) {
-//                CommentItem commentItem = new CommentItem();
-//                commentItem.setUsername("User" + random.nextInt(10));
-//                commentItem.setDateTime(random.nextInt(10) + "min age");
-//                commentItem.setContent("Hello World" + random.nextInt(10));
-//                commentItem.setImg(myListItems.get(random.nextInt(NUM_ITEM)).getImg());
+//        final int NUM_ITEM = 30;
+//        //加载bitmap
+//        for (int i = 0; i < NUM_ITEM; i++) {
+//            Bitmap bitmap;
+//            if (i < 8) {
+//                bitmap = toRoundBitmap(BitmapFactory.decodeResource(getResources(), drawables[i % 8]));
+//            } else {
+////                bitmap = listItems[i % 8].getImg();
+//                bitmap = myListItems.get(i%8).getImg();
 //            }
-
-
-//            listItems[i] = listItem;
-//            myListItems.add(listItem);
-        }
+////            listItem.setImg(bitmap);
+//            myListItems.get(i).setImg(bitmap);
+//        }
     }
 }
