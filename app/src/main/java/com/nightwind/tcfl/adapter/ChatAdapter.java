@@ -11,7 +11,8 @@ import android.widget.TextView;
 
 import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.bean.ChatMsgEntity;
-import com.nightwind.tcfl.tool.Constants;
+import com.nightwind.tcfl.bean.User;
+import com.nightwind.tcfl.tool.Dummy;
 import com.nightwind.tcfl.tool.Options;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -33,6 +34,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     public static int IMVT_TO_MSG = 1;
 
     private List<ChatMsgEntity> mData;
+    private int uid1;
+    private int uid2;
 
     private Context mContext;
 
@@ -40,10 +43,11 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     DisplayImageOptions options = Options.getListOptions();
     protected ImageLoader imageLoader = ImageLoader.getInstance();
 
-    public ChatAdapter(Context mContext, List<ChatMsgEntity> data) {
+    public ChatAdapter(Context mContext, List<ChatMsgEntity> data, int uid1, int uid2) {
         this.mContext = mContext;
         this.mData = data;
-
+        this.uid1 = uid1;
+        this.uid2 = uid2;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -112,6 +116,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             }
         }
         if (!data.isComMeg()) {
+            //自己
             holder.left.setVisibility(View.GONE);
             holder.right.setVisibility(View.VISIBLE);
             holder.chatcontentRight.setText(data.getText());
@@ -120,7 +125,19 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             }
             holder.timeRight.setText(data.getDate());
             //从服务器加载图片
-            imageLoader.displayImage(Constants.getImgURLList()[0], holder.userheadRight, options);
+//            imageLoader.displayImage(Dummy.getImgURLList()[0], holder.userheadRight, options);
+            User user = Dummy.getUser(uid1);
+            if (user != null) {
+                imageLoader.displayImage(user.getAvaterUrl(), holder.userheadRight, options);
+            }
+
+
+//            User user = Dummy.getUser(mCommentItems[position].getUsername());
+//            if (user != null) {
+//                imageLoader.displayImage(user.getAvaterUrl(), holder.imageView1, options);
+//            }
+//            imageLoader.displayImage(user.getAvaterUrl(), holder.imageView1, options);
+
         } else {
             holder.left.setVisibility(View.VISIBLE);
             holder.right.setVisibility(View.GONE);
@@ -130,7 +147,11 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             }
             holder.timeLeft.setText(data.getDate());
             //从服务器加载图片
-            imageLoader.displayImage(Constants.getImgURLList()[1], holder.userheadLeft, options);
+//            imageLoader.displayImage(Dummy.getImgURLList()[1], holder.userheadLeft, options);
+            User user = Dummy.getUser(uid2);
+            if (user != null) {
+                imageLoader.displayImage(user.getAvaterUrl(), holder.userheadLeft, options);
+            }
         }
     }
 

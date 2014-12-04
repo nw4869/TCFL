@@ -1,7 +1,6 @@
 package com.nightwind.tcfl.fragment;
 
 import android.app.Activity;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,7 +12,7 @@ import android.view.ViewGroup;
 import com.nightwind.tcfl.adapter.FriendsAdapter;
 import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.bean.User;
-import com.nightwind.tcfl.tool.Constants;
+import com.nightwind.tcfl.tool.Dummy;
 
 import java.util.ArrayList;
 
@@ -36,7 +35,7 @@ public class FriendsFragment extends Fragment{
     private String mParam1;
     private String mParam2;
 
-    private ArrayList<User> mUsersList;
+    private ArrayList<User> mFriendsList = new ArrayList<>();
 
     //recyclerView
     private RecyclerView mRecyclerView;
@@ -80,7 +79,12 @@ public class FriendsFragment extends Fragment{
     }
 
     private void initData() {
-        mUsersList = Constants.getUsersList();
+//        mFriendsList = Dummy.getUsersList();
+        ArrayList<Integer> friends = Dummy.getSelfUser().getFriendsList();
+
+        for (Integer uid: friends) {
+            mFriendsList.add(Dummy.getUser(uid));
+        }
     }
 
     @Override
@@ -94,7 +98,7 @@ public class FriendsFragment extends Fragment{
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new FriendsAdapter(getActivity(), mUsersList.toArray(new User[mUsersList.size()]));
+        mAdapter = new FriendsAdapter(getActivity(), mFriendsList.toArray(new User[mFriendsList.size()]));
         mRecyclerView.setAdapter(mAdapter);
 
         return rootView;

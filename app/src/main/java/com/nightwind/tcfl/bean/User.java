@@ -1,5 +1,7 @@
 package com.nightwind.tcfl.bean;
 
+import java.util.ArrayList;
+
 /**
  * Created by wind on 2014/11/29.
  */
@@ -7,6 +9,8 @@ public class User {
     private int uid, level, age, sex, edu;
     private String username, password, salt, email, work, info, school, tel;
     private String hobby;
+    private String avaterUrl;
+    private ArrayList<Integer> friendsList = new ArrayList<>();
 
     public int getUid() {
         return uid;
@@ -118,5 +122,52 @@ public class User {
 
     public void setHobby(String hobby) {
         this.hobby = hobby;
+    }
+
+
+    public String getAvaterUrl() {
+        return avaterUrl;
+    }
+
+    public void setAvaterUrl(String avaterUrl) {
+        this.avaterUrl = avaterUrl;
+    }
+
+    public ArrayList<Integer> getFriendsList() {
+        return friendsList;
+    }
+
+    public void setFriendsList(ArrayList<Integer> friendsList) {
+        this.friendsList = friendsList;
+    }
+
+
+    /**
+     * 添加好友
+     * @param uid
+     * @return
+     */
+    public boolean addFriend(int uid) {
+        if (friendsList.contains(uid)) {
+            return false;
+        } else {
+            //todo 检查用户是否存在
+            friendsList.add(uid);
+            return true;
+        }
+    }
+
+    /**
+     * 删除好友
+     * @param uid
+     * @return
+     */
+    public boolean delFriend(int uid) {
+        if (!friendsList.contains(uid)) {
+            return false;
+        } else {
+            friendsList.remove((Integer)uid);
+            return true;
+        }
     }
 }

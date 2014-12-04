@@ -13,7 +13,8 @@ import android.widget.TextView;
 import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.bean.CommentItem;
 import com.nightwind.tcfl.bean.MyListItem;
-import com.nightwind.tcfl.tool.Constants;
+import com.nightwind.tcfl.bean.User;
+import com.nightwind.tcfl.tool.Dummy;
 import com.nightwind.tcfl.tool.Options;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -55,7 +56,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         public TextView TvUsername;
         public TextView TvDateTime;
         public TextView TvContent;
-        public ImageView imageView;
+        public ImageView imageView1;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -72,7 +73,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             TvUsername = (TextView) itemView.findViewById(R.id.username);
             TvDateTime = (TextView) itemView.findViewById(R.id.datetime);
             TvContent = (TextView) itemView.findViewById(R.id.comment);
-            imageView = (ImageView) itemView.findViewById(R.id.imageView);
+            imageView1 = (ImageView) itemView.findViewById(R.id.imageView);
 
         }
     }
@@ -97,7 +98,11 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             holder.username0.setText(mMyListItem.getUsername());
             holder.dateTime0.setText(mMyListItem.getDateTime());
             //从服务器加载图片
-            imageLoader.displayImage(Constants.getImgURLList()[position % 8], holder.imageView, options);
+//            imageLoader.displayImage(Dummy.getImgURLList()[position % 8], holder.imageView1, options);
+            User user = Dummy.getUser(mMyListItem.getUsername());
+            if (user != null) {
+                imageLoader.displayImage(user.getAvaterUrl(), holder.imageView0, options);
+            }
 
             //test:ContentLayout
             TextView tvContent = new TextView(mContext);
@@ -112,9 +117,13 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             holder.TvUsername.setText(mCommentItems[position].getUsername());
             holder.TvDateTime.setText(mCommentItems[position].getDateTime());
             holder.TvContent.setText(mCommentItems[position].getContent());
-//        holder.imageView.setImageBitmap(mCommentItems[position].getImg());
+//        holder.imageView1.setImageBitmap(mCommentItems[position].getImg());
             //从服务器加载图片
-            imageLoader.displayImage(Constants.getImgURLList()[position%8], holder.imageView, options);
+//            imageLoader.displayImage(Dummy.getImgURLList()[position%8], holder.imageView1, options);
+            User user = Dummy.getUser(mCommentItems[position].getUsername());
+            if (user != null) {
+                imageLoader.displayImage(user.getAvaterUrl(), holder.imageView1, options);
+            }
         }
 
     }

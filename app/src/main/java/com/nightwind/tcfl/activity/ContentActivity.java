@@ -14,7 +14,7 @@ import android.view.View;
 import com.nightwind.tcfl.adapter.CommentAdapter;
 import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.bean.MyListItem;
-import com.nightwind.tcfl.tool.Constants;
+import com.nightwind.tcfl.tool.Dummy;
 
 
 public class ContentActivity extends ActionBarActivity implements View.OnTouchListener, GestureDetector.OnGestureListener {
@@ -45,7 +45,7 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         int id = getIntent().getIntExtra("id", 0);
-        mMylistItem = Constants.getMyListItem().get(id);
+        mMylistItem = Dummy.getMyListItem().get(id);
 
 //        //随机指定bitmap
 //        Random random = new Random();

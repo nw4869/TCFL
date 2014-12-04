@@ -1,20 +1,18 @@
 package com.nightwind.tcfl.adapter;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.activity.FriendsActivity;
 import com.nightwind.tcfl.bean.User;
-import com.nightwind.tcfl.tool.Constants;
+import com.nightwind.tcfl.tool.Dummy;
 import com.nightwind.tcfl.tool.Options;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -74,7 +72,8 @@ public class FriendsAdapter  extends RecyclerView.Adapter<FriendsAdapter.ViewHol
         holder.sign.setText(mUsers[position].getInfo());
 
         //从服务器加载图片
-        imageLoader.displayImage(Constants.getImgURLList()[position%8], holder.imageView, options);
+//        imageLoader.displayImage(Dummy.getImgURLList()[position%8], holder.imageView, options);
+        imageLoader.displayImage(mUsers[position].getAvaterUrl(), holder.imageView, options);
     }
 
     @Override

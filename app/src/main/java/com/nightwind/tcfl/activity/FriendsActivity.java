@@ -11,8 +11,10 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.nightwind.tcfl.R;
+import com.nightwind.tcfl.bean.User;
 import com.nightwind.tcfl.fragment.ChatFragment;
 import com.nightwind.tcfl.fragment.FriendsFragment;
+import com.nightwind.tcfl.tool.Dummy;
 
 
 public class FriendsActivity extends ActionBarActivity implements FriendsFragment.OnFragmentInteractionListener {
@@ -77,15 +79,16 @@ public class FriendsActivity extends ActionBarActivity implements FriendsFragmen
     }
 
     @Override
-    public void onFragmentInteraction(String msg) {
-//        Toast.makeText(this, "selected" + msg.toString(), Toast.LENGTH_SHORT).show();
+    public void onFragmentInteraction(String username) {
+//        Toast.makeText(this, "selected" + username.toString(), Toast.LENGTH_SHORT).show();
+        User user = Dummy.getUser(username);
         getSupportFragmentManager().beginTransaction()
                 .setCustomAnimations(R.anim.slide_right_in, R.anim.slide_left_out)
-                .add(R.id.container, ChatFragment.newInstance(1, 2))
+                .add(R.id.container, ChatFragment.newInstance(Dummy.getSelfUser().getUid(), user.getUid()))
                 .addToBackStack("friendsList")
                 .commit();
         mIsChatting = true;
-        getSupportActionBar().setTitle(msg);
+        getSupportActionBar().setTitle(username);
     }
 
     @Override

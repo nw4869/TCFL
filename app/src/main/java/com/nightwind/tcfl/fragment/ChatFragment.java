@@ -1,7 +1,6 @@
 package com.nightwind.tcfl.fragment;
 
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,12 +12,9 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.nightwind.tcfl.R;
-import com.nightwind.tcfl.activity.FriendsActivity;
 import com.nightwind.tcfl.adapter.ChatAdapter;
-import com.nightwind.tcfl.adapter.FriendsAdapter;
 import com.nightwind.tcfl.bean.ChatMsgEntity;
-import com.nightwind.tcfl.bean.User;
-import com.nightwind.tcfl.tool.Constants;
+import com.nightwind.tcfl.tool.Dummy;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -98,7 +94,7 @@ public class ChatFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new ChatAdapter(getActivity(), mMsgs);
+        mAdapter = new ChatAdapter(getActivity(), mMsgs, mUid1, mUid2);
         mRecyclerView.setAdapter(mAdapter);
 
         return rootView;
@@ -123,7 +119,7 @@ public class ChatFragment extends Fragment {
 //    }
 
     private void initData() {
-        mMsgs = Constants.getMsg(mUid1, mUid2);
+        mMsgs = Dummy.getMsg(mUid1, mUid2);
     }
 
 

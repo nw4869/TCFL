@@ -18,7 +18,7 @@ import android.view.ViewGroup;
 import com.nightwind.tcfl.adapter.MyAdapter;
 import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.bean.MyListItem;
-import com.nightwind.tcfl.tool.Constants;
+import com.nightwind.tcfl.tool.Dummy;
 
 import java.util.ArrayList;
 
@@ -190,7 +190,7 @@ public class MyRecyclerFragment extends Fragment {
 
 
     private void initData() {
-        myListItems = Constants.getMyListItem();
+        myListItems = Dummy.getMyListItem();
 
 
 //        final int NUM_ITEM = 30;

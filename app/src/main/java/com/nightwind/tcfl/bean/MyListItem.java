@@ -9,6 +9,7 @@ public class MyListItem {
     private String title;
     private String newsAbstract;
     private String content;
+    private int uid;
     private String username;
     private String dateTime;
     private int commentNum;
@@ -37,6 +38,14 @@ public class MyListItem {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public int getUid() {
+        return uid;
+    }
+
+    public void setUid(int uid) {
+        this.uid = uid;
     }
 
     public String getUsername() {
@@ -72,11 +81,21 @@ public class MyListItem {
     }
 
     public String getNewsAbstract() {
+        if (newsAbstract == null) {
+            if (content != null) {
+                newsAbstract = content.substring(0, Math.min(20, content.length()));
+            } else {
+                newsAbstract = "";
+            }
+        }
         return newsAbstract;
     }
 
     public void setNewsAbstract(String NewsAbstract) {
         this.newsAbstract = NewsAbstract;
     }
+
+
+    //////////////////////////////////////////////////////////////////////
 
 }

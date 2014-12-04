@@ -18,8 +18,9 @@ import android.view.ViewGroup.LayoutParams;
 import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.activity.ContentActivity;
 import com.nightwind.tcfl.bean.MyListItem;
+import com.nightwind.tcfl.bean.User;
 import com.nightwind.tcfl.fragment.MyRecyclerFragment;
-import com.nightwind.tcfl.tool.Constants;
+import com.nightwind.tcfl.tool.Dummy;
 import com.nightwind.tcfl.tool.Options;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -172,17 +173,17 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> implem
                 linerLayout.setPadding(10, 0, 10, 0);
                 linerLayout.addView(imageView, linerLayoutParames);
 
-//                group.addView(imageView);
+//                group.addView(imageView1);
                 group.addView(linerLayout);
             }
             //将图片装载到数组中
             mSlideImageViews = new ImageView[imgIdArray.length];
             for(int i=0; i< mSlideImageViews.length; i++){
                 ImageView imageView = new ImageView(mContext);
-//                imageView.setBackgroundResource(imgIdArray[i]);
+//                imageView1.setBackgroundResource(imgIdArray[i]);
                 //从服务器加载图片
-//                slideImageLoader.displayImage(Constants.getSlideImgURLList()[i % 8], imageView, slideImageOptions);
-                imageLoader.displayImage(Constants.getSlideImgURLList()[i % 8], imageView, slideImageOptions);
+//                slideImageLoader.displayImage(Constants.getSlideImgURLList()[i % 8], imageView1, slideImageOptions);
+                imageLoader.displayImage(Dummy.getSlideImgURLList()[i % 8], imageView, slideImageOptions);
                 mSlideImageViews[i] = imageView;
             }
             //设置Adapter
@@ -206,7 +207,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> implem
             holder.mTextView4.setText(mListItems[position].getCommentNum() + " reply");
 //        holder.mImageVIew.setImageBitmap(mListItems[position].getImg());
             //从服务器加载图片
-            imageLoader.displayImage(Constants.getImgURLList()[position % 8], holder.mImageView, options);
+//            imageLoader.displayImage(Dummy.getImgURLList()[position % 8], holder.mImageView, options);
+            User user = Dummy.getUser(mListItems[position].getUsername());
+            if (user != null) {
+                imageLoader.displayImage(user.getAvaterUrl(), holder.mImageView, options);
+            }
         }
 
 	}
