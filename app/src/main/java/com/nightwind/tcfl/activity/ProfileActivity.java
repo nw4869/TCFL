@@ -58,6 +58,7 @@ public class ProfileActivity extends ActionBarActivity implements View.OnTouchLi
             return true;
         } else if (id == android.R.id.home) {
             finish();
+            overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -113,6 +114,7 @@ public class ProfileActivity extends ActionBarActivity implements View.OnTouchLi
             // startActivity(intent);
 //            Toast.makeText(this, "向右手势", Toast.LENGTH_SHORT).show();
             finish();
+            overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
             return true;
         }
 

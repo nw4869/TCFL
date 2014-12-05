@@ -79,7 +79,6 @@ public class FriendsFragment extends Fragment{
     }
 
     private void initData() {
-//        mFriendsList = Dummy.getUsersList();
         ArrayList<Integer> friends = Dummy.getSelfUser().getFriendsList();
 
         for (Integer uid: friends) {
@@ -143,6 +142,15 @@ public class FriendsFragment extends Fragment{
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(String msg);
+    }
+
+    public void refreshList() {
+        ArrayList<Integer> friends = Dummy.getSelfUser().getFriendsList();
+        mFriendsList.clear();
+        for (Integer uid: friends) {
+            mFriendsList.add(Dummy.getUser(uid));
+        }
+        mAdapter.notifyDataSetChanged();
     }
 
 }

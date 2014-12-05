@@ -251,7 +251,7 @@ public class Dummy {
                 user.setAvaterUrl("http://192.168.1.123/img/conan" + uid + ".jpg");
 
                 //添加好友
-                int m = random.nextInt(ORI_USER_NUM / 2);
+                int m = random.nextInt(ORI_USER_NUM / 2) + 2;
                 for (int j = 0; j < m; j++) {
                     int friendUid = random.nextInt(ORI_USER_NUM) + 1;
                     if (friendUid == uid || !user.addFriend(friendUid)) {

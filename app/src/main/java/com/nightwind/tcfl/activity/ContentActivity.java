@@ -105,8 +105,9 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
         if (id == R.id.action_settings) {
             return true;
         } else if (id == android.R.id.home) {
-            overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+//            overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
             finish();
+            overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
         }
 
         return super.onOptionsItemSelected(item);
@@ -161,6 +162,7 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
             // startActivity(intent);
 //            Toast.makeText(this, "向右手势", Toast.LENGTH_SHORT).show();
             finish();
+            overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
             return true;
         }
 

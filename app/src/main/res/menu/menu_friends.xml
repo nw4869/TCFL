@@ -4,4 +4,6 @@
     tools:context="com.nightwind.tcfl.activity.FriendsActivity">
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
         android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_add_friend" android:title="@string/action_add_friend"
+        android:orderInCategory="1" app:showAsAction="ifRoom" />
 </menu>

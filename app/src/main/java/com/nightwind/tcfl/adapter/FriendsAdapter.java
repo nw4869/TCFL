@@ -83,4 +83,5 @@ public class FriendsAdapter  extends RecyclerView.Adapter<FriendsAdapter.ViewHol
         return mUsers.size();
     }
 
+
 }

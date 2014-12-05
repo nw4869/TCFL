@@ -110,13 +110,14 @@ public class PersonCenterFragment extends Fragment implements View.OnClickListen
     // TODO: Rename method, update argument and hook method into UI event
     public void onListPressed(int id) {
         if (mListener != null) {
-            getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
             if (id == 0) {
                 Intent intent = new Intent(getActivity(), ProfileActivity.class);
                 startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
             } else if (id == 1) {
                 Intent intent = new Intent(getActivity(), FriendsActivity.class);
                 startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
             } else {
 
                 mListener.onFragmentInteraction(id);
