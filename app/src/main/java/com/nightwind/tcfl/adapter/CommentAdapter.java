@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.nightwind.tcfl.AvatarOnClickListener;
 import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.bean.CommentItem;
 import com.nightwind.tcfl.bean.MyListItem;
@@ -67,7 +68,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             title0 = (TextView) itemView.findViewById(R.id.title0);
             username0 = (TextView) itemView.findViewById(R.id.username0);
             dateTime0 = (TextView) itemView.findViewById(R.id.datetime0);
-            imageView0 = (ImageView) itemView.findViewById(R.id.head);
+            imageView0 = (ImageView) itemView.findViewById(R.id.avatar);
             contentLayout = (LinearLayout) itemView.findViewById(R.id.contentLayout0);
             divider = itemView.findViewById(R.id.divider);
 
@@ -104,6 +105,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             User user = Dummy.getUser(mMyListItem.getUsername());
             if (user != null) {
                 imageLoader.displayImage(user.getAvaterUrl(), holder.imageView0, options);
+                holder.imageView0.setOnClickListener(new AvatarOnClickListener(mContext, user.getUsername()));
             }
 
             //test:ContentLayout
@@ -125,6 +127,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             User user = Dummy.getUser(mCommentItems.get(position).getUsername());
             if (user != null) {
                 imageLoader.displayImage(user.getAvaterUrl(), holder.imageView1, options);
+                holder.imageView1.setOnClickListener(new AvatarOnClickListener(mContext, user.getUsername()));
             }
         }
 

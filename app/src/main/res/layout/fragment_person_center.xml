@@ -15,7 +15,7 @@
             android:background="@drawable/background_tab"
             android:padding="16dp">
             <ImageView
-                android:id="@+id/head"
+                android:id="@+id/avatar"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:src="@drawable/conan1"
@@ -31,8 +31,8 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginLeft="16dp"
                 android:layout_alignParentTop="true"
-                android:layout_toRightOf="@+id/head"
-                android:layout_toEndOf="@+id/head" />
+                android:layout_toRightOf="@+id/avatar"
+                android:layout_toEndOf="@+id/avatar" />
 
             </RelativeLayout>
 

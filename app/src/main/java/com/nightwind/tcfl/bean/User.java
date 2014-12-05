@@ -1,7 +1,5 @@
 package com.nightwind.tcfl.bean;
 
-import com.nightwind.tcfl.tool.Dummy;
-
 import java.util.ArrayList;
 
 /**
@@ -14,6 +12,17 @@ public class User {
     private String avaterUrl;
     private ArrayList<Integer> friendsList = new ArrayList<>();
     private boolean online;
+
+    static public int eduNum = 6;
+    static public String[] eduStrings = {"本科", "硕士", "博士", "专科", "中学", "小学"};
+
+    public String getEduString() {
+        if (0 <= edu && edu <= eduNum) {
+            return eduStrings[edu];
+        } else {
+            return eduStrings[0];
+        }
+    }
 
     public int getUid() {
         return uid;

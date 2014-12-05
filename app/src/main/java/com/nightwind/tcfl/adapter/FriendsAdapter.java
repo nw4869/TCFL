@@ -1,6 +1,7 @@
 package com.nightwind.tcfl.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,10 +11,11 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.nightwind.tcfl.AvatarOnClickListener;
 import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.activity.FriendsActivity;
+import com.nightwind.tcfl.activity.ProfileActivity;
 import com.nightwind.tcfl.bean.User;
-import com.nightwind.tcfl.tool.Dummy;
 import com.nightwind.tcfl.tool.Options;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -40,7 +42,7 @@ public class FriendsAdapter  extends RecyclerView.Adapter<FriendsAdapter.ViewHol
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public int id;
-        public ImageView imageView;
+        public ImageView avatar;
         public TextView username;
         public TextView sign;
         public ImageView online;
@@ -56,7 +58,7 @@ public class FriendsAdapter  extends RecyclerView.Adapter<FriendsAdapter.ViewHol
                 }
             });
 
-            imageView = (ImageView) itemView.findViewById(R.id.imageView);
+            avatar = (ImageView) itemView.findViewById(R.id.imageView);
             username = (TextView) itemView.findViewById(R.id.username);
             sign = (TextView) itemView.findViewById(R.id.sign);
             online = (ImageView) itemView.findViewById(R.id.online);
@@ -73,21 +75,23 @@ public class FriendsAdapter  extends RecyclerView.Adapter<FriendsAdapter.ViewHol
 
     @Override
     public void onBindViewHolder(FriendsAdapter.ViewHolder holder, int position) {
-        holder.username.setText(mUsers.get(position).getUsername());
+        String username = mUsers.get(position).getUsername();
+
+        holder.username.setText(username);
         holder.sign.setText(mUsers.get(position).getInfo());
 
         int color = mUsers.get(position).isOnline() ? Color.GREEN : Color.RED;
         holder.online.setBackgroundColor(color);
 
         //从服务器加载图片
-//        imageLoader.displayImage(Dummy.getImgURLList()[position%8], holder.imageView, options);
-        imageLoader.displayImage(mUsers.get(position).getAvaterUrl(), holder.imageView, options);
+//        imageLoader.displayImage(Dummy.getImgURLList()[position%8], holder.avatar, options);
+        imageLoader.displayImage(mUsers.get(position).getAvaterUrl(), holder.avatar, options);
+        holder.avatar.setOnClickListener(new AvatarOnClickListener(mContext, username));
     }
 
     @Override
     public int getItemCount() {
         return mUsers.size();
     }
-
 
 }

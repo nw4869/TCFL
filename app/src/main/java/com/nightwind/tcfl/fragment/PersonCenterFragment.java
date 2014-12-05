@@ -67,7 +67,7 @@ public class PersonCenterFragment extends Fragment implements View.OnClickListen
         // Inflate the layout for this fragment
         View v =  inflater.inflate(R.layout.fragment_person_center, container, false);
 
-        ImageView head = (ImageView) v.findViewById(R.id.head);
+        ImageView head = (ImageView) v.findViewById(R.id.avatar);
         RelativeLayout menu0 = (RelativeLayout) v.findViewById(R.id.menu0);
         RelativeLayout menu1 = (RelativeLayout) v.findViewById(R.id.menu1);
         RelativeLayout menu2 = (RelativeLayout) v.findViewById(R.id.menu2);
@@ -139,7 +139,7 @@ public class PersonCenterFragment extends Fragment implements View.OnClickListen
     public void onClick(View v) {
         int id;
         switch (v.getId()) {
-            case R.id.head:
+            case R.id.avatar:
             case R.id.menu0:
                 id = 0;
                 break;

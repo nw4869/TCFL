@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.view.ViewGroup.LayoutParams;
 
+import com.nightwind.tcfl.AvatarOnClickListener;
 import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.activity.ContentActivity;
 import com.nightwind.tcfl.bean.MyListItem;
@@ -225,6 +226,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> implem
             User user = Dummy.getUser(mListItems.get(position).getUsername());
             if (user != null) {
                 imageLoader.displayImage(user.getAvaterUrl(), holder.mImageView, options);
+                holder.mImageView.setOnClickListener(new AvatarOnClickListener(mContext, user.getUsername()));
             }
 
             holder.v.setOnClickListener(new View.OnClickListener() {

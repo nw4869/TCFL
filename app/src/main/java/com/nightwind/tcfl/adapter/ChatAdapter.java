@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.nightwind.tcfl.AvatarOnClickListener;
 import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.bean.ChatMsgEntity;
 import com.nightwind.tcfl.bean.User;
@@ -129,6 +130,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             User user = Dummy.getUser(uid1);
             if (user != null) {
                 imageLoader.displayImage(user.getAvaterUrl(), holder.userheadRight, options);
+                holder.userheadRight.setOnClickListener(new AvatarOnClickListener(mContext, user.getUsername()));
             }
 
 
@@ -151,6 +153,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             User user = Dummy.getUser(uid2);
             if (user != null) {
                 imageLoader.displayImage(user.getAvaterUrl(), holder.userheadLeft, options);
+                holder.userheadLeft.setOnClickListener(new AvatarOnClickListener(mContext, user.getUsername()));
             }
         }
     }

@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
         <ImageView
-            android:id="@+id/head"
+            android:id="@+id/avatar"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/conan1"
@@ -29,8 +29,8 @@
             android:text="Nightwind"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
-            android:layout_toRightOf="@+id/head"
-            android:layout_toEndOf="@+id/head" />
+            android:layout_toRightOf="@+id/avatar"
+            android:layout_toEndOf="@+id/avatar" />
         <TextView
             android:id="@+id/sign"
             style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
@@ -72,7 +72,7 @@
             android:text="等级"
             android:gravity="center_horizontal"/>
         <TextView
-            android:id="@+id/tv_data1"
+            android:id="@+id/tv_level"
             style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -107,7 +107,7 @@
             android:text="年龄"
             android:gravity="center_horizontal" />
         <TextView
-            android:id="@+id/tv_data2"
+            android:id="@+id/tv_age"
             style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -142,7 +142,7 @@
             android:text="性别"
             android:gravity="center_horizontal" />
         <TextView
-            android:id="@+id/tv_data3"
+            android:id="@+id/tv_sex"
             style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -177,7 +177,7 @@
             android:text="职业"
             android:gravity="center_horizontal" />
         <TextView
-            android:id="@+id/tv_data4"
+            android:id="@+id/tv_work"
             style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -213,7 +213,7 @@
             android:text="学历"
             android:gravity="center_horizontal" />
         <TextView
-            android:id="@+id/tv_data5"
+            android:id="@+id/tv_edu"
             style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -248,7 +248,7 @@
             android:text="爱好"
             android:gravity="center_horizontal" />
         <TextView
-            android:id="@+id/tv_data6"
+            android:id="@+id/tv_hobby"
             style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

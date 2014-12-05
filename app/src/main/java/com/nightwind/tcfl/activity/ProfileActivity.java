@@ -8,8 +8,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.nightwind.tcfl.AvatarOnClickListener;
 import com.nightwind.tcfl.R;
+import com.nightwind.tcfl.bean.User;
+import com.nightwind.tcfl.tool.Dummy;
+import com.nightwind.tcfl.tool.Options;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 
 public class ProfileActivity extends ActionBarActivity implements View.OnTouchListener, GestureDetector.OnGestureListener {
@@ -18,7 +26,23 @@ public class ProfileActivity extends ActionBarActivity implements View.OnTouchLi
     private GestureDetector mGestureDetector;
 
     private final int verticalMinDistance = 50;
-    private final int minVelocity         = 0;
+    private final int minVelocity = 0;
+
+    private User mUser;
+
+    private ImageView mIVAvatar;
+    private TextView mTVUsername;
+    private TextView mTVSign;
+    private TextView mTVLevel;
+    private TextView mTVAge;
+    private TextView mTVSex;
+    private TextView mTVWork;
+    private TextView mTVEdu;
+    private TextView mTVHobby;
+
+    //图片下载选项
+    DisplayImageOptions options = Options.getListOptions();
+    protected ImageLoader imageLoader = ImageLoader.getInstance();
 
 
     @Override
@@ -26,16 +50,48 @@ public class ProfileActivity extends ActionBarActivity implements View.OnTouchLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        if (getIntent() != null) {
+            String username = getIntent().getStringExtra("username");
+            if (username != null) {
+                mUser = Dummy.getUser(username);
+            } else {
+                mUser = Dummy.getSelfUser();
+            }
+        }
+
+        //初始化工具栏
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         // toolbar.setLogo(R.drawable.ic_launcher);
-        mToolbar.setTitle("TCFL");// 标题的文字需在setSupportActionBar之前，不然会无效
+        mToolbar.setTitle("Profile");// 标题的文字需在setSupportActionBar之前，不然会无效
         // toolbar.setSubtitle("副标题");
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
-
+        //滑动关闭监听器
         mGestureDetector = new GestureDetector(this, this);
+
+        //修改信息
+        mIVAvatar = (ImageView) findViewById(R.id.avatar);
+        mTVUsername = (TextView) findViewById(R.id.username);
+        mTVSign = (TextView) findViewById(R.id.sign);
+        mTVLevel = (TextView) findViewById(R.id.tv_level);
+        mTVAge = (TextView) findViewById(R.id.tv_age);
+        mTVSex = (TextView) findViewById(R.id.tv_sex);
+        mTVWork = (TextView) findViewById(R.id.tv_work);
+        mTVEdu = (TextView) findViewById(R.id.tv_edu);
+        mTVHobby = (TextView) findViewById(R.id.tv_hobby);
+
+        mIVAvatar.setOnClickListener(new AvatarOnClickListener(this, mUser.getUsername()));
+        imageLoader.displayImage(mUser.getAvaterUrl(), mIVAvatar, options);
+
+        mTVUsername.setText(mUser.getUsername());
+        mTVSign.setText(mUser.getInfo());
+        mTVLevel.setText(String.valueOf(mUser.getLevel()));
+        mTVAge.setText(String.valueOf(mUser.getAge()));
+        mTVSex.setText(mUser.getSex() == 0 ? "男" : "女");
+        mTVWork.setText(mUser.getWork());
+        mTVEdu.setText(mUser.getEduString());
+        mTVHobby.setText(mUser.getHobby());
     }
 
 

@@ -244,7 +244,8 @@ public class Dummy {
                 user.setAge(random.nextInt(60) + 1);
                 user.setInfo("Hello World");
                 user.setSex(random.nextInt(2));
-                user.setEdu(random.nextInt(4));
+                user.setEdu(random.nextInt(User.eduNum));
+                user.setWork("IT");
                 user.setHobby("Programming");
 
                 //头像
