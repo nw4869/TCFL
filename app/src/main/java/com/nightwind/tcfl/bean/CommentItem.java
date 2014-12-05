@@ -9,8 +9,6 @@ public class CommentItem {
     private String content;
     private String username;
     private String dateTime;
-    private Bitmap img;
-
 
     public String getContent() {
         return content;
@@ -36,11 +34,4 @@ public class CommentItem {
         this.dateTime = dateTime;
     }
 
-    public Bitmap getImg() {
-        return img;
-    }
-
-    public void setImg(Bitmap img) {
-        this.img = img;
-    }
 }

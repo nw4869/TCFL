@@ -25,11 +25,16 @@ import com.nightwind.tcfl.tool.Options;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> implements ViewPager.OnPageChangeListener {
     private static Context mContext;
     private final int mType;
+    private final int mColId;
 
-    private MyListItem[] mListItems;
+    private ArrayList<MyListItem> mListItems;
 
     /**
      * ViewPager
@@ -73,6 +78,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> implem
         public View v;
 
         public int id;
+
+        public TextView mHeadline;
+
         public LinearLayout mListItemLayout;
         public TextView mTextView1;
         public TextView mTextView2;
@@ -88,22 +96,15 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> implem
 		public ViewHolder(View v) {
 			super(v);
             this.v = v;
+            mHeadline = (TextView) v.findViewById(R.id.headline);
+
             mListItemLayout = (LinearLayout) v.findViewById(R.id.list_item);
             mTextView1 = (TextView) v.findViewById(R.id.textView1);
             mTextView2 = (TextView) v.findViewById(R.id.textView2);
             mTextView3 = (TextView) v.findViewById(R.id.textView3);
             mTextView4 = (TextView) v.findViewById(R.id.textView4);
             mImageView = (ImageView) v.findViewById(R.id.imageView);
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-//                    Toast.makeText(mContext, "onClick " + id, Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(mContext, ContentActivity.class);
-                    intent.putExtra("id", id);
-                    mContext.startActivity(intent);
-                    ((Activity)mContext).overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
-                }
-            });
+
 
             mSlideImageLayout = (FrameLayout) v.findViewById(R.id.slideImage);
             mImageViewPager = (ViewPager) v.findViewById(R.id.viewPager);
@@ -118,10 +119,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> implem
     }
 
 	// Provide a suitable constructor (depends on the kind of dataset)
-    public MyAdapter(Context context, MyListItem[] listItems, int type) {
+    public MyAdapter(Context context, ArrayList<MyListItem> listItems, int type, int colId) {
         mContext = context;
         mListItems = listItems;
         mType = type;
+        mColId = colId;
     }
 
 	// Create new views (invoked by the layout manager)
@@ -137,45 +139,49 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> implem
 
 	// Replace the contents of a view (invoked by the layout manager)
 	@Override
-	public void onBindViewHolder(ViewHolder holder, int position) {
+	public void onBindViewHolder(ViewHolder holder, final int position) {
 		// - get element from your dataset at this position
 		// - replace the contents of the view with that element
 		System.out.println("onBindViewHolder");
 
-        if (mType == MyRecyclerFragment.TYPE_WITH_SLIDE_IMAGE && position == 0) {
-            holder.mListItemLayout.setVisibility(View.GONE);
-            holder.mSlideImageLayout.setVisibility(View.VISIBLE);
-            holder.divider.setVisibility(View.VISIBLE);
+        //循环滑动图片
+        if (position == 0) {
+            if (mType == MyRecyclerFragment.TYPE_WITH_SLIDE_IMAGE) {
 
-            viewPager = holder.mImageViewPager;
-            group = holder.mPointsViewGroup;
-            group.removeAllViews();
+                holder.mListItemLayout.setVisibility(View.GONE);
+                holder.mSlideImageLayout.setVisibility(View.VISIBLE);
+                holder.divider.setVisibility(View.VISIBLE);
+                holder.mHeadline.setVisibility(View.VISIBLE);
 
-            //将点点加入到ViewGroup中
-            tips = new ImageView[imgIdArray.length];
-            for(int i=0; i<tips.length; i++){
+                viewPager = holder.mImageViewPager;
+                group = holder.mPointsViewGroup;
+                group.removeAllViews();
 
-                ImageView imageView = new ImageView(mContext);
-                imageView.setLayoutParams(new LayoutParams(10, 10));
-                tips[i] = imageView;
-                if(i == 0){
-                    tips[i].setBackgroundResource(R.drawable.page_indicator_focused);
-                }else{
-                    tips[i].setBackgroundResource(R.drawable.page_indicator_unfocused);
-                }
+                //将点点加入到ViewGroup中
+                tips = new ImageView[imgIdArray.length];
+                for(int i=0; i<tips.length; i++){
 
-                //用LinearLayout包装一下实现padding
-                LinearLayout linerLayout = new LinearLayout(mContext);
-                LinearLayout.LayoutParams linerLayoutParames = new LinearLayout.LayoutParams(
-                        10,
-                        10,
-                        1);
-                linerLayout.setPadding(10, 0, 10, 0);
-                linerLayout.addView(imageView, linerLayoutParames);
+                    ImageView imageView = new ImageView(mContext);
+                    imageView.setLayoutParams(new LayoutParams(10, 10));
+                    tips[i] = imageView;
+                    if(i == 0){
+                        tips[i].setBackgroundResource(R.drawable.page_indicator_focused);
+                    }else{
+                        tips[i].setBackgroundResource(R.drawable.page_indicator_unfocused);
+                    }
+
+                    //用LinearLayout包装一下实现padding
+                    LinearLayout linerLayout = new LinearLayout(mContext);
+                    LinearLayout.LayoutParams linerLayoutParames = new LinearLayout.LayoutParams(
+                            10,
+                            10,
+                            1);
+                    linerLayout.setPadding(10, 0, 10, 0);
+                    linerLayout.addView(imageView, linerLayoutParames);
 
 //                group.addView(imageView1);
-                group.addView(linerLayout);
-            }
+                    group.addView(linerLayout);
+                }
             //将图片装载到数组中
             mSlideImageViews = new ImageView[imgIdArray.length];
             for(int i=0; i< mSlideImageViews.length; i++){
@@ -193,25 +199,45 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> implem
             //设置ViewPager的默认项, 设置为长度的100倍，这样子开始就能往左滑动
             viewPager.setCurrentItem((mSlideImageViews.length) * 100);
 
+            } else {
+                holder.mListItemLayout.setVisibility(View.GONE);
+                holder.mSlideImageLayout.setVisibility(View.GONE);
+                holder.divider.setVisibility(View.GONE);
+            }
 
+            holder.mHeadline.setVisibility(View.VISIBLE);
+            holder.mHeadline.setText("page " + mColId);
 
         } else {
             holder.mListItemLayout.setVisibility(View.VISIBLE);
             holder.mSlideImageLayout.setVisibility(View.GONE);
             holder.divider.setVisibility(View.GONE);
+            holder.mHeadline.setVisibility(View.GONE);
 
             holder.id = position;
-            holder.mTextView1.setText(mListItems[position].getTitle());
-            holder.mTextView2.setText(mListItems[position].getNewsAbstract());
-            holder.mTextView3.setText(mListItems[position].getUsername() + "  " + mListItems[position].getDateTime());
-            holder.mTextView4.setText(mListItems[position].getCommentNum() + " reply");
+            holder.mTextView1.setText(mListItems.get(position).getTitle());
+            holder.mTextView2.setText(mListItems.get(position).getNewsAbstract());
+            holder.mTextView3.setText(mListItems.get(position).getUsername() + "  " + mListItems.get(position).getDateTime());
+            holder.mTextView4.setText(mListItems.get(position).getCommentNum() + " reply");
 //        holder.mImageVIew.setImageBitmap(mListItems[position].getImg());
             //从服务器加载图片
 //            imageLoader.displayImage(Dummy.getImgURLList()[position % 8], holder.mImageView, options);
-            User user = Dummy.getUser(mListItems[position].getUsername());
+            User user = Dummy.getUser(mListItems.get(position).getUsername());
             if (user != null) {
                 imageLoader.displayImage(user.getAvaterUrl(), holder.mImageView, options);
             }
+
+            holder.v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+//                    Toast.makeText(mContext, "onClick " + id, Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(mContext, ContentActivity.class);
+                    intent.putExtra("rowId", position);
+                    intent.putExtra("colId", mColId);
+                    mContext.startActivity(intent);
+                    ((Activity)mContext).overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+                }
+            });
         }
 
 	}
@@ -219,7 +245,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> implem
 	// Return the size of your dataset (invoked by the layout manager)
 	@Override
 	public int getItemCount() {
-        return mListItems.length;
+        return mListItems.size();
 	}
 
 

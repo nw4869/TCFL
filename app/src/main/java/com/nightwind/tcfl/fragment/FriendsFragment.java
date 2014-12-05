@@ -98,7 +98,7 @@ public class FriendsFragment extends Fragment{
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new FriendsAdapter(getActivity(), mFriendsList.toArray(new User[mFriendsList.size()]));
+        mAdapter = new FriendsAdapter(getActivity(), mFriendsList);
         mRecyclerView.setAdapter(mAdapter);
 
         return rootView;

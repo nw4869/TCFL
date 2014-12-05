@@ -19,6 +19,8 @@ import com.nightwind.tcfl.tool.Options;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import java.util.ArrayList;
+
 /**
  * Created by wind on 2014/11/28.
  */
@@ -27,7 +29,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     private static Context mContext;
 
     private MyListItem mMyListItem;
-    private CommentItem[] mCommentItems;
+    private ArrayList<CommentItem> mCommentItems;
 
     //图片下载选项
     DisplayImageOptions options = Options.getListOptions();
@@ -114,13 +116,13 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             holder.divider.setVisibility(View.GONE);
             holder.commentItem.setVisibility(View.VISIBLE);
 
-            holder.TvUsername.setText(mCommentItems[position].getUsername());
-            holder.TvDateTime.setText(mCommentItems[position].getDateTime());
-            holder.TvContent.setText(mCommentItems[position].getContent());
+            holder.TvUsername.setText(mCommentItems.get(position).getUsername());
+            holder.TvDateTime.setText(mCommentItems.get(position).getDateTime());
+            holder.TvContent.setText(mCommentItems.get(position).getContent());
 //        holder.imageView1.setImageBitmap(mCommentItems[position].getImg());
             //从服务器加载图片
 //            imageLoader.displayImage(Dummy.getImgURLList()[position%8], holder.imageView1, options);
-            User user = Dummy.getUser(mCommentItems[position].getUsername());
+            User user = Dummy.getUser(mCommentItems.get(position).getUsername());
             if (user != null) {
                 imageLoader.displayImage(user.getAvaterUrl(), holder.imageView1, options);
             }
@@ -130,7 +132,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
     @Override
     public int getItemCount() {
-        return mCommentItems.length;
+        return mCommentItems.size();
     }
 
 }

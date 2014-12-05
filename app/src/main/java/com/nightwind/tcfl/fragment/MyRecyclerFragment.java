@@ -124,7 +124,7 @@ public class MyRecyclerFragment extends Fragment {
 
 //        mAdapter = new MyAdapter(getActivity(), myDataset, bitmaps);
 //        mAdapter = new MyAdapter(getActivity(), listItems);
-        mAdapter = new MyAdapter(getActivity(), myListItems.toArray(new MyListItem[myListItems.size()]), type);
+        mAdapter = new MyAdapter(getActivity(), myListItems, type, position);
         mRecyclerView.setAdapter(mAdapter);
 
         return v;
@@ -190,7 +190,7 @@ public class MyRecyclerFragment extends Fragment {
 
 
     private void initData() {
-        myListItems = Dummy.getMyListItem();
+        myListItems = Dummy.getMyListItem(position);
 
 
 //        final int NUM_ITEM = 30;

@@ -39,13 +39,17 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         // toolbar.setLogo(R.drawable.ic_launcher);
-        mToolbar.setTitle("TCFL");// 标题的文字需在setSupportActionBar之前，不然会无效
+//        mToolbar.setTitle("Content");// 标题的文字需在setSupportActionBar之前，不然会无效
         // toolbar.setSubtitle("副标题");
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        int id = getIntent().getIntExtra("id", 0);
-        mMylistItem = Dummy.getMyListItem().get(id);
+        int colId = getIntent().getIntExtra("colId", 0);
+        int rowId = getIntent().getIntExtra("rowId", 0);
+
+        mMylistItem = Dummy.getMyListItem(colId).get(rowId);
+
+        getSupportActionBar().setTitle(mMylistItem.getTitle());
 
 //        //随机指定bitmap
 //        Random random = new Random();

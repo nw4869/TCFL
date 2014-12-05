@@ -17,19 +17,21 @@ import com.nightwind.tcfl.tool.Options;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import java.util.ArrayList;
+
 /**
  * Created by wind on 2014/12/3.
  */
 public class FriendsAdapter  extends RecyclerView.Adapter<FriendsAdapter.ViewHolder>{
     private static Context mContext;
 
-    private User[] mUsers;
+    private ArrayList<User> mUsers;
 
     //图片下载选项
     DisplayImageOptions options = Options.getListOptions();
     protected ImageLoader imageLoader = ImageLoader.getInstance();
 
-    public FriendsAdapter(Context context, User[] users) {
+    public FriendsAdapter(Context context, ArrayList<User> users) {
         mUsers = users;
         mContext = context;
     }
@@ -68,17 +70,17 @@ public class FriendsAdapter  extends RecyclerView.Adapter<FriendsAdapter.ViewHol
 
     @Override
     public void onBindViewHolder(FriendsAdapter.ViewHolder holder, int position) {
-        holder.username.setText(mUsers[position].getUsername());
-        holder.sign.setText(mUsers[position].getInfo());
+        holder.username.setText(mUsers.get(position).getUsername());
+        holder.sign.setText(mUsers.get(position).getInfo());
 
         //从服务器加载图片
 //        imageLoader.displayImage(Dummy.getImgURLList()[position%8], holder.imageView, options);
-        imageLoader.displayImage(mUsers[position].getAvaterUrl(), holder.imageView, options);
+        imageLoader.displayImage(mUsers.get(position).getAvaterUrl(), holder.imageView, options);
     }
 
     @Override
     public int getItemCount() {
-        return mUsers.length;
+        return mUsers.size();
     }
 
 }

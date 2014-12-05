@@ -2,6 +2,8 @@ package com.nightwind.tcfl.bean;
 
 import android.graphics.Bitmap;
 
+import java.util.ArrayList;
+
 /**
  * Created by wind on 2014/11/28.
  */
@@ -14,13 +16,13 @@ public class MyListItem {
     private String dateTime;
     private int commentNum;
     private Bitmap img;
-    private CommentItem[] commentItems;
+    private ArrayList<CommentItem> commentItems;
 
-    public CommentItem[] getCommentItems() {
+    public ArrayList<CommentItem> getCommentItems() {
         return commentItems;
     }
 
-    public void setCommentItems(CommentItem[] commentItems) {
+    public void setCommentItems(ArrayList<CommentItem> commentItems) {
         this.commentItems = commentItems;
     }
 

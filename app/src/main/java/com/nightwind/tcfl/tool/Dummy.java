@@ -138,19 +138,26 @@ public class Dummy {
     /**
      * 文章（帖子）
      */
-    private static ArrayList<MyListItem> mListItems;
-    public static ArrayList<MyListItem> getMyListItem() {
+    private static HashMap<Integer, ArrayList<MyListItem>> mNewsLists = new HashMap<>();
+    public static ArrayList<MyListItem> getMyListItem(int index) {
 
-        if (mListItems != null) {
-            return mListItems;
+        ArrayList<MyListItem> listItems = mNewsLists.get(index);
+
+        if (listItems != null) {
+            return listItems;
+        } else if (index > 0) {
+            listItems = new ArrayList<>(mNewsLists.get(0));
+            mNewsLists.put(index, listItems);
+            return listItems;
         }
 
-        mListItems = new ArrayList<>();
+        listItems = new ArrayList<>();
 
         final int NUM_ITEM = 30;
         Random random = new Random();
 
         //0可能是滚动图片
+        listItems.add(null);
         for (int i = 1; i <= NUM_ITEM; i++) {
             User user;
             do {
@@ -180,8 +187,9 @@ public class Dummy {
 
             //评论：
             int n = random.nextInt(10);
+            ArrayList<CommentItem> commentItems = new ArrayList<>();
             //0是帖子内容
-            CommentItem[] commentItems = new CommentItem[n+1];
+            commentItems.add(null);
             for (int j = 1; j <= n; j++) {
                 CommentItem commentItem = new CommentItem();
                 User user1;
@@ -193,13 +201,14 @@ public class Dummy {
                 commentItem.setDateTime(date1);
                 commentItem.setContent("Hello World" + random.nextInt(10));
 //                    commentItem.setImg(myListItems.get(random.nextInt(NUM_ITEM)).getImg());
-                commentItems[j] = commentItem;
+                commentItems.add(commentItem);
             }
             listItem.setCommentNum(n);
             listItem.setCommentItems(commentItems);
-            mListItems.add(listItem);
+            listItems.add(listItem);
         }
-        return mListItems;
+        mNewsLists.put(index, listItems);
+        return listItems;
     }
 
 
@@ -212,7 +221,7 @@ public class Dummy {
         uidMap  = new HashMap<>();
         usernameMap = new HashMap<>();
         getUsersList();
-        getMyListItem();
+        getMyListItem(0);
         getMsg(1, 2);
     }
 
