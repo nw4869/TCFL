@@ -23,6 +23,8 @@ public class FriendsActivity extends ActionBarActivity implements FriendsFragmen
         View.OnTouchListener, GestureDetector.OnGestureListener{
 
     FriendsFragment mFriendsListFragment;
+    ChatFragment mChatFragment;
+    AddFriendFragment mAddFriendFragment;
 
     private Menu mMenu;
     private Toolbar mToolbar;
@@ -83,6 +85,7 @@ public class FriendsActivity extends ActionBarActivity implements FriendsFragmen
         if (id == R.id.action_settings) {
             return true;
         } else if (id == android.R.id.home) {
+            hideSoftInput();
             if (current == 0) {
                 //结束该Activiy
                 finish();
@@ -97,9 +100,10 @@ public class FriendsActivity extends ActionBarActivity implements FriendsFragmen
             }
         }  else if (id == R.id.action_add_friend) {
             //打开添加好友菜单
+            mAddFriendFragment = AddFriendFragment.newInstance(Dummy.getSelfUser().getUid());
             getSupportFragmentManager().beginTransaction()
                     .setCustomAnimations(R.anim.slide_right_in, R.anim.slide_left_out, R.anim.slide_left_in, R.anim.slide_right_out)
-                    .add(R.id.container, AddFriendFragment.newInstance(Dummy.getSelfUser().getUid()))
+                    .add(R.id.container, mAddFriendFragment)
                     .addToBackStack("addFriend")
                     .commit();
             getSupportActionBar().setTitle("add Friend");
@@ -118,9 +122,10 @@ public class FriendsActivity extends ActionBarActivity implements FriendsFragmen
     public void onFragmentInteraction(String username) {
 //        Toast.makeText(this, "selected" + username.toString(), Toast.LENGTH_SHORT).show();
         User user = Dummy.getUser(username);
+        mChatFragment = ChatFragment.newInstance(Dummy.getSelfUser().getUid(), user.getUid());
         getSupportFragmentManager().beginTransaction()
                 .setCustomAnimations(R.anim.slide_right_in, R.anim.slide_left_out, R.anim.slide_left_in, R.anim.slide_right_out)
-                .add(R.id.container, ChatFragment.newInstance(Dummy.getSelfUser().getUid(), user.getUid()))
+                .add(R.id.container, mChatFragment)
                 .addToBackStack("friendsList")
                 .commit();
         current++;
@@ -137,6 +142,7 @@ public class FriendsActivity extends ActionBarActivity implements FriendsFragmen
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
+            hideSoftInput();
             getSupportActionBar().setTitle("Friends");
             current--;
             if (current == 0) {
@@ -179,6 +185,8 @@ public class FriendsActivity extends ActionBarActivity implements FriendsFragmen
 
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+//        mToolbar.setFocusableInTouchMode(true);
+//        mToolbar.requestFocusFromTouch();
         return false;
     }
 
@@ -198,6 +206,7 @@ public class FriendsActivity extends ActionBarActivity implements FriendsFragmen
 
         } else if (absdx > 1.5*absdy && e2.getX() - e1.getX() > verticalMinDistance && Math.abs(velocityX) > minVelocity) {
 
+            hideSoftInput();
             if (current == 0) { //在列表界面时右划关闭activity
                 finish();
                 overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
@@ -225,6 +234,15 @@ public class FriendsActivity extends ActionBarActivity implements FriendsFragmen
     public boolean dispatchTouchEvent(MotionEvent ev) {
         mGestureDetector.onTouchEvent(ev);
         return super.dispatchTouchEvent(ev);
+    }
+
+    public void hideSoftInput() {
+        if (mChatFragment != null) {
+            mChatFragment.hideSoftInput();
+        }
+        if (mAddFriendFragment != null) {
+            mAddFriendFragment.hideSoftInput();
+        }
     }
 
     //    /**

@@ -121,18 +121,15 @@ public class AddFriendFragment extends Fragment {
         mIVAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                //收起键盘
-//                ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).
-//                        hideSoftInputFromWindow(mEtQueryUsername.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
                 String queryUsername = String.valueOf(mEtQueryUsername.getText());
                 User selfUser = Dummy.getSelfUser();
                 User friend = Dummy.getUser(queryUsername);
-                if (selfUser.addFriend(friend.getUid())) {
+                if (selfUser.getUid() == friend.getUid()) {
+                    Toast.makeText(getActivity(), "添加好友失败，您不能添加自己为好友", Toast.LENGTH_SHORT).show();
+                } else if (selfUser.addFriend(friend.getUid())) {
                     Toast.makeText(getActivity(), "添加好友成功", Toast.LENGTH_SHORT).show();
                     mListener.onFragmentInteraction(true);
-                } else if (selfUser.getUid() == friend.getUid()) {
-                    Toast.makeText(getActivity(), "添加好友失败，您不能添加自己为好友", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getActivity(), "添加好友失败，您已添加该好友", Toast.LENGTH_SHORT).show();
                 }
@@ -159,9 +156,7 @@ public class AddFriendFragment extends Fragment {
             //服务器下载头像
             imageLoader.displayImage(user.getAvaterUrl(), mIVAvatar, options);
 
-            //收起键盘
-            ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).
-                    hideSoftInputFromWindow(mEtQueryUsername.getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+            hideSoftInput();
         }
     }
 
@@ -203,6 +198,14 @@ public class AddFriendFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(boolean addedFriend);
+    }
+
+    public void hideSoftInput() {
+        //收起键盘
+        if (mEtQueryUsername != null && getActivity() != null) {
+            ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).
+                    hideSoftInputFromWindow(mEtQueryUsername.getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+        }
     }
 
 }

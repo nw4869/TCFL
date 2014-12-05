@@ -1,6 +1,7 @@
 package com.nightwind.tcfl.fragment;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -150,6 +152,14 @@ public class ChatFragment extends Fragment {
             mAdapter.notifyDataSetChanged();
             mEditTextContent.setText("");
             mRecyclerView.scrollToPosition(mAdapter.getItemCount() - 1);
+        }
+    }
+
+    public void hideSoftInput() {
+        //收起键盘
+        if (mEditTextContent != null && getActivity() != null) {
+            ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).
+                    hideSoftInputFromWindow(mEditTextContent.getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
         }
     }
 }
