@@ -260,6 +260,9 @@ public class Dummy {
                     }
                 }
 
+                //在线状态
+                user.setOnline(uid % 2 == 0);
+
                 usersList.add(user);
                 uidMap.put(uid, user);
                 usernameMap.put(user.getUsername(), user);

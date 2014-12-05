@@ -1,6 +1,7 @@
 package com.nightwind.tcfl.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,6 +43,7 @@ public class FriendsAdapter  extends RecyclerView.Adapter<FriendsAdapter.ViewHol
         public ImageView imageView;
         public TextView username;
         public TextView sign;
+        public ImageView online;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -57,6 +59,7 @@ public class FriendsAdapter  extends RecyclerView.Adapter<FriendsAdapter.ViewHol
             imageView = (ImageView) itemView.findViewById(R.id.imageView);
             username = (TextView) itemView.findViewById(R.id.username);
             sign = (TextView) itemView.findViewById(R.id.sign);
+            online = (ImageView) itemView.findViewById(R.id.online);
         }
     }
 
@@ -72,6 +75,9 @@ public class FriendsAdapter  extends RecyclerView.Adapter<FriendsAdapter.ViewHol
     public void onBindViewHolder(FriendsAdapter.ViewHolder holder, int position) {
         holder.username.setText(mUsers.get(position).getUsername());
         holder.sign.setText(mUsers.get(position).getInfo());
+
+        int color = mUsers.get(position).isOnline() ? Color.GREEN : Color.RED;
+        holder.online.setBackgroundColor(color);
 
         //从服务器加载图片
 //        imageLoader.displayImage(Dummy.getImgURLList()[position%8], holder.imageView, options);

@@ -111,11 +111,19 @@ public class PersonCenterFragment extends Fragment implements View.OnClickListen
     public void onListPressed(int id) {
         if (mListener != null) {
             if (id == 0) {
+                //我的资料
                 Intent intent = new Intent(getActivity(), ProfileActivity.class);
                 startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
-            } else if (id == 1) {
+            } else if (id == 1 || id == 2) {
                 Intent intent = new Intent(getActivity(), FriendsActivity.class);
+                if (id == 1) {
+                    //所有好友
+                    intent.putExtra("online", false);
+                } else {
+                    //在线好友
+                    intent.putExtra("online", true);
+                }
                 startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
             } else {

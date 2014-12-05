@@ -27,6 +27,7 @@ public class FriendsActivity extends ActionBarActivity implements FriendsFragmen
     private Menu mMenu;
     private Toolbar mToolbar;
     private int current = 0;
+    private boolean mOnline = false;
 
     //这三个用于右划关闭activity
     private GestureDetector mGestureDetector;
@@ -37,22 +38,29 @@ public class FriendsActivity extends ActionBarActivity implements FriendsFragmen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends);
+
+        if (getIntent() != null) {
+            mOnline = getIntent().getBooleanExtra("online", false);
+        }
+
         if (savedInstanceState == null) {
-            mFriendsListFragment = new FriendsFragment();
+            mFriendsListFragment = FriendsFragment.newInstance(mOnline);
             getSupportFragmentManager().beginTransaction()
                     .setCustomAnimations(R.anim.slide_right_in, R.anim.slide_left_out, R.anim.slide_left_in, R.anim.slide_right_out)
                     .add(R.id.container, mFriendsListFragment)
                     .commit();
+
+            mToolbar = (Toolbar) findViewById(R.id.toolbar);
+            // toolbar.setLogo(R.drawable.ic_launcher);
+            mToolbar.setTitle("Friends");// 标题的文字需在setSupportActionBar之前，不然会无效
+            // toolbar.setSubtitle("副标题");
+            setSupportActionBar(mToolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+            mGestureDetector = new GestureDetector(this, this);
+
         }
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        // toolbar.setLogo(R.drawable.ic_launcher);
-        mToolbar.setTitle("Friends");// 标题的文字需在setSupportActionBar之前，不然会无效
-        // toolbar.setSubtitle("副标题");
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        mGestureDetector = new GestureDetector(this, this);
     }
 
 

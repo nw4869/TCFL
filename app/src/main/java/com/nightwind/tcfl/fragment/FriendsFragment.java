@@ -15,6 +15,9 @@ import com.nightwind.tcfl.bean.User;
 import com.nightwind.tcfl.tool.Dummy;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 
 
 /**
@@ -28,13 +31,12 @@ import java.util.ArrayList;
 public class FriendsFragment extends Fragment{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_ONLINE = "online";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private boolean mOnline;
 
+    //数据集
     private ArrayList<User> mFriendsList = new ArrayList<>();
 
     //recyclerView
@@ -48,16 +50,14 @@ public class FriendsFragment extends Fragment{
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param online Parameter 1.
      * @return A new instance of fragment FriendsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static FriendsFragment newInstance(String param1, String param2) {
+    public static FriendsFragment newInstance(boolean online) {
         FriendsFragment fragment = new FriendsFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putBoolean(ARG_ONLINE, online);
         fragment.setArguments(args);
         return fragment;
     }
@@ -70,8 +70,7 @@ public class FriendsFragment extends Fragment{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            mOnline = getArguments().getBoolean(ARG_ONLINE);
         }
 
 
@@ -80,10 +79,22 @@ public class FriendsFragment extends Fragment{
 
     private void initData() {
         ArrayList<Integer> friends = Dummy.getSelfUser().getFriendsList();
-
+        mFriendsList.clear();
         for (Integer uid: friends) {
-            mFriendsList.add(Dummy.getUser(uid));
+            User friend = Dummy.getUser(uid);
+            //蕴含关系
+            if (mOnline && !friend.isOnline()) {
+                continue;
+            }
+            mFriendsList.add(friend);
         }
+        //按用户名升序排列
+        Collections.sort(mFriendsList, new Comparator<User>() {
+            @Override
+            public int compare(User lhs, User rhs) {
+                return lhs.getUsername().compareTo(rhs.getUsername());
+            }
+        });
     }
 
     @Override
@@ -145,11 +156,7 @@ public class FriendsFragment extends Fragment{
     }
 
     public void refreshList() {
-        ArrayList<Integer> friends = Dummy.getSelfUser().getFriendsList();
-        mFriendsList.clear();
-        for (Integer uid: friends) {
-            mFriendsList.add(Dummy.getUser(uid));
-        }
+        initData();
         mAdapter.notifyDataSetChanged();
     }
 

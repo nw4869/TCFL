@@ -1,7 +1,7 @@
 package com.nightwind.tcfl.fragment;
 
 import android.app.Activity;
-import android.net.Uri;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -113,22 +114,27 @@ public class AddFriendFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String queryUsername = String.valueOf(mEtQueryUsername.getText());
-                User user = search(queryUsername);
-                showResult(user);
+                searchAndShowResult(queryUsername);
             }
         });
 
         mIVAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                //收起键盘
+//                ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).
+//                        hideSoftInputFromWindow(mEtQueryUsername.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
                 String queryUsername = String.valueOf(mEtQueryUsername.getText());
                 User selfUser = Dummy.getSelfUser();
                 User friend = Dummy.getUser(queryUsername);
                 if (selfUser.addFriend(friend.getUid())) {
                     Toast.makeText(getActivity(), "添加好友成功", Toast.LENGTH_SHORT).show();
                     mListener.onFragmentInteraction(true);
+                } else if (selfUser.getUid() == friend.getUid()) {
+                    Toast.makeText(getActivity(), "添加好友失败，您不能添加自己为好友", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(getActivity(), "您已添加该好友", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "添加好友失败，您已添加该好友", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -139,7 +145,8 @@ public class AddFriendFragment extends Fragment {
         return v;
     }
 
-    private void showResult(User user) {
+    private void searchAndShowResult(String queryUsername) {
+        User user = Dummy.getUser(queryUsername);
         mResult.setVisibility(View.VISIBLE);
         if (user == null) {
             mTvNotFound.setVisibility(View.VISIBLE);
@@ -152,12 +159,12 @@ public class AddFriendFragment extends Fragment {
             //服务器下载头像
             imageLoader.displayImage(user.getAvaterUrl(), mIVAvatar, options);
 
+            //收起键盘
+            ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).
+                    hideSoftInputFromWindow(mEtQueryUsername.getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
         }
     }
 
-    private User search(String queryUsername) {
-        return Dummy.getUser(queryUsername);
-    }
 
 //    // TODO: Rename method, update argument and hook method into UI event
 //    public void onButtonPressed(Uri uri) {

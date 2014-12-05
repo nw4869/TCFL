@@ -1,5 +1,7 @@
 package com.nightwind.tcfl.bean;
 
+import com.nightwind.tcfl.tool.Dummy;
+
 import java.util.ArrayList;
 
 /**
@@ -11,6 +13,7 @@ public class User {
     private String hobby;
     private String avaterUrl;
     private ArrayList<Integer> friendsList = new ArrayList<>();
+    private boolean online;
 
     public int getUid() {
         return uid;
@@ -141,6 +144,36 @@ public class User {
         this.friendsList = friendsList;
     }
 
+    public boolean isOnline() {
+        return online;
+    }
+
+    public void setOnline(boolean online) {
+        this.online = online;
+    }
+
+    public User() {
+    }
+
+    public User(int uid, int level, int age, int sex, int edu, String username, String password, String salt, String email, String work, String info, String school, String tel, String hobby, String avaterUrl, ArrayList<Integer> friendsList, boolean online) {
+        this.uid = uid;
+        this.level = level;
+        this.age = age;
+        this.sex = sex;
+        this.edu = edu;
+        this.username = username;
+        this.password = password;
+        this.salt = salt;
+        this.email = email;
+        this.work = work;
+        this.info = info;
+        this.school = school;
+        this.tel = tel;
+        this.hobby = hobby;
+        this.avaterUrl = avaterUrl;
+        this.friendsList = friendsList;
+        this.online = online;
+    }
 
     /**
      * 添加好友
