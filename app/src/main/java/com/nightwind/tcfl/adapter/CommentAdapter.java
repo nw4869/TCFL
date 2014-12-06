@@ -1,8 +1,9 @@
 package com.nightwind.tcfl.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,8 @@ import android.widget.TextView;
 
 import com.nightwind.tcfl.AvatarOnClickListener;
 import com.nightwind.tcfl.R;
+import com.nightwind.tcfl.activity.AddCommentActivity;
+import com.nightwind.tcfl.activity.ContentActivity;
 import com.nightwind.tcfl.bean.ArticleEntity;
 import com.nightwind.tcfl.bean.CommentEntity;
 import com.nightwind.tcfl.bean.User;
@@ -33,15 +36,19 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
     private ArticleEntity mArticleEntity;
     private ArrayList<CommentEntity> mCommentEntities;
+    private int mClassify;
+    private int mArticleId;
 
     //图片下载选项
     DisplayImageOptions options = Options.getListOptions();
     protected ImageLoader imageLoader = ImageLoader.getInstance();
 
-    public CommentAdapter(Context context, ArticleEntity articleEntity) {
+    public CommentAdapter(Context context, ArticleEntity articleEntity, int classify, int articleId) {
         mContext = context;
         mArticleEntity = articleEntity;
         mCommentEntities = articleEntity.getCommentEntities();
+        mClassify = classify;
+        mArticleId = articleId;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
@@ -60,8 +67,10 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         public RelativeLayout commentItem;
         public TextView TvUsername;
         public TextView TvDateTime;
+        public TextView TvReplySome;
         public TextView TvContent;
         public ImageView imageView1;
+        public ImageView commentIcon;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -77,9 +86,10 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             commentItem = (RelativeLayout) itemView.findViewById(R.id.commentItem);
             TvUsername = (TextView) itemView.findViewById(R.id.username);
             TvDateTime = (TextView) itemView.findViewById(R.id.datetime);
+            TvReplySome = (TextView) itemView.findViewById(R.id.replySomeone);
             TvContent = (TextView) itemView.findViewById(R.id.comment);
             imageView1 = (ImageView) itemView.findViewById(R.id.imageView);
-
+            commentIcon = (ImageView) itemView.findViewById(R.id.commentIcon);
         }
     }
 
@@ -91,7 +101,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         holder.id = position;
 
         if (position == 0) {
@@ -111,29 +121,58 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             }
 
             //test:ContentLayout
+            String content = mArticleEntity.getContent();
             TextView tvContent = new TextView(mContext);
-            tvContent.setText(mArticleEntity.getContent());
+            tvContent.setText(content);
             tvContent.setTextColor(Color.BLACK);
             tvContent.setTextSize(16);
             holder.contentLayout.removeAllViews();
             holder.contentLayout.addView(tvContent);
+
+//            //添加分享文字到ShareProvider
+//            ((ContentActivity)mContext).setShareString(content);
 
         } else {
             holder.authItem.setVisibility(View.GONE);
             holder.divider.setVisibility(View.GONE);
             holder.commentItem.setVisibility(View.VISIBLE);
 
-            holder.TvUsername.setText(mCommentEntities.get(position).getUsername());
-            holder.TvDateTime.setText(mCommentEntities.get(position).getDateTime());
-            holder.TvContent.setText(mCommentEntities.get(position).getContent());
+            CommentEntity comment = mCommentEntities.get(position);
+
+            //是否回复某个评论
+            if (comment.getParentId() != 0) {
+                holder.TvReplySome.setVisibility(View.VISIBLE);
+                CommentEntity parentComment = mCommentEntities.get(comment.getParentId());
+                String parentContent = "回复" + parentComment.getUsername() + ": " + parentComment.getContent();
+                holder.TvReplySome.setText(parentContent);
+            } else {
+                holder.TvReplySome.setVisibility(View.GONE);
+            }
+
+            holder.TvUsername.setText(comment.getUsername());
+            holder.TvDateTime.setText(comment.getDateTime());
+            holder.TvContent.setText(comment.getContent());
 //        holder.imageView1.setImageBitmap(mCommentEntities[position].getImg());
             //从服务器加载图片
 //            imageLoader.displayImage(Dummy.getImgURLList()[position%8], holder.imageView1, options);
-            User user = Dummy.getUser(mCommentEntities.get(position).getUsername());
+            User user = Dummy.getUser(comment.getUsername());
             if (user != null) {
                 imageLoader.displayImage(user.getAvaterUrl(), holder.imageView1, options);
                 holder.imageView1.setOnClickListener(new AvatarOnClickListener(mContext, user.getUsername()));
             }
+
+            //回复按钮
+            holder.commentIcon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, AddCommentActivity.class);
+                    intent.putExtra("classify", mClassify);
+                    intent.putExtra("articleId", mArticleId);
+                    intent.putExtra("parentComment", position);
+//                    MainActivity.this.startActivity(intent);
+                    ((Activity)mContext).startActivityForResult(intent, position);
+                }
+            });
         }
 
     }

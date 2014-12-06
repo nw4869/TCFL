@@ -134,6 +134,8 @@ public class Dummy {
      * 文章（帖子）
      */
     private static HashMap<Integer, ArrayList<ArticleEntity>> mNewsLists = new HashMap<>();
+    private static HashMap<Integer, ArticleEntity> mArticleMap = new HashMap<>();
+    private static int mArticleNum = 0;
     public static ArrayList<ArticleEntity> getMyListItem(int index) {
 
         ArrayList<ArticleEntity> listItems = mNewsLists.get(index);
@@ -209,6 +211,9 @@ public class Dummy {
     static public boolean addArticle(int classify, ArticleEntity article) {
         mNewsLists.get(classify).add(article);
         article.getCommentEntities().add(null);
+
+        //new
+//        mArticleNum++;
         return true;
     }
 

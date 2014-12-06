@@ -9,6 +9,7 @@ public class CommentEntity {
     private String content;
     private String username;
     private String dateTime;
+    private int parent = 0;
 
     public String getContent() {
         return content;
@@ -34,4 +35,11 @@ public class CommentEntity {
         this.dateTime = dateTime;
     }
 
+    public int getParentId() {
+        return parent;
+    }
+
+    public void setParent(int parent) {
+        this.parent = parent;
+    }
 }

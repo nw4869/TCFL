@@ -39,6 +39,14 @@
             android:name="com.nightwind.tcfl.activity.AddArticleActivity"
             android:label="@string/title_activity_add_article" >
         </activity>
+        <activity
+            android:name="com.nightwind.tcfl.activity.AddCommentActivity"
+            android:label="@string/title_activity_add_comment" >
+        </activity>
+        <activity
+            android:name="com.nightwind.tcfl.activity.MyCollectionActivity"
+            android:label="@string/title_activity_my_collection" >
+        </activity>
     </application>
 
 </manifest>

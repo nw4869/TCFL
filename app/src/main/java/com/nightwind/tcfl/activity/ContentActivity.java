@@ -1,15 +1,19 @@
 package com.nightwind.tcfl.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import com.nightwind.tcfl.adapter.CommentAdapter;
 import com.nightwind.tcfl.R;
@@ -19,7 +23,7 @@ import com.nightwind.tcfl.tool.Dummy;
 
 public class ContentActivity extends ActionBarActivity implements View.OnTouchListener, GestureDetector.OnGestureListener {
 
-    private ArticleEntity mMylistItem;
+    private ArticleEntity mArticle;
 
     //Comment Items
     private RecyclerView mRecyclerView;
@@ -27,10 +31,16 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
     private RecyclerView.LayoutManager mLayoutManager;
 
     private Toolbar mToolbar;
+    private ShareActionProvider mShareActionProvider;
 
     private GestureDetector mGestureDetector;
     private final int verticalMinDistance = 50;
     private final int minVelocity         = 0;
+
+    private int mColId;
+    private int mRowId;
+
+    private Menu mMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,17 +54,18 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        int colId = getIntent().getIntExtra("colId", 0);
-        int rowId = getIntent().getIntExtra("rowId", 0);
+        mColId = getIntent().getIntExtra("colId", 0);
+        mRowId = getIntent().getIntExtra("rowId", 0);
 
-        mMylistItem = Dummy.getMyListItem(colId).get(rowId);
+        mArticle = Dummy.getMyListItem(mColId).get(mRowId);
 
-        getSupportActionBar().setTitle(mMylistItem.getTitle());
+        //设置标题
+        getSupportActionBar().setTitle(mArticle.getTitle());
 
 //        //随机指定bitmap
 //        Random random = new Random();
-//        for (int i = 0; i < mMylistItem.getCommentNum(); i++) {
-//            mMylistItem.getCommentEntities()[i].setImg(Constants.getMyListItem().get(random.nextInt(mMylistItem.getCommentNum())).getImg());
+//        for (int i = 0; i < mArticle.getCommentNum(); i++) {
+//            mArticle.getCommentEntities()[i].setImg(Constants.getMyListItem().get(random.nextInt(mArticle.getCommentNum())).getImg());
 //        }
 //
 //        TextView tvUsername = (TextView) findViewById(R.id.username);
@@ -64,11 +75,11 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
 //        TextView tvContent = new TextView(this);
 //
 //
-//        tvUsername.setText(mMylistItem.getUsername());
-//        tvTitle.setText(mMylistItem.getTitle());
-//        tvDateTime.setText(mMylistItem.getDateTime());
+//        tvUsername.setText(mArticle.getUsername());
+//        tvTitle.setText(mArticle.getTitle());
+//        tvDateTime.setText(mArticle.getDateTime());
 //
-//        tvContent.setText(mMylistItem.getContent());
+//        tvContent.setText(mArticle.getContent());
 //        contentLayout.addView(tvContent);
 
 
@@ -78,21 +89,42 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-//        mAdapter = new CommentAdapter(this, mMylistItem.getCommentEntities());
-        mAdapter = new CommentAdapter(this, mMylistItem);
+//        mAdapter = new CommentAdapter(this, mArticle.getCommentEntities());
+        mAdapter = new CommentAdapter(this, mArticle, mColId, mRowId);
         mRecyclerView.setAdapter(mAdapter);
 
         mGestureDetector = new GestureDetector(this,  this);
 
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_content, menu);
+
+        mMenu = menu;
+
+        // ShareActionProvider配置
+		mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menu
+                .findItem(R.id.action_share));
+        String content = mArticle.getContent();
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        /*设置内容*/
+        intent.putExtra(Intent.EXTRA_TEXT, content);
+        intent.setType("text/*");
+        mShareActionProvider.setShareIntent(intent);
+
+        //收藏按钮
+        if (mArticle.isCollected()) {
+            mMenu.getItem(1).setVisible(false);
+            mMenu.getItem(2).setVisible(true);
+        } else {
+            mMenu.getItem(1).setVisible(true);
+            mMenu.getItem(2).setVisible(false);
+        }
         return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -108,13 +140,36 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
 //            overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
             finish();
             overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
+        } else if (id == R.id.action_add_comment) {
+            //回帖
+            Intent intent = new Intent(ContentActivity.this, AddCommentActivity.class);
+            intent.putExtra("classify", mColId);
+            intent.putExtra("articleId", mRowId);
+            intent.putExtra("parentComment", mRowId);
+//                    MainActivity.this.startActivity(intent);
+            ContentActivity.this.startActivityForResult(intent, 0);
+        } else if (id == R.id.action_to_collect) {
+            mArticle.setCollected(true);
+            mMenu.getItem(1).setVisible(false);
+            mMenu.getItem(2).setVisible(true);
+            Toast.makeText(this, "收藏成功", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.action_to_not_collect) {
+            mArticle.setCollected(false);
+            mMenu.getItem(1).setVisible(true);
+            mMenu.getItem(2).setVisible(false);
+            Toast.makeText(this, "取消收藏", Toast.LENGTH_SHORT).show();
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        mAdapter.notifyDataSetChanged();
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
-
+    ///////////////////////////////////////////////////////
     //右划关闭
 
     @Override

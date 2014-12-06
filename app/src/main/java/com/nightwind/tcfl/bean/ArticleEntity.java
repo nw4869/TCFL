@@ -8,16 +8,34 @@ import java.util.ArrayList;
  * Created by wind on 2014/11/28.
  */
 public class ArticleEntity {
+    private int classify;
+    private int id;
     private String title;
     private String newsAbstract;
     private String content;
 //    private int uid;
     private String username;
     private String dateTime;
+    private boolean collected;
 //    private int commentNum;
 //    private Bitmap img;
     private ArrayList<CommentEntity> commentEntities = new ArrayList<>();
 
+    public int getClassify() {
+        return classify;
+    }
+
+    public void setClassify(int classify) {
+        this.classify = classify;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;
@@ -60,7 +78,7 @@ public class ArticleEntity {
     }
 
     public int getCommentNum() {
-        return commentEntities.size();
+        return commentEntities.size() - 1;
     }
 
 //    public void setCommentNum(int commentNum) {
@@ -99,10 +117,18 @@ public class ArticleEntity {
         this.commentEntities = commentEntities;
     }
 
+    public boolean isCollected() {
+        return collected;
+    }
+
+    public void setCollected(boolean collected) {
+        this.collected = collected;
+    }
     //////////////////////////////////////////////////////////////////////
 
     public boolean addComment(CommentEntity comment) {
         commentEntities.add(comment);
         return true;
     }
+
 }
