@@ -17,13 +17,13 @@ import android.widget.Toast;
 
 import com.nightwind.tcfl.adapter.CommentAdapter;
 import com.nightwind.tcfl.R;
-import com.nightwind.tcfl.bean.ArticleEntity;
+import com.nightwind.tcfl.bean.Article;
 import com.nightwind.tcfl.tool.Dummy;
 
 
 public class ContentActivity extends ActionBarActivity implements View.OnTouchListener, GestureDetector.OnGestureListener {
 
-    private ArticleEntity mArticle;
+    private Article mArticle;
 
     //Comment Items
     private RecyclerView mRecyclerView;
@@ -37,8 +37,9 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
     private final int verticalMinDistance = 50;
     private final int minVelocity         = 0;
 
-    private int mColId;
+    private int mClassify;
     private int mRowId;
+    private int mArticleId;
 
     private Menu mMenu;
 
@@ -54,10 +55,12 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mColId = getIntent().getIntExtra("colId", 0);
+        mClassify = getIntent().getIntExtra("classify", 0);
         mRowId = getIntent().getIntExtra("rowId", 0);
+        mArticleId = getIntent().getIntExtra("articleId", 0);
 
-        mArticle = Dummy.getMyListItem(mColId).get(mRowId);
+        mArticle = Dummy.getMyListItem(mClassify).get(mRowId);
+//        mArticleId = mArticle.getId();
 
         //设置标题
         getSupportActionBar().setTitle(mArticle.getTitle());
@@ -90,7 +93,7 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
         mRecyclerView.setLayoutManager(mLayoutManager);
 
 //        mAdapter = new CommentAdapter(this, mArticle.getCommentEntities());
-        mAdapter = new CommentAdapter(this, mArticle, mColId, mRowId);
+        mAdapter = new CommentAdapter(this, mArticle, mClassify, mRowId, mArticleId);
         mRecyclerView.setAdapter(mAdapter);
 
         mGestureDetector = new GestureDetector(this,  this);
@@ -143,7 +146,7 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
         } else if (id == R.id.action_add_comment) {
             //回帖
             Intent intent = new Intent(ContentActivity.this, AddCommentActivity.class);
-            intent.putExtra("classify", mColId);
+            intent.putExtra("classify", mClassify);
             intent.putExtra("articleId", mRowId);
             intent.putExtra("parentComment", mRowId);
 //                    MainActivity.this.startActivity(intent);

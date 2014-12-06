@@ -1,8 +1,8 @@
 
 package com.nightwind.tcfl.bean;
 
-public class ChatMsgEntity {
-    private static final String TAG = ChatMsgEntity.class.getSimpleName();
+public class ChatMsg {
+    private static final String TAG = ChatMsg.class.getSimpleName();
     //名字
     private String name;
     //日期
@@ -44,7 +44,7 @@ public class ChatMsgEntity {
     	isComMeg = isComMsg;
     }
 
-    public ChatMsgEntity() {
+    public ChatMsg() {
     }
 
     public boolean isComMeg() {
@@ -55,7 +55,7 @@ public class ChatMsgEntity {
         this.isComMeg = isComMeg;
     }
 
-    public ChatMsgEntity(String name, String date, String text, boolean isComMeg) {
+    public ChatMsg(String name, String date, String text, boolean isComMeg) {
         this.name = name;
         this.date = date;
         this.text = text;

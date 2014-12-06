@@ -16,9 +16,8 @@ import android.widget.TextView;
 import com.nightwind.tcfl.AvatarOnClickListener;
 import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.activity.AddCommentActivity;
-import com.nightwind.tcfl.activity.ContentActivity;
-import com.nightwind.tcfl.bean.ArticleEntity;
-import com.nightwind.tcfl.bean.CommentEntity;
+import com.nightwind.tcfl.bean.Article;
+import com.nightwind.tcfl.bean.Comment;
 import com.nightwind.tcfl.bean.User;
 import com.nightwind.tcfl.tool.Dummy;
 import com.nightwind.tcfl.tool.Options;
@@ -34,20 +33,22 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
     private static Context mContext;
 
-    private ArticleEntity mArticleEntity;
-    private ArrayList<CommentEntity> mCommentEntities;
+    private Article mArticle;
+    private ArrayList<Comment> mCommentEntities;
     private int mClassify;
+    private int mRowId;
     private int mArticleId;
 
     //图片下载选项
     DisplayImageOptions options = Options.getListOptions();
     protected ImageLoader imageLoader = ImageLoader.getInstance();
 
-    public CommentAdapter(Context context, ArticleEntity articleEntity, int classify, int articleId) {
+    public CommentAdapter(Context context, Article article, int classify, int rowId, int articleId) {
         mContext = context;
-        mArticleEntity = articleEntity;
-        mCommentEntities = articleEntity.getCommentEntities();
+        mArticle = article;
+        mCommentEntities = article.getCommentEntities();
         mClassify = classify;
+        mRowId = rowId;
         mArticleId = articleId;
     }
 
@@ -109,19 +110,19 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             holder.divider.setVisibility(View.VISIBLE);
             holder.commentItem.setVisibility(View.GONE);
 
-            holder.title0.setText(mArticleEntity.getTitle());
-            holder.username0.setText(mArticleEntity.getUsername());
-            holder.dateTime0.setText(mArticleEntity.getDateTime());
+            holder.title0.setText(mArticle.getTitle());
+            holder.username0.setText(mArticle.getUsername());
+            holder.dateTime0.setText(mArticle.getDateTime());
             //从服务器加载图片
 //            imageLoader.displayImage(Dummy.getImgURLList()[position % 8], holder.imageView1, options);
-            User user = Dummy.getUser(mArticleEntity.getUsername());
+            User user = Dummy.getUser(mArticle.getUsername());
             if (user != null) {
                 imageLoader.displayImage(user.getAvaterUrl(), holder.imageView0, options);
                 holder.imageView0.setOnClickListener(new AvatarOnClickListener(mContext, user.getUsername()));
             }
 
             //test:ContentLayout
-            String content = mArticleEntity.getContent();
+            String content = mArticle.getContent();
             TextView tvContent = new TextView(mContext);
             tvContent.setText(content);
             tvContent.setTextColor(Color.BLACK);
@@ -137,12 +138,12 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             holder.divider.setVisibility(View.GONE);
             holder.commentItem.setVisibility(View.VISIBLE);
 
-            CommentEntity comment = mCommentEntities.get(position);
+            Comment comment = mCommentEntities.get(position);
 
             //是否回复某个评论
             if (comment.getParentId() != 0) {
                 holder.TvReplySome.setVisibility(View.VISIBLE);
-                CommentEntity parentComment = mCommentEntities.get(comment.getParentId());
+                Comment parentComment = mCommentEntities.get(comment.getParentId());
                 String parentContent = "回复" + parentComment.getUsername() + ": " + parentComment.getContent();
                 holder.TvReplySome.setText(parentContent);
             } else {
@@ -167,7 +168,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, AddCommentActivity.class);
                     intent.putExtra("classify", mClassify);
-                    intent.putExtra("articleId", mArticleId);
+                    intent.putExtra("rowId", mRowId);
+                    intent.putExtra("articleId", mRowId);
                     intent.putExtra("parentComment", position);
 //                    MainActivity.this.startActivity(intent);
                     ((Activity)mContext).startActivityForResult(intent, position);

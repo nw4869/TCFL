@@ -17,7 +17,7 @@ import android.view.ViewGroup;
 
 import com.nightwind.tcfl.adapter.ArticleAdapter;
 import com.nightwind.tcfl.R;
-import com.nightwind.tcfl.bean.ArticleEntity;
+import com.nightwind.tcfl.bean.Article;
 import com.nightwind.tcfl.tool.Dummy;
 
 import java.util.ArrayList;
@@ -45,7 +45,7 @@ public class ArticleRecyclerFragment extends Fragment {
 
 //    ArrayList<NewsEntity> newsList = new ArrayList<NewsEntity>();
 
-    ArrayList<ArticleEntity> articleEntities = new ArrayList<ArticleEntity>();
+    ArrayList<Article> articleEntities = new ArrayList<Article>();
 
     private static final int[] drawables = { R.drawable.conan1, R.drawable.conan2, R.drawable.conan3, R.drawable.conan4,
             R.drawable.conan5, R.drawable.conan6, R.drawable.conan7, R.drawable.conan8 };
@@ -99,10 +99,10 @@ public class ArticleRecyclerFragment extends Fragment {
         // specify an adapter (see also next example)
 
 //        final int NUM_ITEM = 30;
-//        ArticleEntity[] listItems = new ArticleEntity[NUM_ITEM];
+//        Article[] listItems = new Article[NUM_ITEM];
 //        for (int i = 0; i < NUM_ITEM; i++) {
 //
-//            ArticleEntity listItem = new ArticleEntity();
+//            Article listItem = new Article();
 //
 //            listItem.setTitle("Title " + (i + 1));
 //            listItem.setNewsAbstract("Abstract " + (i + 1));

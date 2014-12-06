@@ -1,13 +1,11 @@
 package com.nightwind.tcfl.bean;
 
-import android.graphics.Bitmap;
-
 import java.util.ArrayList;
 
 /**
  * Created by wind on 2014/11/28.
  */
-public class ArticleEntity {
+public class Article {
     private int classify;
     private int id;
     private String title;
@@ -19,7 +17,7 @@ public class ArticleEntity {
     private boolean collected;
 //    private int commentNum;
 //    private Bitmap img;
-    private ArrayList<CommentEntity> commentEntities = new ArrayList<>();
+    private ArrayList<Comment> commentEntities = new ArrayList<>();
 
     public int getClassify() {
         return classify;
@@ -109,11 +107,11 @@ public class ArticleEntity {
     }
 
 
-    public ArrayList<CommentEntity> getCommentEntities() {
+    public ArrayList<Comment> getCommentEntities() {
         return commentEntities;
     }
 
-    public void setCommentEntities(ArrayList<CommentEntity> commentEntities) {
+    public void setCommentEntities(ArrayList<Comment> commentEntities) {
         this.commentEntities = commentEntities;
     }
 
@@ -126,7 +124,7 @@ public class ArticleEntity {
     }
     //////////////////////////////////////////////////////////////////////
 
-    public boolean addComment(CommentEntity comment) {
+    public boolean addComment(Comment comment) {
         commentEntities.add(comment);
         return true;
     }

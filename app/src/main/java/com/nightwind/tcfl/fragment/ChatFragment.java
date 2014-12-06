@@ -17,7 +17,7 @@ import android.widget.EditText;
 
 import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.adapter.ChatAdapter;
-import com.nightwind.tcfl.bean.ChatMsgEntity;
+import com.nightwind.tcfl.bean.ChatMsg;
 import com.nightwind.tcfl.tool.Dummy;
 
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ public class ChatFragment extends Fragment {
     private int mUid1;
     private int mUid2;
 
-    private ArrayList<ChatMsgEntity> mMsgs;
+    private ArrayList<ChatMsg> mMsgs;
 
     //recyclerView
     private RecyclerView mRecyclerView;
@@ -158,7 +158,7 @@ public class ChatFragment extends Fragment {
         String contString = mEditTextContent.getText().toString();
         if (contString.length() > 0)
         {
-            ChatMsgEntity entity = new ChatMsgEntity();
+            ChatMsg entity = new ChatMsg();
             entity.setDate(getDate());
             entity.setName("");
             entity.setMsgType(false);

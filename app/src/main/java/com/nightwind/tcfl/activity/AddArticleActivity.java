@@ -9,7 +9,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.nightwind.tcfl.R;
-import com.nightwind.tcfl.bean.ArticleEntity;
+import com.nightwind.tcfl.bean.Article;
 import com.nightwind.tcfl.bean.User;
 import com.nightwind.tcfl.tool.BaseTools;
 import com.nightwind.tcfl.tool.Dummy;
@@ -65,7 +65,7 @@ public class AddArticleActivity extends ActionBarActivity {
         if (id == R.id.action_settings) {
             return true;
         } else if (id == R.id.action_push_article) {
-            ArticleEntity article = new ArticleEntity();
+            Article article = new Article();
 
             String title = String.valueOf(mETTitle.getText());
             String content = String.valueOf(mETContent.getText());

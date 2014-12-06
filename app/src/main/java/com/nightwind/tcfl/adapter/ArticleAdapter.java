@@ -18,7 +18,7 @@ import android.view.ViewGroup.LayoutParams;
 import com.nightwind.tcfl.AvatarOnClickListener;
 import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.activity.ContentActivity;
-import com.nightwind.tcfl.bean.ArticleEntity;
+import com.nightwind.tcfl.bean.Article;
 import com.nightwind.tcfl.bean.User;
 import com.nightwind.tcfl.fragment.ArticleRecyclerFragment;
 import com.nightwind.tcfl.tool.BaseTools;
@@ -32,9 +32,9 @@ import java.util.ArrayList;
 public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHolder> implements ViewPager.OnPageChangeListener {
     private static Context mContext;
     private final int mType;
-    private final int mColId;
+    private final int mClassify;
 
-    private ArrayList<ArticleEntity> mListItems;
+    private ArrayList<Article> mListItems;
 
     /**
      * ViewPager
@@ -119,11 +119,11 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
     }
 
 	// Provide a suitable constructor (depends on the kind of dataset)
-    public ArticleAdapter(Context context, ArrayList<ArticleEntity> listItems, int type, int colId) {
+    public ArticleAdapter(Context context, ArrayList<Article> listItems, int type, int colId) {
         mContext = context;
         mListItems = listItems;
         mType = type;
-        mColId = colId;
+        mClassify = colId;
     }
 
 	// Create new views (invoked by the layout manager)
@@ -206,7 +206,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
             }
 
             holder.mHeadline.setVisibility(View.VISIBLE);
-            holder.mHeadline.setText("page " + mColId);
+            holder.mHeadline.setText("page " + mClassify);
 
         } else {
             holder.mListItemLayout.setVisibility(View.VISIBLE);
@@ -240,9 +240,12 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
                 @Override
                 public void onClick(View v) {
 //                    Toast.makeText(mContext, "onClick " + id, Toast.LENGTH_SHORT).show();
+                    int articleId = mListItems.get(position).getId();
                     Intent intent = new Intent(mContext, ContentActivity.class);
                     intent.putExtra("rowId", position);
-                    intent.putExtra("colId", mColId);
+                    intent.putExtra("classify", mClassify);
+                    intent.putExtra("articleId", articleId);
+
                     mContext.startActivity(intent);
                     ((Activity)mContext).overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
                 }

@@ -10,8 +10,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.nightwind.tcfl.R;
-import com.nightwind.tcfl.bean.ArticleEntity;
-import com.nightwind.tcfl.bean.CommentEntity;
+import com.nightwind.tcfl.bean.Article;
+import com.nightwind.tcfl.bean.Comment;
 import com.nightwind.tcfl.bean.User;
 import com.nightwind.tcfl.tool.BaseTools;
 import com.nightwind.tcfl.tool.Dummy;
@@ -24,7 +24,8 @@ public class AddCommentActivity extends ActionBarActivity {
 
     private User mSelfUser;
     private int mClassify = 0;
-    private int mArticleId = 1;
+    private int mRowId = 1;
+    private int mArticleId = 0;
     private int mParentComment = 0;
 
     @Override
@@ -34,8 +35,9 @@ public class AddCommentActivity extends ActionBarActivity {
 
         if (getIntent() != null) {
             mClassify = getIntent().getIntExtra("classify", 0);
-            mArticleId = getIntent().getIntExtra("articleId", 1);
+            mRowId = getIntent().getIntExtra("rowId", 1);
             mParentComment = getIntent().getIntExtra("parentComment", 0);
+            mArticleId = getIntent().getIntExtra("articleId", 0);
         } else {
             Log.e("AddCommentActivity", "getIntent Error!");
         }
@@ -86,9 +88,9 @@ public class AddCommentActivity extends ActionBarActivity {
     }
 
     private boolean pushComment() {
-        ArticleEntity article = Dummy.getMyListItem(mClassify).get(mArticleId);
+        Article article = Dummy.getMyListItem(mClassify).get(mRowId);
 
-        CommentEntity comment = new CommentEntity();
+        Comment comment = new Comment();
 
         comment.setParent(mParentComment);
         String content = String.valueOf(mETContent.getText());

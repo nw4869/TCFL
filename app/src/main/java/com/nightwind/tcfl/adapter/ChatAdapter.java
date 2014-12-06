@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.nightwind.tcfl.AvatarOnClickListener;
 import com.nightwind.tcfl.R;
-import com.nightwind.tcfl.bean.ChatMsgEntity;
+import com.nightwind.tcfl.bean.ChatMsg;
 import com.nightwind.tcfl.bean.User;
 import com.nightwind.tcfl.tool.BaseTools;
 import com.nightwind.tcfl.tool.Dummy;
@@ -19,8 +19,6 @@ import com.nightwind.tcfl.tool.Options;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -35,7 +33,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     //自己发出的信息
     public static int IMVT_TO_MSG = 1;
 
-    private List<ChatMsgEntity> mData;
+    private List<ChatMsg> mData;
     private int uid1;
     private int uid2;
 
@@ -45,7 +43,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     DisplayImageOptions options = Options.getListOptions();
     protected ImageLoader imageLoader = ImageLoader.getInstance();
 
-    public ChatAdapter(Context mContext, List<ChatMsgEntity> data, int uid1, int uid2) {
+    public ChatAdapter(Context mContext, List<ChatMsg> data, int uid1, int uid2) {
         this.mContext = mContext;
         this.mData = data;
         this.uid1 = uid1;
@@ -93,10 +91,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        ChatMsgEntity data = mData.get(position);
+        ChatMsg data = mData.get(position);
         boolean near = false;
         if (position > 0) {
-            ChatMsgEntity lastData = mData.get(position-1);
+            ChatMsg lastData = mData.get(position-1);
             Date last = BaseTools.strToDate(lastData.getDate());
             Date crt = BaseTools.strToDate(data.getDate());
             Calendar calendar = Calendar.getInstance();

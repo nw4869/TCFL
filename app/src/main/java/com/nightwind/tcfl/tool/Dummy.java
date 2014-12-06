@@ -1,9 +1,9 @@
 package com.nightwind.tcfl.tool;
 
 
-import com.nightwind.tcfl.bean.ChatMsgEntity;
-import com.nightwind.tcfl.bean.CommentEntity;
-import com.nightwind.tcfl.bean.ArticleEntity;
+import com.nightwind.tcfl.bean.Article;
+import com.nightwind.tcfl.bean.ChatMsg;
+import com.nightwind.tcfl.bean.Comment;
 import com.nightwind.tcfl.bean.User;
 
 import java.util.ArrayList;
@@ -133,24 +133,26 @@ public class Dummy {
     /**
      * 文章（帖子）
      */
-    private static HashMap<Integer, ArrayList<ArticleEntity>> mNewsLists = new HashMap<>();
-    private static HashMap<Integer, ArticleEntity> mArticleMap = new HashMap<>();
-    private static int mArticleNum = 0;
-    public static ArrayList<ArticleEntity> getMyListItem(int index) {
+    private static HashMap<Integer, ArrayList<Article>> mNewsLists = new HashMap<>();
+//    private static HashMap<Integer, Article> mArticles = new HashMap<>();
+    private static ArrayList<Article> mArticles = new ArrayList<>();
+//    private static int mArticleNum = 0;
+    public static ArrayList<Article> getMyListItem(int index) {
 
-        ArrayList<ArticleEntity> listItems = mNewsLists.get(index);
+        ArrayList<Article> listItems = mNewsLists.get(index);
 
         if (listItems != null) {
             return listItems;
-        } else if (index > 0) {
-            listItems = new ArrayList<>(mNewsLists.get(0));
-            mNewsLists.put(index, listItems);
-            return listItems;
         }
+//        } else if (index > 0) {
+//            listItems = new ArrayList<>(mNewsLists.get(0));
+//            mNewsLists.put(index, listItems);
+//            return listItems;
+//        }
 
         listItems = new ArrayList<>();
 
-        final int NUM_ITEM = 15;
+        final int NUM_ITEM = 10;
         Random random = new Random();
 
         //0可能是滚动图片
@@ -161,17 +163,17 @@ public class Dummy {
                 user = Dummy.getUser(random.nextInt(ORI_USER_NUM) + 1);
             } while(user == null);
 
-            ArticleEntity listItem = new ArticleEntity();
+            Article article = new Article();
 
-            listItem.setTitle("Title " + (i));
-//            listItem.setNewsAbstract("Abstract " + (i));
-            listItem.setContent("Content " + (i));
-//            listItem.setUid(user.getUid());
-//            listItem.setUsername("UserName " + (i));
-            listItem.setUsername(user.getUsername());
+            article.setTitle("Title " + (i));
+//            article.setNewsAbstract("Abstract " + (i));
+            article.setContent("Content " + (i));
+//            article.setUid(user.getUid());
+//            article.setUsername("UserName " + (i));
+            article.setUsername(user.getUsername());
             String date = String.format("2014-01-%02d 21:21", i);
-            listItem.setDateTime(date);
-//            listItem.setCommentNum((i + 1));
+            article.setDateTime(date);
+//            article.setCommentNum((i + 1));
 
 //                Bitmap bitmap;
 //                if (i < 8) {
@@ -180,42 +182,52 @@ public class Dummy {
 ////                bitmap = listItems[i % 8].getImg();
 //                    bitmap = myListItems.get(i%8).getImg();
 //                }
-//                listItem.setImg(bitmap);
+//                article.setImg(bitmap);
 
             //评论：
             int n = random.nextInt(10);
-            ArrayList<CommentEntity> commentEntities = new ArrayList<>();
+            ArrayList<Comment> commentEntities = new ArrayList<>();
             //0是帖子内容
             commentEntities.add(null);
             for (int j = 1; j <= n; j++) {
-                CommentEntity commentEntity = new CommentEntity();
+                Comment comment = new Comment();
                 User user1;
                 do {
                     user1 = Dummy.getUser(random.nextInt(ORI_USER_NUM) + 1);
                 } while(user1 == null);
-                commentEntity.setUsername(user1.getUsername());
+                comment.setUsername(user1.getUsername());
                 String date1 = String.format("2014-02-%02d 21:21", j);
-                commentEntity.setDateTime(date1);
-                commentEntity.setContent("Hello World" + random.nextInt(10));
-//                    commentEntity.setImg(myListItems.get(random.nextInt(NUM_ITEM)).getImg());
-                commentEntities.add(commentEntity);
+                comment.setDateTime(date1);
+                comment.setContent("Hello World" + random.nextInt(10));
+//                    comment.setImg(myListItems.get(random.nextInt(NUM_ITEM)).getImg());
+                commentEntities.add(comment);
             }
-//            listItem.setCommentNum(n);
-            listItem.setCommentEntities(commentEntities);
-            listItems.add(listItem);
+//            article.setCommentNum(n);
+            article.setCommentEntities(commentEntities);
+            mArticles.add(article);
+            listItems.add(article);
         }
         mNewsLists.put(index, listItems);
         return listItems;
     }
 
-    static public boolean addArticle(int classify, ArticleEntity article) {
+    static public Article getArticle(int articleId) {
+        return mArticles.get(articleId);
+    }
+
+    static public boolean addArticle(int classify, Article article) {
         mNewsLists.get(classify).add(article);
         article.getCommentEntities().add(null);
 
-        //new
-//        mArticleNum++;
+        //
+        mArticles.add(article);
         return true;
     }
+
+//    static public void genArticles() {
+//        User user = Dummy.getUser(1);
+//
+//    }
 
 
     /**
@@ -288,8 +300,8 @@ public class Dummy {
         return getUser(1);
     }
 
-    private static ArrayList<ChatMsgEntity> msgs;
-    public static ArrayList<ChatMsgEntity> getMsg(int mUid1, int mUid2) {
+    private static ArrayList<ChatMsg> msgs;
+    public static ArrayList<ChatMsg> getMsg(int mUid1, int mUid2) {
         if (msgs != null) {
             return msgs;
         } else {
@@ -312,7 +324,7 @@ public class Dummy {
 
 
             for(int i = 0; i < COUNT; i++) {
-                ChatMsgEntity entity = new ChatMsgEntity();
+                ChatMsg entity = new ChatMsg();
                 entity.setDate(dataArray[i]);
                 if (i % 2 == 0)
                 {
