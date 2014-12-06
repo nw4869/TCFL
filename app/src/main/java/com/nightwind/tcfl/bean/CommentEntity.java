@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 /**
  * Created by wind on 2014/11/28.
  */
-public class CommentItem {
+public class CommentEntity {
     private String content;
     private String username;
     private String dateTime;

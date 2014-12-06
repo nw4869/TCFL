@@ -1,6 +1,8 @@
 package com.nightwind.tcfl.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +14,8 @@ import android.widget.TextView;
 
 import com.nightwind.tcfl.AvatarOnClickListener;
 import com.nightwind.tcfl.R;
-import com.nightwind.tcfl.bean.CommentItem;
-import com.nightwind.tcfl.bean.MyListItem;
+import com.nightwind.tcfl.bean.ArticleEntity;
+import com.nightwind.tcfl.bean.CommentEntity;
 import com.nightwind.tcfl.bean.User;
 import com.nightwind.tcfl.tool.Dummy;
 import com.nightwind.tcfl.tool.Options;
@@ -29,17 +31,17 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
     private static Context mContext;
 
-    private MyListItem mMyListItem;
-    private ArrayList<CommentItem> mCommentItems;
+    private ArticleEntity mArticleEntity;
+    private ArrayList<CommentEntity> mCommentEntities;
 
     //图片下载选项
     DisplayImageOptions options = Options.getListOptions();
     protected ImageLoader imageLoader = ImageLoader.getInstance();
 
-    public CommentAdapter(Context context, MyListItem myListItem) {
+    public CommentAdapter(Context context, ArticleEntity articleEntity) {
         mContext = context;
-        mMyListItem = myListItem;
-        mCommentItems = myListItem.getCommentItems();
+        mArticleEntity = articleEntity;
+        mCommentEntities = articleEntity.getCommentEntities();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
@@ -97,12 +99,12 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             holder.divider.setVisibility(View.VISIBLE);
             holder.commentItem.setVisibility(View.GONE);
 
-            holder.title0.setText(mMyListItem.getTitle());
-            holder.username0.setText(mMyListItem.getUsername());
-            holder.dateTime0.setText(mMyListItem.getDateTime());
+            holder.title0.setText(mArticleEntity.getTitle());
+            holder.username0.setText(mArticleEntity.getUsername());
+            holder.dateTime0.setText(mArticleEntity.getDateTime());
             //从服务器加载图片
 //            imageLoader.displayImage(Dummy.getImgURLList()[position % 8], holder.imageView1, options);
-            User user = Dummy.getUser(mMyListItem.getUsername());
+            User user = Dummy.getUser(mArticleEntity.getUsername());
             if (user != null) {
                 imageLoader.displayImage(user.getAvaterUrl(), holder.imageView0, options);
                 holder.imageView0.setOnClickListener(new AvatarOnClickListener(mContext, user.getUsername()));
@@ -110,7 +112,10 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
             //test:ContentLayout
             TextView tvContent = new TextView(mContext);
-            tvContent.setText(mMyListItem.getContent());
+            tvContent.setText(mArticleEntity.getContent());
+            tvContent.setTextColor(Color.BLACK);
+            tvContent.setTextSize(16);
+            holder.contentLayout.removeAllViews();
             holder.contentLayout.addView(tvContent);
 
         } else {
@@ -118,13 +123,13 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             holder.divider.setVisibility(View.GONE);
             holder.commentItem.setVisibility(View.VISIBLE);
 
-            holder.TvUsername.setText(mCommentItems.get(position).getUsername());
-            holder.TvDateTime.setText(mCommentItems.get(position).getDateTime());
-            holder.TvContent.setText(mCommentItems.get(position).getContent());
-//        holder.imageView1.setImageBitmap(mCommentItems[position].getImg());
+            holder.TvUsername.setText(mCommentEntities.get(position).getUsername());
+            holder.TvDateTime.setText(mCommentEntities.get(position).getDateTime());
+            holder.TvContent.setText(mCommentEntities.get(position).getContent());
+//        holder.imageView1.setImageBitmap(mCommentEntities[position].getImg());
             //从服务器加载图片
 //            imageLoader.displayImage(Dummy.getImgURLList()[position%8], holder.imageView1, options);
-            User user = Dummy.getUser(mCommentItems.get(position).getUsername());
+            User user = Dummy.getUser(mCommentEntities.get(position).getUsername());
             if (user != null) {
                 imageLoader.displayImage(user.getAvaterUrl(), holder.imageView1, options);
                 holder.imageView1.setOnClickListener(new AvatarOnClickListener(mContext, user.getUsername()));
@@ -135,7 +140,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
     @Override
     public int getItemCount() {
-        return mCommentItems.size();
+        return mCommentEntities.size();
     }
 
 }

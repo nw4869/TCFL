@@ -81,7 +81,7 @@ public class ProfileActivity extends ActionBarActivity implements View.OnTouchLi
         mTVEdu = (TextView) findViewById(R.id.tv_edu);
         mTVHobby = (TextView) findViewById(R.id.tv_hobby);
 
-        mIVAvatar.setOnClickListener(new AvatarOnClickListener(this, mUser.getUsername()));
+//        mIVAvatar.setOnClickListener(new AvatarOnClickListener(this, mUser.getUsername()));
         imageLoader.displayImage(mUser.getAvaterUrl(), mIVAvatar, options);
 
         mTVUsername.setText(mUser.getUsername());

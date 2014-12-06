@@ -18,24 +18,23 @@ import android.view.ViewGroup.LayoutParams;
 import com.nightwind.tcfl.AvatarOnClickListener;
 import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.activity.ContentActivity;
-import com.nightwind.tcfl.bean.MyListItem;
+import com.nightwind.tcfl.bean.ArticleEntity;
 import com.nightwind.tcfl.bean.User;
-import com.nightwind.tcfl.fragment.MyRecyclerFragment;
+import com.nightwind.tcfl.fragment.ArticleRecyclerFragment;
+import com.nightwind.tcfl.tool.BaseTools;
 import com.nightwind.tcfl.tool.Dummy;
 import com.nightwind.tcfl.tool.Options;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> implements ViewPager.OnPageChangeListener {
+public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHolder> implements ViewPager.OnPageChangeListener {
     private static Context mContext;
     private final int mType;
     private final int mColId;
 
-    private ArrayList<MyListItem> mListItems;
+    private ArrayList<ArticleEntity> mListItems;
 
     /**
      * ViewPager
@@ -120,7 +119,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> implem
     }
 
 	// Provide a suitable constructor (depends on the kind of dataset)
-    public MyAdapter(Context context, ArrayList<MyListItem> listItems, int type, int colId) {
+    public ArticleAdapter(Context context, ArrayList<ArticleEntity> listItems, int type, int colId) {
         mContext = context;
         mListItems = listItems;
         mType = type;
@@ -147,7 +146,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> implem
 
         //循环滑动图片
         if (position == 0) {
-            if (mType == MyRecyclerFragment.TYPE_WITH_SLIDE_IMAGE) {
+            if (mType == ArticleRecyclerFragment.TYPE_WITH_SLIDE_IMAGE) {
 
                 holder.mListItemLayout.setVisibility(View.GONE);
                 holder.mSlideImageLayout.setVisibility(View.VISIBLE);
@@ -218,7 +217,15 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> implem
             holder.id = position;
             holder.mTextView1.setText(mListItems.get(position).getTitle());
             holder.mTextView2.setText(mListItems.get(position).getNewsAbstract());
-            holder.mTextView3.setText(mListItems.get(position).getUsername() + "  " + mListItems.get(position).getDateTime());
+            String date = mListItems.get(position).getDateTime();
+            String newDate = date;
+            if (BaseTools.isInCurrentYear(date)) {
+                newDate = BaseTools.getMonthAndDay(date) + " " +BaseTools.getTime(date);
+                if (BaseTools.isInCurrentDay(date)) {
+                    newDate = BaseTools.getTime(date);
+                }
+            }
+            holder.mTextView3.setText(mListItems.get(position).getUsername() + "  " + newDate);
             holder.mTextView4.setText(mListItems.get(position).getCommentNum() + " reply");
 //        holder.mImageVIew.setImageBitmap(mListItems[position].getImg());
             //从服务器加载图片

@@ -15,15 +15,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.nightwind.tcfl.adapter.MyAdapter;
+import com.nightwind.tcfl.adapter.ArticleAdapter;
 import com.nightwind.tcfl.R;
-import com.nightwind.tcfl.bean.MyListItem;
+import com.nightwind.tcfl.bean.ArticleEntity;
 import com.nightwind.tcfl.tool.Dummy;
 
 import java.util.ArrayList;
 
 
-public class MyRecyclerFragment extends Fragment {
+public class ArticleRecyclerFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_POSITION = "position";
@@ -45,7 +45,7 @@ public class MyRecyclerFragment extends Fragment {
 
 //    ArrayList<NewsEntity> newsList = new ArrayList<NewsEntity>();
 
-    ArrayList<MyListItem> myListItems = new ArrayList<MyListItem>();
+    ArrayList<ArticleEntity> articleEntities = new ArrayList<ArticleEntity>();
 
     private static final int[] drawables = { R.drawable.conan1, R.drawable.conan2, R.drawable.conan3, R.drawable.conan4,
             R.drawable.conan5, R.drawable.conan6, R.drawable.conan7, R.drawable.conan8 };
@@ -57,8 +57,8 @@ public class MyRecyclerFragment extends Fragment {
      * @return A new instance of fragment MyCardFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static MyRecyclerFragment newInstance(int position, int type) {
-        MyRecyclerFragment fragment = new MyRecyclerFragment();
+    public static ArticleRecyclerFragment newInstance(int position, int type) {
+        ArticleRecyclerFragment fragment = new ArticleRecyclerFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_POSITION, position);
         args.putInt(ARG_TYPE, type);
@@ -66,7 +66,7 @@ public class MyRecyclerFragment extends Fragment {
         return fragment;
     }
 
-    public MyRecyclerFragment() {
+    public ArticleRecyclerFragment() {
         // Required empty public constructor
     }
 
@@ -99,10 +99,10 @@ public class MyRecyclerFragment extends Fragment {
         // specify an adapter (see also next example)
 
 //        final int NUM_ITEM = 30;
-//        MyListItem[] listItems = new MyListItem[NUM_ITEM];
+//        ArticleEntity[] listItems = new ArticleEntity[NUM_ITEM];
 //        for (int i = 0; i < NUM_ITEM; i++) {
 //
-//            MyListItem listItem = new MyListItem();
+//            ArticleEntity listItem = new ArticleEntity();
 //
 //            listItem.setTitle("Title " + (i + 1));
 //            listItem.setNewsAbstract("Abstract " + (i + 1));
@@ -122,9 +122,9 @@ public class MyRecyclerFragment extends Fragment {
 //        }
 
 
-//        mAdapter = new MyAdapter(getActivity(), myDataset, bitmaps);
-//        mAdapter = new MyAdapter(getActivity(), listItems);
-        mAdapter = new MyAdapter(getActivity(), myListItems, type, position);
+//        mAdapter = new ArticleAdapter(getActivity(), myDataset, bitmaps);
+//        mAdapter = new ArticleAdapter(getActivity(), listItems);
+        mAdapter = new ArticleAdapter(getActivity(), articleEntities, type, position);
         mRecyclerView.setAdapter(mAdapter);
 
         return v;
@@ -190,7 +190,7 @@ public class MyRecyclerFragment extends Fragment {
 
 
     private void initData() {
-        myListItems = Dummy.getMyListItem(position);
+        articleEntities = Dummy.getMyListItem(position);
 
 
 //        final int NUM_ITEM = 30;
@@ -201,10 +201,14 @@ public class MyRecyclerFragment extends Fragment {
 //                bitmap = toRoundBitmap(BitmapFactory.decodeResource(getResources(), drawables[i % 8]));
 //            } else {
 ////                bitmap = listItems[i % 8].getImg();
-//                bitmap = myListItems.get(i%8).getImg();
+//                bitmap = articleEntities.get(i%8).getImg();
 //            }
 ////            listItem.setImg(bitmap);
-//            myListItems.get(i).setImg(bitmap);
+//            articleEntities.get(i).setImg(bitmap);
 //        }
+    }
+    public void refreshList() {
+
+        mAdapter.notifyDataSetChanged();
     }
 }

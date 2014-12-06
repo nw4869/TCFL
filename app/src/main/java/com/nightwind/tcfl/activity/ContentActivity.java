@@ -13,13 +13,13 @@ import android.view.View;
 
 import com.nightwind.tcfl.adapter.CommentAdapter;
 import com.nightwind.tcfl.R;
-import com.nightwind.tcfl.bean.MyListItem;
+import com.nightwind.tcfl.bean.ArticleEntity;
 import com.nightwind.tcfl.tool.Dummy;
 
 
 public class ContentActivity extends ActionBarActivity implements View.OnTouchListener, GestureDetector.OnGestureListener {
 
-    private MyListItem mMylistItem;
+    private ArticleEntity mMylistItem;
 
     //Comment Items
     private RecyclerView mRecyclerView;
@@ -54,7 +54,7 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
 //        //随机指定bitmap
 //        Random random = new Random();
 //        for (int i = 0; i < mMylistItem.getCommentNum(); i++) {
-//            mMylistItem.getCommentItems()[i].setImg(Constants.getMyListItem().get(random.nextInt(mMylistItem.getCommentNum())).getImg());
+//            mMylistItem.getCommentEntities()[i].setImg(Constants.getMyListItem().get(random.nextInt(mMylistItem.getCommentNum())).getImg());
 //        }
 //
 //        TextView tvUsername = (TextView) findViewById(R.id.username);
@@ -78,7 +78,7 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-//        mAdapter = new CommentAdapter(this, mMylistItem.getCommentItems());
+//        mAdapter = new CommentAdapter(this, mMylistItem.getCommentEntities());
         mAdapter = new CommentAdapter(this, mMylistItem);
         mRecyclerView.setAdapter(mAdapter);
 

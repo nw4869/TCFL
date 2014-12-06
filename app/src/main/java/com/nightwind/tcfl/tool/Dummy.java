@@ -1,18 +1,13 @@
 package com.nightwind.tcfl.tool;
 
 
-import android.content.Intent;
-
 import com.nightwind.tcfl.bean.ChatMsgEntity;
-import com.nightwind.tcfl.bean.CommentItem;
-import com.nightwind.tcfl.bean.MyListItem;
-import com.nightwind.tcfl.bean.NewsClassify;
-import com.nightwind.tcfl.bean.NewsEntity;
+import com.nightwind.tcfl.bean.CommentEntity;
+import com.nightwind.tcfl.bean.ArticleEntity;
 import com.nightwind.tcfl.bean.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Random;
 
 public class Dummy {
@@ -138,10 +133,10 @@ public class Dummy {
     /**
      * 文章（帖子）
      */
-    private static HashMap<Integer, ArrayList<MyListItem>> mNewsLists = new HashMap<>();
-    public static ArrayList<MyListItem> getMyListItem(int index) {
+    private static HashMap<Integer, ArrayList<ArticleEntity>> mNewsLists = new HashMap<>();
+    public static ArrayList<ArticleEntity> getMyListItem(int index) {
 
-        ArrayList<MyListItem> listItems = mNewsLists.get(index);
+        ArrayList<ArticleEntity> listItems = mNewsLists.get(index);
 
         if (listItems != null) {
             return listItems;
@@ -153,7 +148,7 @@ public class Dummy {
 
         listItems = new ArrayList<>();
 
-        final int NUM_ITEM = 30;
+        final int NUM_ITEM = 15;
         Random random = new Random();
 
         //0可能是滚动图片
@@ -164,12 +159,12 @@ public class Dummy {
                 user = Dummy.getUser(random.nextInt(ORI_USER_NUM) + 1);
             } while(user == null);
 
-            MyListItem listItem = new MyListItem();
+            ArticleEntity listItem = new ArticleEntity();
 
             listItem.setTitle("Title " + (i));
 //            listItem.setNewsAbstract("Abstract " + (i));
             listItem.setContent("Content " + (i));
-            listItem.setUid(user.getUid());
+//            listItem.setUid(user.getUid());
 //            listItem.setUsername("UserName " + (i));
             listItem.setUsername(user.getUsername());
             String date = String.format("2014-01-%02d 21:21", i);
@@ -187,28 +182,34 @@ public class Dummy {
 
             //评论：
             int n = random.nextInt(10);
-            ArrayList<CommentItem> commentItems = new ArrayList<>();
+            ArrayList<CommentEntity> commentEntities = new ArrayList<>();
             //0是帖子内容
-            commentItems.add(null);
+            commentEntities.add(null);
             for (int j = 1; j <= n; j++) {
-                CommentItem commentItem = new CommentItem();
+                CommentEntity commentEntity = new CommentEntity();
                 User user1;
                 do {
                     user1 = Dummy.getUser(random.nextInt(ORI_USER_NUM) + 1);
                 } while(user1 == null);
-                commentItem.setUsername(user1.getUsername());
+                commentEntity.setUsername(user1.getUsername());
                 String date1 = String.format("2014-02-%02d 21:21", j);
-                commentItem.setDateTime(date1);
-                commentItem.setContent("Hello World" + random.nextInt(10));
-//                    commentItem.setImg(myListItems.get(random.nextInt(NUM_ITEM)).getImg());
-                commentItems.add(commentItem);
+                commentEntity.setDateTime(date1);
+                commentEntity.setContent("Hello World" + random.nextInt(10));
+//                    commentEntity.setImg(myListItems.get(random.nextInt(NUM_ITEM)).getImg());
+                commentEntities.add(commentEntity);
             }
-            listItem.setCommentNum(n);
-            listItem.setCommentItems(commentItems);
+//            listItem.setCommentNum(n);
+            listItem.setCommentEntities(commentEntities);
             listItems.add(listItem);
         }
         mNewsLists.put(index, listItems);
         return listItems;
+    }
+
+    static public boolean addArticle(int classify, ArticleEntity article) {
+        mNewsLists.get(classify).add(article);
+        article.getCommentEntities().add(null);
+        return true;
     }
 
 

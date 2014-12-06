@@ -13,6 +13,7 @@ import com.nightwind.tcfl.AvatarOnClickListener;
 import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.bean.ChatMsgEntity;
 import com.nightwind.tcfl.bean.User;
+import com.nightwind.tcfl.tool.BaseTools;
 import com.nightwind.tcfl.tool.Dummy;
 import com.nightwind.tcfl.tool.Options;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -90,25 +91,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         return vh;
     }
 
-    static public Date strToDate(String str) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-        Date date = null;
-        try {
-            date = format.parse(str);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return date;
-    }
-
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         ChatMsgEntity data = mData.get(position);
         boolean near = false;
         if (position > 0) {
             ChatMsgEntity lastData = mData.get(position-1);
-            Date last = strToDate(lastData.getDate());
-            Date crt = strToDate(data.getDate());
+            Date last = BaseTools.strToDate(lastData.getDate());
+            Date crt = BaseTools.strToDate(data.getDate());
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(last);
             calendar.add(Calendar.MINUTE, 3);

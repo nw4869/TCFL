@@ -1,6 +1,7 @@
 package com.nightwind.tcfl.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -23,10 +24,13 @@ import android.view.Window;
 import android.widget.Toast;
 
 import com.nightwind.tcfl.R;
-import com.nightwind.tcfl.fragment.MyRecyclerFragment;
+import com.nightwind.tcfl.fragment.ArticleRecyclerFragment;
 import com.nightwind.tcfl.fragment.PersonCenterFragment;
 import com.nightwind.tcfl.fragment.SuperAwesomeCardFragment;
 import com.nightwind.tcfl.widget.PagerSlidingTabStrip;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MainActivity extends ActionBarActivity implements PersonCenterFragment.OnFragmentInteractionListener{
 	private DrawerLayout mDrawerLayout;
@@ -35,6 +39,8 @@ public class MainActivity extends ActionBarActivity implements PersonCenterFragm
 	private PagerSlidingTabStrip mPagerSlidingTabStrip;
 	private ViewPager mViewPager;
 	private Toolbar mToolbar;
+
+    private HashMap<Integer, Fragment> mFragments;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +72,17 @@ public class MainActivity extends ActionBarActivity implements PersonCenterFragm
 				case R.id.action_share:
 					Toast.makeText(MainActivity.this, "action_share", Toast.LENGTH_SHORT).show();
 					break;
+                //添加文章
+                case R.id.action_add_article:
+                    int classify = mViewPager.getCurrentItem();
+                    Intent intent = new Intent(MainActivity.this, AddArticleActivity.class);
+                    intent.putExtra("classify", classify);
+//                    MainActivity.this.startActivity(intent);
+                    MainActivity.this.startActivityForResult(intent, classify);
+//                    MainActivity.this.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+//                    Toast.makeText(MainActivity.this, "action_add_article", Toast.LENGTH_SHORT).show();
+                    break;
+
 				default:
 					break;
 				}
@@ -82,6 +99,7 @@ public class MainActivity extends ActionBarActivity implements PersonCenterFragm
 
 		mPagerSlidingTabStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
 		mViewPager = (ViewPager) findViewById(R.id.pager);
+        mFragments = new HashMap<>();
 		mViewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
 		mPagerSlidingTabStrip.setViewPager(mViewPager);
 		mPagerSlidingTabStrip.setOnPageChangeListener(new OnPageChangeListener() {
@@ -99,7 +117,6 @@ public class MainActivity extends ActionBarActivity implements PersonCenterFragm
 			public void onPageScrollStateChanged(int arg0) {
 			}
 		});
-
 
 		initTabsValue();
 	}
@@ -202,16 +219,16 @@ public class MainActivity extends ActionBarActivity implements PersonCenterFragm
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// switch (item.getItemId()) {
-		// case R.id.action_settings:
-		// Toast.makeText(MainActivity.this, "action_settings", 0).show();
-		// break;
-		// case R.id.action_share:
-		// Toast.makeText(MainActivity.this, "action_share", 0).show();
-		// break;
-		// default:
-		// break;
-		// }
+//		switch (item.getItemId()) {
+//            case R.id.action_settings:
+//                Toast.makeText(MainActivity.this, "action_settings", 0).show();
+//                break;
+//            case R.id.action_share:
+//                Toast.makeText(MainActivity.this, "action_share", 0).show();
+//                break;
+//            default:
+//               break;
+//		}
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -219,6 +236,19 @@ public class MainActivity extends ActionBarActivity implements PersonCenterFragm
     public void onFragmentInteraction(int id) {
         Toast.makeText(this, "slider menu select id:" + id, Toast.LENGTH_SHORT).show();
         mDrawerLayout.closeDrawers();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        int classify = requestCode;
+        if (resultCode == 0) {
+            //获取当前fragment
+//            Fragment fragment = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewPager + ":" + mViewPager.getCurrentItem());
+            Fragment fragment = mFragments.get(classify);
+            //刷新列表
+            ((ArticleRecyclerFragment)fragment).refreshList();
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     /* ***************FragmentPagerAdapter***************** */
@@ -243,16 +273,18 @@ public class MainActivity extends ActionBarActivity implements PersonCenterFragm
 		@Override
 		public Fragment getItem(int position) {
 //            if (position == 1) {
-//                return MyRecyclerFragment.newInstance(position);
+//                return ArticleRecyclerFragment.newInstance(position);
 //            }
 //			return SuperAwesomeCardFragment.newInstance(position);
             int type;
             if (position == 0) {
-                type = MyRecyclerFragment.TYPE_WITH_SLIDE_IMAGE;
+                type = ArticleRecyclerFragment.TYPE_WITH_SLIDE_IMAGE;
             } else {
-                type = MyRecyclerFragment.TYPE_NORMAL;
+                type = ArticleRecyclerFragment.TYPE_NORMAL;
             }
-            return MyRecyclerFragment.newInstance(position, type);
+            Fragment fragment = ArticleRecyclerFragment.newInstance(position, type);
+            mFragments.put(position, fragment);
+            return fragment;
 		}
 
 	}

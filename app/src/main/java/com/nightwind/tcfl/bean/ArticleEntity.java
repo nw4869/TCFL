@@ -7,24 +7,17 @@ import java.util.ArrayList;
 /**
  * Created by wind on 2014/11/28.
  */
-public class MyListItem {
+public class ArticleEntity {
     private String title;
     private String newsAbstract;
     private String content;
-    private int uid;
+//    private int uid;
     private String username;
     private String dateTime;
-    private int commentNum;
-    private Bitmap img;
-    private ArrayList<CommentItem> commentItems;
+//    private int commentNum;
+//    private Bitmap img;
+    private ArrayList<CommentEntity> commentEntities = new ArrayList<>();
 
-    public ArrayList<CommentItem> getCommentItems() {
-        return commentItems;
-    }
-
-    public void setCommentItems(ArrayList<CommentItem> commentItems) {
-        this.commentItems = commentItems;
-    }
 
     public String getTitle() {
         return title;
@@ -42,13 +35,13 @@ public class MyListItem {
         this.content = content;
     }
 
-    public int getUid() {
-        return uid;
-    }
-
-    public void setUid(int uid) {
-        this.uid = uid;
-    }
+//    public int getUid() {
+//        return uid;
+//    }
+//
+//    public void setUid(int uid) {
+//        this.uid = uid;
+//    }
 
     public String getUsername() {
         return username;
@@ -67,20 +60,20 @@ public class MyListItem {
     }
 
     public int getCommentNum() {
-        return commentNum;
+        return commentEntities.size();
     }
 
-    public void setCommentNum(int commentNum) {
-        this.commentNum = commentNum;
-    }
+//    public void setCommentNum(int commentNum) {
+//        this.commentNum = commentNum;
+//    }
 
-    public Bitmap getImg() {
-        return img;
-    }
-
-    public void setImg(Bitmap img) {
-        this.img = img;
-    }
+//    public Bitmap getImg() {
+//        return img;
+//    }
+//
+//    public void setImg(Bitmap img) {
+//        this.img = img;
+//    }
 
     public String getNewsAbstract() {
         if (newsAbstract == null) {
@@ -98,6 +91,18 @@ public class MyListItem {
     }
 
 
+    public ArrayList<CommentEntity> getCommentEntities() {
+        return commentEntities;
+    }
+
+    public void setCommentEntities(ArrayList<CommentEntity> commentEntities) {
+        this.commentEntities = commentEntities;
+    }
+
     //////////////////////////////////////////////////////////////////////
 
+    public boolean addComment(CommentEntity comment) {
+        commentEntities.add(comment);
+        return true;
+    }
 }
