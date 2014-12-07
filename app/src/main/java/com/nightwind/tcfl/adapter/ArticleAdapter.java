@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,9 +32,10 @@ import java.util.ArrayList;
 
 public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHolder> implements ViewPager.OnPageChangeListener {
     private static Context mContext;
-    private final int mType;
-    private final int mClassify;
+    private int mType;
+    private int mClassify;
 
+    //数据集
     private ArrayList<Article> mListItems;
 
     /**
@@ -93,6 +95,8 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
         public ViewGroup mPointsViewGroup;
         public View divider;
 
+        public TextView mTvNoData;
+
 		public ViewHolder(View v) {
 			super(v);
             this.v = v;
@@ -111,6 +115,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
             mPointsViewGroup = (ViewGroup) v.findViewById(R.id.viewGroup);
             divider = v.findViewById(R.id.divider);
 
+            mTvNoData = (TextView) v.findViewById(R.id.noData);
         }
 	}
 
@@ -124,6 +129,17 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
         mListItems = listItems;
         mType = type;
         mClassify = colId;
+    }
+
+    //我的收藏
+    public ArticleAdapter(Context context, ArrayList<Article> articleList, int type) {
+        if (type == ArticleRecyclerFragment.TYPE_COLLECTION) {
+            mContext = context;
+            mListItems = articleList;
+            mType = type;
+        } else {
+            Log.e("ArticleAdapter Constructor", "TYPE IS NOT COLLECTION");
+        }
     }
 
 	// Create new views (invoked by the layout manager)
@@ -205,8 +221,18 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
                 holder.divider.setVisibility(View.GONE);
             }
 
-            holder.mHeadline.setVisibility(View.VISIBLE);
-            holder.mHeadline.setText("page " + mClassify);
+            //若不是“我的收藏”则显示page描述
+            if (mType != ArticleRecyclerFragment.TYPE_COLLECTION) {
+                holder.mHeadline.setVisibility(View.VISIBLE);
+                holder.mHeadline.setText("page description " + mClassify);
+            } else {
+                holder.mHeadline.setVisibility(View.GONE);
+            }
+
+            //若长度为1（列表为空），则显示“列表为空”字样
+            if (mListItems.size() == 1) {
+                holder.mTvNoData.setVisibility(View.VISIBLE);
+            }
 
         } else {
             holder.mListItemLayout.setVisibility(View.VISIBLE);

@@ -361,4 +361,29 @@ public class Dummy {
 	/** mark=4 ：收藏 */
 	public final static int mark_favor = 4;
 
+    static private ArrayList<Article> mCollectionList = new ArrayList<>();
+    static {
+        mCollectionList.add(null);
+    }
+    public static ArrayList<Article> getCollectionList() {
+        return mCollectionList;
+    }
+    public static boolean addCollection(Article article) {
+        if (mCollectionList.contains(article)) {
+            return false;
+        } else {
+            mCollectionList.add(article);
+            article.setCollected(true);
+            return true;
+        }
+    }
+    public static boolean removeCollection(Article article) {
+        if (!mCollectionList.contains(article)) {
+            return false;
+        } else {
+            mCollectionList.remove(article);
+            article.setCollected(false);
+            return true;
+        }
+    }
 }

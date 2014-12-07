@@ -155,12 +155,14 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
 //                    MainActivity.this.startActivity(intent);
             ContentActivity.this.startActivityForResult(intent, 0);
         } else if (id == R.id.action_to_collect) {
-            mArticle.setCollected(true);
+//            mArticle.setCollected(true);
+            Dummy.addCollection(mArticle);
             mMenu.getItem(1).setVisible(false);
             mMenu.getItem(2).setVisible(true);
             Toast.makeText(this, "收藏成功", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.action_to_not_collect) {
-            mArticle.setCollected(false);
+//            mArticle.setCollected(false);
+            Dummy.removeCollection(mArticle);
             mMenu.getItem(1).setVisible(true);
             mMenu.getItem(2).setVisible(false);
             Toast.makeText(this, "取消收藏", Toast.LENGTH_SHORT).show();
@@ -208,7 +210,7 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
         float absdx = Math.abs(e2.getX() - e1.getX());
         float absdy = Math.abs(e2.getY() - e1.getY());
-        System.out.println("x` = " + (e1.getX() - e2.getX()) + " y` = " + Math.abs(e1.getY() - e2.getY()));
+//        System.out.println("x` = " + (e1.getX() - e2.getX()) + " y` = " + Math.abs(e1.getY() - e2.getY()));
 
         if (e1.getX() - e2.getX() > verticalMinDistance && Math.abs(velocityX) > minVelocity) {
 

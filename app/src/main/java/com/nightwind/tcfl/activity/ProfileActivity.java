@@ -155,7 +155,7 @@ public class ProfileActivity extends ActionBarActivity implements View.OnTouchLi
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
         float absdx = Math.abs(e2.getX() - e1.getX());
         float absdy = Math.abs(e2.getY() - e1.getY());
-        System.out.println("x` = " + (e1.getX() - e2.getX()) + " y` = " + Math.abs(e1.getY() - e2.getY()));
+//        System.out.println("x` = " + (e1.getX() - e2.getX()) + " y` = " + Math.abs(e1.getY() - e2.getY()));
 
         if (e1.getX() - e2.getX() > verticalMinDistance && Math.abs(velocityX) > minVelocity) {
 

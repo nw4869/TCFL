@@ -31,6 +31,7 @@ public class ArticleRecyclerFragment extends Fragment {
 
     public static final int TYPE_NORMAL = 0;
     public static final int TYPE_WITH_SLIDE_IMAGE = 1;
+    public static final int TYPE_COLLECTION = 2;
 
 
     // TODO: Rename and change types of parameters
@@ -45,7 +46,8 @@ public class ArticleRecyclerFragment extends Fragment {
 
 //    ArrayList<NewsEntity> newsList = new ArrayList<NewsEntity>();
 
-    ArrayList<Article> articleEntities = new ArrayList<Article>();
+    //数据集
+    ArrayList<Article> mArticleEntities = new ArrayList<Article>();
 
     private static final int[] drawables = { R.drawable.conan1, R.drawable.conan2, R.drawable.conan3, R.drawable.conan4,
             R.drawable.conan5, R.drawable.conan6, R.drawable.conan7, R.drawable.conan8 };
@@ -66,6 +68,22 @@ public class ArticleRecyclerFragment extends Fragment {
         return fragment;
     }
 
+
+    /**
+     *
+     * 用于我的收藏，type必须为TYPE_COLLECTION
+     *
+     * @param type
+     * @return
+     */
+    public static ArticleRecyclerFragment newInstance(int type) {
+        ArticleRecyclerFragment fragment = new ArticleRecyclerFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_TYPE, type);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     public ArticleRecyclerFragment() {
         // Required empty public constructor
     }
@@ -75,7 +93,7 @@ public class ArticleRecyclerFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            position = getArguments().getInt(ARG_POSITION);
+            position = getArguments().getInt(ARG_POSITION, 0);
             type = getArguments().getInt(ARG_TYPE);
         }
         initData();
@@ -124,7 +142,11 @@ public class ArticleRecyclerFragment extends Fragment {
 
 //        mAdapter = new ArticleAdapter(getActivity(), myDataset, bitmaps);
 //        mAdapter = new ArticleAdapter(getActivity(), listItems);
-        mAdapter = new ArticleAdapter(getActivity(), articleEntities, type, position);
+        if (type == TYPE_COLLECTION) {
+            mAdapter = new ArticleAdapter(getActivity(), mArticleEntities, type);
+        } else {
+            mAdapter = new ArticleAdapter(getActivity(), mArticleEntities, type, position);
+        }
         mRecyclerView.setAdapter(mAdapter);
 
         return v;
@@ -190,7 +212,17 @@ public class ArticleRecyclerFragment extends Fragment {
 
 
     private void initData() {
-        articleEntities = Dummy.getMyListItem(position);
+        if (type == TYPE_NORMAL || type == TYPE_WITH_SLIDE_IMAGE) {
+            mArticleEntities = Dummy.getMyListItem(position);
+        } else if (type == TYPE_COLLECTION) {
+//            mArticleEntities.clear();
+//            ArrayList<Integer> collectionList = Dummy.getCollectionList();
+//            for (Integer collectionId: collectionList) {
+//                Article article = Dummy.getArticle(collectionId);
+//                mArticleEntities.add(article);
+//            }
+            mArticleEntities = Dummy.getCollectionList();
+        }
 
 
 //        final int NUM_ITEM = 30;
@@ -201,10 +233,10 @@ public class ArticleRecyclerFragment extends Fragment {
 //                bitmap = toRoundBitmap(BitmapFactory.decodeResource(getResources(), drawables[i % 8]));
 //            } else {
 ////                bitmap = listItems[i % 8].getImg();
-//                bitmap = articleEntities.get(i%8).getImg();
+//                bitmap = mArticleEntities.get(i%8).getImg();
 //            }
 ////            listItem.setImg(bitmap);
-//            articleEntities.get(i).setImg(bitmap);
+//            mArticleEntities.get(i).setImg(bitmap);
 //        }
     }
     public void refreshList() {
