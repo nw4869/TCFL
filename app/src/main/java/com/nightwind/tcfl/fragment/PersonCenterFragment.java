@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.nightwind.tcfl.activity.FriendsActivity;
+import com.nightwind.tcfl.activity.MyActicleActivity;
 import com.nightwind.tcfl.activity.MyCollectionActivity;
 import com.nightwind.tcfl.activity.ProfileActivity;
 import com.nightwind.tcfl.R;
@@ -125,6 +126,11 @@ public class PersonCenterFragment extends Fragment implements View.OnClickListen
                     //在线好友
                     intent.putExtra("online", true);
                 }
+                startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+            } else if (id == 3) {
+                //我的帖子
+                Intent intent = new Intent(getActivity(), MyActicleActivity.class);
                 startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
             } else if (id == 4) {

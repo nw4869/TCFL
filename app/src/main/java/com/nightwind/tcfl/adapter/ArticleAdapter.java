@@ -133,7 +133,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
 
     //我的收藏
     public ArticleAdapter(Context context, ArrayList<Article> articleList, int type) {
-        if (type == ArticleRecyclerFragment.TYPE_COLLECTION) {
+        if (type == ArticleRecyclerFragment.TYPE_COLLECTION || type ==ArticleRecyclerFragment.TYPE_MY_ARTICLE) {
             mContext = context;
             mListItems = articleList;
             mType = type;
@@ -221,8 +221,8 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
                 holder.divider.setVisibility(View.GONE);
             }
 
-            //若不是“我的收藏”则显示page描述
-            if (mType != ArticleRecyclerFragment.TYPE_COLLECTION) {
+            //若是首页的viewPage则显示page描述
+            if (mType == ArticleRecyclerFragment.TYPE_NORMAL || mType == ArticleRecyclerFragment.TYPE_WITH_SLIDE_IMAGE) {
                 holder.mHeadline.setVisibility(View.VISIBLE);
                 holder.mHeadline.setText("page description " + mClassify);
             } else {
@@ -241,9 +241,10 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
             holder.mHeadline.setVisibility(View.GONE);
 
             holder.id = position;
-            holder.mTextView1.setText(mListItems.get(position).getTitle());
-            holder.mTextView2.setText(mListItems.get(position).getNewsAbstract());
-            String date = mListItems.get(position).getDateTime();
+            Article article = mListItems.get(position);
+            holder.mTextView1.setText(article.getTitle());
+            holder.mTextView2.setText(article.getNewsAbstract());
+            String date = article.getDateTime();
             String newDate = date;
             if (BaseTools.isInCurrentYear(date)) {
                 newDate = BaseTools.getMonthAndDay(date) + " " +BaseTools.getTime(date);
@@ -251,12 +252,12 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
                     newDate = BaseTools.getTime(date);
                 }
             }
-            holder.mTextView3.setText(mListItems.get(position).getUsername() + "  " + newDate);
-            holder.mTextView4.setText(mListItems.get(position).getCommentNum() + " reply");
+            holder.mTextView3.setText(article.getUsername() + "  " + newDate);
+            holder.mTextView4.setText(article.getCommentNum() + " reply");
 //        holder.mImageVIew.setImageBitmap(mListItems[position].getImg());
             //从服务器加载图片
 //            imageLoader.displayImage(Dummy.getImgURLList()[position % 8], holder.mImageView, options);
-            User user = Dummy.getUser(mListItems.get(position).getUsername());
+            User user = Dummy.getUser(article.getUsername());
             if (user != null) {
                 imageLoader.displayImage(user.getAvaterUrl(), holder.mImageView, options);
                 holder.mImageView.setOnClickListener(new AvatarOnClickListener(mContext, user.getUsername()));

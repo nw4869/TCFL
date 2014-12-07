@@ -10,15 +10,11 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.nightwind.tcfl.R;
-import com.nightwind.tcfl.bean.User;
 import com.nightwind.tcfl.fragment.ArticleRecyclerFragment;
-import com.nightwind.tcfl.tool.Dummy;
 
-public class MyCollectionActivity extends ActionBarActivity implements View.OnTouchListener, GestureDetector.OnGestureListener {
+public class MyActicleActivity extends ActionBarActivity implements View.OnTouchListener, GestureDetector.OnGestureListener{
 
     private Toolbar mToolbar;
-
-//    private User mSelfUser;
 
     private GestureDetector mGestureDetector;
     private final int verticalMinDistance = 50;
@@ -27,21 +23,19 @@ public class MyCollectionActivity extends ActionBarActivity implements View.OnTo
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_collection);
-
-//        mSelfUser = Dummy.getSelfUser();
+        setContentView(R.layout.activity_my_acticle);
 
         //fragment
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .setCustomAnimations(R.anim.slide_right_in, R.anim.slide_left_out, R.anim.slide_left_in, R.anim.slide_right_out)
-                    .add(R.id.container, ArticleRecyclerFragment.newInstance(ArticleRecyclerFragment.TYPE_COLLECTION))
+                    .add(R.id.container, ArticleRecyclerFragment.newInstance(ArticleRecyclerFragment.TYPE_MY_ARTICLE))
                     .commit();
         }
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         // toolbar.setLogo(R.drawable.ic_launcher);
-        mToolbar.setTitle("我的收藏");// 标题的文字需在setSupportActionBar之前，不然会无效
+        mToolbar.setTitle("我的帖子");// 标题的文字需在setSupportActionBar之前，不然会无效
         // toolbar.setSubtitle("副标题");
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -54,7 +48,7 @@ public class MyCollectionActivity extends ActionBarActivity implements View.OnTo
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_my_collection, menu);
+        getMenuInflater().inflate(R.menu.menu_my_acticle, menu);
         return true;
     }
 
@@ -75,7 +69,6 @@ public class MyCollectionActivity extends ActionBarActivity implements View.OnTo
 
         return super.onOptionsItemSelected(item);
     }
-
 
 
     //右划关闭

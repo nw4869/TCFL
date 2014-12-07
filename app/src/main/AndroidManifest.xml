@@ -9,13 +9,13 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
-        android:name="com.nightwind.tcfl.app.AppApplication"
+        android:name=".app.AppApplication"
         android:allowBackup="true"
         android:icon="@drawable/kenan"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.nightwind.tcfl.activity.MainActivity"
+            android:name=".activity.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,28 +24,32 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.nightwind.tcfl.activity.ContentActivity"
+            android:name=".activity.ContentActivity"
             android:label="@string/title_activity_content" >
         </activity>
         <activity
-            android:name="com.nightwind.tcfl.activity.ProfileActivity"
+            android:name=".activity.ProfileActivity"
             android:label="@string/title_activity_profile" >
         </activity>
         <activity
-            android:name="com.nightwind.tcfl.activity.FriendsActivity"
+            android:name=".activity.FriendsActivity"
             android:label="@string/title_activity_friends" >
         </activity>
         <activity
-            android:name="com.nightwind.tcfl.activity.AddArticleActivity"
+            android:name=".activity.AddArticleActivity"
             android:label="@string/title_activity_add_article" >
         </activity>
         <activity
-            android:name="com.nightwind.tcfl.activity.AddCommentActivity"
+            android:name=".activity.AddCommentActivity"
             android:label="@string/title_activity_add_comment" >
         </activity>
         <activity
-            android:name="com.nightwind.tcfl.activity.MyCollectionActivity"
+            android:name=".activity.MyCollectionActivity"
             android:label="@string/title_activity_my_collection" >
+        </activity>
+        <activity
+            android:name=".activity.MyActicleActivity"
+            android:label="@string/title_activity_my_acticle" >
         </activity>
     </application>
 

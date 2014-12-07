@@ -24,7 +24,6 @@ import java.util.ArrayList;
 
 
 public class ArticleRecyclerFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_POSITION = "position";
     private static final String ARG_TYPE = "type";
@@ -32,11 +31,9 @@ public class ArticleRecyclerFragment extends Fragment {
     public static final int TYPE_NORMAL = 0;
     public static final int TYPE_WITH_SLIDE_IMAGE = 1;
     public static final int TYPE_COLLECTION = 2;
+    public static final int TYPE_MY_ARTICLE = 3;
 
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
     private int position;
     private int type;
 
@@ -58,7 +55,6 @@ public class ArticleRecyclerFragment extends Fragment {
      *
      * @return A new instance of fragment MyCardFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static ArticleRecyclerFragment newInstance(int position, int type) {
         ArticleRecyclerFragment fragment = new ArticleRecyclerFragment();
         Bundle args = new Bundle();
@@ -71,7 +67,7 @@ public class ArticleRecyclerFragment extends Fragment {
 
     /**
      *
-     * 用于我的收藏，type必须为TYPE_COLLECTION
+     * 用于我的收藏，我的帖子，type必须为TYPE_COLLECTION 或 TYPE_MY_ARTICLE
      *
      * @param type
      * @return
@@ -142,7 +138,7 @@ public class ArticleRecyclerFragment extends Fragment {
 
 //        mAdapter = new ArticleAdapter(getActivity(), myDataset, bitmaps);
 //        mAdapter = new ArticleAdapter(getActivity(), listItems);
-        if (type == TYPE_COLLECTION) {
+        if (type == TYPE_COLLECTION || type == TYPE_MY_ARTICLE) {
             mAdapter = new ArticleAdapter(getActivity(), mArticleEntities, type);
         } else {
             mAdapter = new ArticleAdapter(getActivity(), mArticleEntities, type, position);
@@ -150,6 +146,12 @@ public class ArticleRecyclerFragment extends Fragment {
         mRecyclerView.setAdapter(mAdapter);
 
         return v;
+    }
+
+    @Override
+    public void onResume() {
+        refreshList();
+        super.onResume();
     }
 
     /**
@@ -214,7 +216,7 @@ public class ArticleRecyclerFragment extends Fragment {
     private void initData() {
         if (type == TYPE_NORMAL || type == TYPE_WITH_SLIDE_IMAGE) {
             mArticleEntities = Dummy.getMyListItem(position);
-        } else if (type == TYPE_COLLECTION) {
+        } else if (type == TYPE_COLLECTION ) {
 //            mArticleEntities.clear();
 //            ArrayList<Integer> collectionList = Dummy.getCollectionList();
 //            for (Integer collectionId: collectionList) {
@@ -222,6 +224,8 @@ public class ArticleRecyclerFragment extends Fragment {
 //                mArticleEntities.add(article);
 //            }
             mArticleEntities = Dummy.getCollectionList();
+        } else if (type == TYPE_MY_ARTICLE) {
+            mArticleEntities = Dummy.getMyArticleList();
         }
 
 

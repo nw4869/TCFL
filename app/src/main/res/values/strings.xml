@@ -24,5 +24,6 @@
     <string name="action_collect">收藏</string>
     <string name="action_to_not_collect">取消收藏</string>
     <string name="title_activity_my_collection">MyCollectionActivity</string>
+    <string name="title_activity_my_acticle">MyActicleActivity</string>
 
 </resources>

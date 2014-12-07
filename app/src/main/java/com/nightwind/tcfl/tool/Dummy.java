@@ -131,119 +131,9 @@ public class Dummy {
 
 
     /**
-     * 文章（帖子）
-     */
-    private static HashMap<Integer, ArrayList<Article>> mNewsLists = new HashMap<>();
-//    private static HashMap<Integer, Article> mArticles = new HashMap<>();
-    private static ArrayList<Article> mArticles = new ArrayList<>();
-//    private static int mArticleNum = 0;
-    public static ArrayList<Article> getMyListItem(int index) {
-
-        ArrayList<Article> listItems = mNewsLists.get(index);
-
-        if (listItems != null) {
-            return listItems;
-        }
-//        } else if (index > 0) {
-//            listItems = new ArrayList<>(mNewsLists.get(0));
-//            mNewsLists.put(index, listItems);
-//            return listItems;
-//        }
-
-        listItems = new ArrayList<>();
-
-        final int NUM_ITEM = 10;
-        Random random = new Random();
-
-        //0可能是滚动图片
-        listItems.add(null);
-        for (int i = 1; i <= NUM_ITEM; i++) {
-            User user;
-            do {
-                user = Dummy.getUser(random.nextInt(ORI_USER_NUM) + 1);
-            } while(user == null);
-
-            Article article = new Article();
-
-            article.setId(i-1);
-            article.setTitle("Title " + (i));
-//            article.setNewsAbstract("Abstract " + (i));
-            article.setContent("Content " + (i));
-//            article.setUid(user.getUid());
-//            article.setUsername("UserName " + (i));
-            article.setUsername(user.getUsername());
-            String date = String.format("2014-01-%02d 21:21", i);
-            article.setDateTime(date);
-//            article.setCommentNum((i + 1));
-
-//                Bitmap bitmap;
-//                if (i < 8) {
-//                    bitmap = toRoundBitmap(BitmapFactory.decodeResource(getResources(), drawables[i % 8]));
-//                } else {
-////                bitmap = listItems[i % 8].getImg();
-//                    bitmap = myListItems.get(i%8).getImg();
-//                }
-//                article.setImg(bitmap);
-
-            //评论：
-            int n = random.nextInt(10);
-            ArrayList<Comment> commentEntities = new ArrayList<>();
-            //0是帖子内容
-            commentEntities.add(null);
-            for (int j = 1; j <= n; j++) {
-                Comment comment = new Comment();
-                User user1;
-                do {
-                    user1 = Dummy.getUser(random.nextInt(ORI_USER_NUM) + 1);
-                } while(user1 == null);
-                comment.setUsername(user1.getUsername());
-                String date1 = String.format("2014-02-%02d 21:21", j);
-                comment.setDateTime(date1);
-                comment.setContent("Hello World" + random.nextInt(10));
-//                    comment.setImg(myListItems.get(random.nextInt(NUM_ITEM)).getImg());
-                commentEntities.add(comment);
-            }
-//            article.setCommentNum(n);
-            article.setCommentEntities(commentEntities);
-            mArticles.add(article);
-            listItems.add(article);
-        }
-        mNewsLists.put(index, listItems);
-        return listItems;
-    }
-
-    static public Article getArticle(int articleId) {
-        return mArticles.get(articleId);
-    }
-
-    static public boolean addArticle(int classify, Article article) {
-        mNewsLists.get(classify).add(article);
-        article.getCommentEntities().add(null);
-
-        //
-        article.setId(mArticles.size());
-        mArticles.add(article);
-        return true;
-    }
-
-//    static public void genArticles() {
-//        User user = Dummy.getUser(1);
-//
-//    }
-
-
-    /**
      * User
      */
     static private final int ORI_USER_NUM = 8;
-
-    static {
-        uidMap  = new HashMap<>();
-        usernameMap = new HashMap<>();
-        getUsersList();
-        getMyListItem(0);
-        getMsg(1, 2);
-    }
 
     static private ArrayList<User> usersList;
     static private HashMap<Integer, User> uidMap;
@@ -302,6 +192,181 @@ public class Dummy {
         return getUser(1);
     }
 
+
+    /**
+     * 我的收藏
+     */
+
+    static private ArrayList<Article> mCollectionList;
+    public static ArrayList<Article> getCollectionList() {
+        return mCollectionList;
+    }
+    public static boolean addCollection(Article article) {
+        if (mCollectionList.contains(article)) {
+            return false;
+        } else {
+            mCollectionList.add(article);
+            article.setCollected(true);
+            return true;
+        }
+    }
+    public static boolean removeCollection(Article article) {
+        if (!mCollectionList.contains(article)) {
+            return false;
+        } else {
+            mCollectionList.remove(article);
+            article.setCollected(false);
+            return true;
+        }
+    }
+
+    /**
+     *
+     *我的帖子
+     *
+     */
+    static private ArrayList<Article> mMyArticleList;
+    public static ArrayList<Article> getMyArticleList() {
+        return mMyArticleList;
+    }
+    public static boolean addMyArticle(Article article) {
+        if (mMyArticleList.contains(article)) {
+            return false;
+        } else {
+            mMyArticleList.add(article);
+            article.setCollected(true);
+            return true;
+        }
+    }
+    public static boolean removeMyArticle(Article article) {
+        if (!mMyArticleList.contains(article)) {
+            return false;
+        } else {
+            mMyArticleList.remove(article);
+            article.setCollected(false);
+            return true;
+        }
+    }
+
+    /**
+     * 文章（帖子）
+     */
+    private static HashMap<Integer, ArrayList<Article>> mNewsLists;
+//    private static HashMap<Integer, Article> mArticles = new HashMap<>();
+    private static ArrayList<Article> mArticles;
+//    private static int mArticleNum = 0;
+    public static ArrayList<Article> getMyListItem(int index) {
+
+        if (mNewsLists == null) {
+            mNewsLists = new HashMap<>();
+        }
+        ArrayList<Article> listItems = mNewsLists.get(index);
+
+        if (listItems != null) {
+            return listItems;
+        }
+//        } else if (index > 0) {
+//            listItems = new ArrayList<>(mNewsLists.get(0));
+//            mNewsLists.put(index, listItems);
+//            return listItems;
+//        }
+
+        listItems = new ArrayList<>();
+
+        final int NUM_ITEM = 10;
+        Random random = new Random();
+
+        //0可能是滚动图片
+        listItems.add(null);
+        for (int i = 1; i <= NUM_ITEM; i++) {
+            User user;
+            do {
+                user = Dummy.getUser(random.nextInt(ORI_USER_NUM) + 1);
+            } while(user == null);
+
+
+            Article article = new Article();
+
+
+            article.setId(mArticles.size());
+            article.setTitle("Title " + (i));
+//            article.setNewsAbstract("Abstract " + (i));
+            article.setContent("Content " + (i));
+//            article.setUid(user.getUid());
+//            article.setUsername("UserName " + (i));
+            article.setUsername(user.getUsername());
+            String date = String.format("2014-01-%02d 21:21", i);
+            article.setDateTime(date);
+//            article.setCommentNum((i + 1));
+
+//                Bitmap bitmap;
+//                if (i < 8) {
+//                    bitmap = toRoundBitmap(BitmapFactory.decodeResource(getResources(), drawables[i % 8]));
+//                } else {
+////                bitmap = listItems[i % 8].getImg();
+//                    bitmap = myListItems.get(i%8).getImg();
+//                }
+//                article.setImg(bitmap);
+
+            //评论：
+            int n = random.nextInt(10);
+            ArrayList<Comment> commentEntities = new ArrayList<>();
+            //0是帖子内容
+            commentEntities.add(null);
+            for (int j = 1; j <= n; j++) {
+                Comment comment = new Comment();
+                User user1;
+                do {
+                    user1 = Dummy.getUser(random.nextInt(ORI_USER_NUM) + 1);
+                } while(user1 == null);
+                comment.setUsername(user1.getUsername());
+                String date1 = String.format("2014-02-%02d 21:21", j);
+                comment.setDateTime(date1);
+                comment.setContent("Hello World" + random.nextInt(10));
+//                    comment.setImg(myListItems.get(random.nextInt(NUM_ITEM)).getImg());
+                commentEntities.add(comment);
+            }
+//            article.setCommentNum(n);
+            article.setCommentEntities(commentEntities);
+
+            //1/7的概率收藏该帖子
+            if (random.nextInt(7) == 0) {
+                addCollection(article);
+            }
+
+            //加入我的帖子
+            if (user.getUid() == getSelfUser().getUid()) {
+                addMyArticle(article);
+            }
+            mArticles.add(article);
+            listItems.add(article);
+        }
+        mNewsLists.put(index, listItems);
+        return listItems;
+    }
+
+    static public Article getArticle(int articleId) {
+        return mArticles.get(articleId);
+    }
+
+    static public boolean addArticle(int classify, Article article) {
+        mNewsLists.get(classify).add(article);
+        article.getCommentEntities().add(null);
+
+        //
+        article.setId(mArticles.size());
+        mArticles.add(article);
+        addMyArticle(article);
+        return true;
+    }
+
+//    static public void genArticles() {
+//        User user = Dummy.getUser(1);
+//
+//    }
+
+
+
     private static ArrayList<ChatMsg> msgs;
     public static ArrayList<ChatMsg> getMsg(int mUid1, int mUid2) {
         if (msgs != null) {
@@ -345,6 +410,22 @@ public class Dummy {
     }
 
 
+    static {
+        mArticles = new ArrayList<>();
+        uidMap  = new HashMap<>();
+        usernameMap = new HashMap<>();
+        mMyArticleList = new ArrayList<>();
+        mCollectionList = new ArrayList<>();
+        mNewsLists = new HashMap<>();
+
+        mMyArticleList.add(null);
+        mCollectionList.add(null);
+
+        getUsersList();
+        getMsg(1, 2);
+        getMyListItem(0);
+    }
+
 
 
 
@@ -360,30 +441,4 @@ public class Dummy {
 	public final static int mark_exclusive = 3;
 	/** mark=4 ：收藏 */
 	public final static int mark_favor = 4;
-
-    static private ArrayList<Article> mCollectionList = new ArrayList<>();
-    static {
-        mCollectionList.add(null);
-    }
-    public static ArrayList<Article> getCollectionList() {
-        return mCollectionList;
-    }
-    public static boolean addCollection(Article article) {
-        if (mCollectionList.contains(article)) {
-            return false;
-        } else {
-            mCollectionList.add(article);
-            article.setCollected(true);
-            return true;
-        }
-    }
-    public static boolean removeCollection(Article article) {
-        if (!mCollectionList.contains(article)) {
-            return false;
-        } else {
-            mCollectionList.remove(article);
-            article.setCollected(false);
-            return true;
-        }
-    }
 }
