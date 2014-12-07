@@ -37,8 +37,8 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
     private final int verticalMinDistance = 50;
     private final int minVelocity         = 0;
 
-    private int mClassify;
-    private int mRowId;
+//    private int mClassify;
+//    private int mRowId;
     private int mArticleId;
 
     private Menu mMenu;
@@ -55,11 +55,12 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mClassify = getIntent().getIntExtra("classify", 0);
-        mRowId = getIntent().getIntExtra("rowId", 0);
+//        mClassify = getIntent().getIntExtra("classify", 0);
+//        mRowId = getIntent().getIntExtra("rowId", 0);
         mArticleId = getIntent().getIntExtra("articleId", 0);
 
-        mArticle = Dummy.getMyListItem(mClassify).get(mRowId);
+//        mArticle = Dummy.getMyListItem(mClassify).get(mRowId);
+        mArticle = Dummy.getArticle(mArticleId);
 //        mArticleId = mArticle.getId();
 
         //设置标题
@@ -93,7 +94,8 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
         mRecyclerView.setLayoutManager(mLayoutManager);
 
 //        mAdapter = new CommentAdapter(this, mArticle.getCommentEntities());
-        mAdapter = new CommentAdapter(this, mArticle, mClassify, mRowId, mArticleId);
+//        mAdapter = new CommentAdapter(this, mArticle, mClassify, mRowId, mArticleId);
+        mAdapter = new CommentAdapter(this, mArticle);
         mRecyclerView.setAdapter(mAdapter);
 
         mGestureDetector = new GestureDetector(this,  this);
@@ -146,9 +148,10 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
         } else if (id == R.id.action_add_comment) {
             //回帖
             Intent intent = new Intent(ContentActivity.this, AddCommentActivity.class);
-            intent.putExtra("classify", mClassify);
-            intent.putExtra("articleId", mRowId);
-            intent.putExtra("parentComment", mRowId);
+//            intent.putExtra("classify", mClassify);
+//            intent.putExtra("rowId", mRowId);
+            intent.putExtra("articleId", mArticleId);
+            intent.putExtra("parentComment", 0);
 //                    MainActivity.this.startActivity(intent);
             ContentActivity.this.startActivityForResult(intent, 0);
         } else if (id == R.id.action_to_collect) {

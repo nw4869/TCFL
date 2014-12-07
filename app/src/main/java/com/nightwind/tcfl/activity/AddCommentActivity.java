@@ -23,8 +23,8 @@ public class AddCommentActivity extends ActionBarActivity {
     private EditText mETContent;
 
     private User mSelfUser;
-    private int mClassify = 0;
-    private int mRowId = 1;
+    private int mClassify;
+    private int mRowId;
     private int mArticleId = 0;
     private int mParentComment = 0;
 
@@ -34,8 +34,8 @@ public class AddCommentActivity extends ActionBarActivity {
         setContentView(R.layout.activity_add_comment);
 
         if (getIntent() != null) {
-            mClassify = getIntent().getIntExtra("classify", 0);
-            mRowId = getIntent().getIntExtra("rowId", 1);
+//            mClassify = getIntent().getIntExtra("classify", 0);
+//            mRowId = getIntent().getIntExtra("rowId", 1);
             mParentComment = getIntent().getIntExtra("parentComment", 0);
             mArticleId = getIntent().getIntExtra("articleId", 0);
         } else {
@@ -88,11 +88,12 @@ public class AddCommentActivity extends ActionBarActivity {
     }
 
     private boolean pushComment() {
-        Article article = Dummy.getMyListItem(mClassify).get(mRowId);
+//        Article article = Dummy.getMyListItem(mClassify).get(mRowId);
+        Article article = Dummy.getArticle(mArticleId);
 
         Comment comment = new Comment();
 
-        comment.setParent(mParentComment);
+        comment.setParentComment(mParentComment);
         String content = String.valueOf(mETContent.getText());
         comment.setContent(content);
         comment.setUsername(mSelfUser.getUsername());

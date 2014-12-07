@@ -9,7 +9,8 @@ public class Comment {
     private String content;
     private String username;
     private String dateTime;
-    private int parent = 0;
+    private int parentComment = 0;
+    private int articleId;
 
     public String getContent() {
         return content;
@@ -35,11 +36,19 @@ public class Comment {
         this.dateTime = dateTime;
     }
 
-    public int getParentId() {
-        return parent;
+    public int getParentComment() {
+        return parentComment;
     }
 
-    public void setParent(int parent) {
-        this.parent = parent;
+    public void setParentComment(int parent) {
+        this.parentComment = parent;
+    }
+
+    public int getArticleId() {
+        return articleId;
+    }
+
+    public void setArticleId(int articleId) {
+        this.articleId = articleId;
     }
 }

@@ -242,8 +242,8 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
 //                    Toast.makeText(mContext, "onClick " + id, Toast.LENGTH_SHORT).show();
                     int articleId = mListItems.get(position).getId();
                     Intent intent = new Intent(mContext, ContentActivity.class);
-                    intent.putExtra("rowId", position);
-                    intent.putExtra("classify", mClassify);
+//                    intent.putExtra("rowId", position);
+//                    intent.putExtra("classify", mClassify);
                     intent.putExtra("articleId", articleId);
 
                     mContext.startActivity(intent);

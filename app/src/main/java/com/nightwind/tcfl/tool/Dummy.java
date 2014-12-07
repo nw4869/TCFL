@@ -165,6 +165,7 @@ public class Dummy {
 
             Article article = new Article();
 
+            article.setId(i-1);
             article.setTitle("Title " + (i));
 //            article.setNewsAbstract("Abstract " + (i));
             article.setContent("Content " + (i));
@@ -220,6 +221,7 @@ public class Dummy {
         article.getCommentEntities().add(null);
 
         //
+        article.setId(mArticles.size());
         mArticles.add(article);
         return true;
     }
