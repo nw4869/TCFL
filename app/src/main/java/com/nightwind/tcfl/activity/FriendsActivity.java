@@ -1,6 +1,5 @@
 package com.nightwind.tcfl.activity;
 
-import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -28,8 +27,10 @@ public class FriendsActivity extends ActionBarActivity implements FriendsFragmen
 
     private Menu mMenu;
     private Toolbar mToolbar;
-    private int current = 0;
+    private int currentFragmentStackTop = 0;
     private boolean mOnline = false;
+
+    private boolean mIsFromProfile = false;
 
     //这三个用于右划关闭activity
     private GestureDetector mGestureDetector;
@@ -41,8 +42,13 @@ public class FriendsActivity extends ActionBarActivity implements FriendsFragmen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends);
 
+        String profileUsername = null;
         if (getIntent() != null) {
             mOnline = getIntent().getBooleanExtra("online", false);
+            mIsFromProfile = getIntent().getBooleanExtra("isFromProfile", false);
+            if (mIsFromProfile) {
+                profileUsername = getIntent().getStringExtra("username");
+            }
         }
 
         if (savedInstanceState == null) {
@@ -63,14 +69,35 @@ public class FriendsActivity extends ActionBarActivity implements FriendsFragmen
 
         }
 
+        if (mIsFromProfile) {
+            onFragmentInteraction(profileUsername);
+        }
+
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (mMenu != null) {
+            mMenu.getItem(0).setVisible(currentFragmentStackTop == 0);
+        }
+    }
+
+    @Override
+    protected void onResumeFragments() {
+        super.onResumeFragments();
+        if (mMenu != null) {
+            mMenu.getItem(0).setVisible(currentFragmentStackTop == 0);
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_friends, menu);
         mMenu = menu;
+        mMenu.getItem(0).setVisible(currentFragmentStackTop == 0);
         return true;
     }
 
@@ -86,7 +113,7 @@ public class FriendsActivity extends ActionBarActivity implements FriendsFragmen
             return true;
         } else if (id == android.R.id.home) {
             hideSoftInput();
-            if (current == 0) {
+            if (currentFragmentStackTop == 0) {
                 //结束该Activiy
                 finish();
                 overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
@@ -96,7 +123,7 @@ public class FriendsActivity extends ActionBarActivity implements FriendsFragmen
                 getSupportActionBar().setTitle("Friends");
                 mMenu.getItem(0).setVisible(true);  //显示添加好友
                 getSupportFragmentManager().popBackStack();
-                current--;
+                currentFragmentStackTop--;
             }
         }  else if (id == R.id.action_add_friend) {
             //打开添加好友菜单
@@ -107,7 +134,7 @@ public class FriendsActivity extends ActionBarActivity implements FriendsFragmen
                     .addToBackStack("addFriend")
                     .commit();
             getSupportActionBar().setTitle("add Friend");
-            current++;
+            currentFragmentStackTop++;
             mMenu.getItem(0).setVisible(false);  //隐藏添加好友
         }
 
@@ -128,9 +155,11 @@ public class FriendsActivity extends ActionBarActivity implements FriendsFragmen
                 .add(R.id.container, mChatFragment)
                 .addToBackStack("friendsList")
                 .commit();
-        current++;
+        currentFragmentStackTop++;
         getSupportActionBar().setTitle(username);
-        mMenu.getItem(0).setVisible(false);
+        if (mMenu != null) {
+            mMenu.getItem(0).setVisible(false);
+        }
     }
 
     /**
@@ -144,8 +173,8 @@ public class FriendsActivity extends ActionBarActivity implements FriendsFragmen
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             hideSoftInput();
             getSupportActionBar().setTitle("Friends");
-            current--;
-            if (current == 0) {
+            currentFragmentStackTop--;
+            if (currentFragmentStackTop == 0) {
                 mMenu.getItem(0).setVisible(true);  //显示添加好友
             }
         }
@@ -207,7 +236,7 @@ public class FriendsActivity extends ActionBarActivity implements FriendsFragmen
         } else if (absdx > 1.5*absdy && e2.getX() - e1.getX() > verticalMinDistance && Math.abs(velocityX) > minVelocity) {
 
             hideSoftInput();
-            if (current == 0) { //在列表界面时右划关闭activity
+            if (currentFragmentStackTop == 0) { //在列表界面时右划关闭activity
                 finish();
                 overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
                 return true;
@@ -216,7 +245,7 @@ public class FriendsActivity extends ActionBarActivity implements FriendsFragmen
                 getSupportActionBar().setTitle("Friends");
                 mMenu.getItem(0).setVisible(true);  //显示添加好友
                 getSupportFragmentManager().popBackStack();
-                current--;
+                currentFragmentStackTop--;
             }
 
         }

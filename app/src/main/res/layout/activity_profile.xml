@@ -266,4 +266,34 @@
         android:layout_below="@+id/item6"
         android:background="#1e000000" />
 
+    <RelativeLayout
+        android:id="@+id/rl_start_chat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_tab"
+        android:layout_marginTop="16dp"
+        android:paddingRight="8dp"
+        android:paddingLeft="8dp"
+        android:layout_below="@+id/divider7"
+        android:layout_centerHorizontal="true">
+
+        <ImageView
+            android:id="@+id/iv_chat"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/start_chat2"/>
+
+        <TextView
+            android:id="@+id/tv_start_chat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@id/iv_chat"
+            android:text="开始对话"
+            style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
+            android:layout_centerVertical="true" />
+
+    </RelativeLayout>
+
+
 </RelativeLayout>

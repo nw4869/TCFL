@@ -1,5 +1,6 @@
 package com.nightwind.tcfl.activity;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -8,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -39,6 +41,8 @@ public class ProfileActivity extends ActionBarActivity implements View.OnTouchLi
     private TextView mTVWork;
     private TextView mTVEdu;
     private TextView mTVHobby;
+
+    private ViewGroup mVGStartChat;
 
     //图片下载选项
     DisplayImageOptions options = Options.getListOptions();
@@ -81,6 +85,8 @@ public class ProfileActivity extends ActionBarActivity implements View.OnTouchLi
         mTVEdu = (TextView) findViewById(R.id.tv_edu);
         mTVHobby = (TextView) findViewById(R.id.tv_hobby);
 
+        mVGStartChat = (ViewGroup) findViewById(R.id.rl_start_chat);
+
 //        mIVAvatar.setOnClickListener(new AvatarOnClickListener(this, mUser.getUsername()));
         imageLoader.displayImage(mUser.getAvaterUrl(), mIVAvatar, options);
 
@@ -92,6 +98,22 @@ public class ProfileActivity extends ActionBarActivity implements View.OnTouchLi
         mTVWork.setText(mUser.getWork());
         mTVEdu.setText(mUser.getEduString());
         mTVHobby.setText(mUser.getHobby());
+
+        if (mUser.getUid() == Dummy.getSelfUser().getUid()) {
+            mVGStartChat.setVisibility(View.GONE);
+        } else {
+            mVGStartChat.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(ProfileActivity.this, FriendsActivity.class);
+                    intent.putExtra("isFromProfile", true);
+                    intent.putExtra("username", mUser.getUsername());
+                    ProfileActivity.this.startActivity(intent);
+                    ProfileActivity.this.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+                    finish();
+                }
+            });
+        }
     }
 
 
@@ -159,16 +181,8 @@ public class ProfileActivity extends ActionBarActivity implements View.OnTouchLi
 
         if (e1.getX() - e2.getX() > verticalMinDistance && Math.abs(velocityX) > minVelocity) {
 
-            // 切换Activity
-            // Intent intent = new Intent(ViewSnsActivity.this, UpdateStatusActivity.class);
-            // startActivity(intent);
-//            Toast.makeText(this, "向左手势", Toast.LENGTH_SHORT).show();
         } else if (absdx > 1.5*absdy && e2.getX() - e1.getX() > verticalMinDistance && Math.abs(velocityX) > minVelocity) {
 
-            // 切换Activity
-            // Intent intent = new Intent(ViewSnsActivity.this, UpdateStatusActivity.class);
-            // startActivity(intent);
-//            Toast.makeText(this, "向右手势", Toast.LENGTH_SHORT).show();
             finish();
             overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
             return true;

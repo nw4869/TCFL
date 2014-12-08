@@ -234,7 +234,6 @@ public class Dummy {
             return false;
         } else {
             mMyArticleList.add(article);
-            article.setCollected(true);
             return true;
         }
     }
@@ -243,7 +242,6 @@ public class Dummy {
             return false;
         } else {
             mMyArticleList.remove(article);
-            article.setCollected(false);
             return true;
         }
     }
@@ -291,7 +289,7 @@ public class Dummy {
             article.setId(mArticles.size());
             article.setTitle("Title " + (i));
 //            article.setNewsAbstract("Abstract " + (i));
-            article.setContent("Content " + (i));
+            article.setContent("I am Content " + (i) + "  I am Content\n "+ "I am Content\n "+ "I am Content\n "+ "I am Content\n "+ "I am Content\n "+ "I am Content\n "+ "I am Content\n "+ "I am Content\n "+ "I am Content\n "+ "I am Content\n "+ "I am Content\n "+ "I am Content\n ");
 //            article.setUid(user.getUid());
 //            article.setUsername("UserName " + (i));
             article.setUsername(user.getUsername());

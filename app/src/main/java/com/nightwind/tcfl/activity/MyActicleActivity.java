@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewParent;
 
 import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.fragment.ArticleRecyclerFragment;
@@ -90,6 +91,12 @@ public class MyActicleActivity extends ActionBarActivity implements View.OnTouch
 
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        // Disallow Parent Intercept, just in case
+//        ViewParent parent = getParent();
+        ViewParent parent = getWindow().getDecorView().getParent();
+        if (parent != null) {
+            parent.requestDisallowInterceptTouchEvent(true);
+        }
         return false;
     }
 
