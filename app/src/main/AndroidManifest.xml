@@ -51,6 +51,14 @@
             android:name=".activity.MyActicleActivity"
             android:label="@string/title_activity_my_acticle" >
         </activity>
+        <activity
+            android:name=".activity.LoginActivity"
+            android:label="@string/title_activity_login" >
+        </activity>
+        <activity
+            android:name=".activity.BaseActivity"
+            android:label="@string/title_activity_base" >
+        </activity>
     </application>
 
 </manifest>

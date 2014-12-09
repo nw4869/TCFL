@@ -1,0 +1,61 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.nightwind.tcfl.activity.LoginActivity">
+
+    <include layout="@layout/toolbar"
+        android:id="@+id/toolbar"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
+        android:padding="32dp">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/username"
+            android:maxLength="10"
+            android:hint="用户名"
+            android:text="nw"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:inputType="textPassword"
+            android:maxLength="18"
+            android:id="@+id/password"
+            android:layout_below="@+id/username"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:hint="密码"
+            android:text="4869"/>
+
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="登录"
+            android:background="?attr/colorPrimary"
+            android:id="@+id/login"
+            android:layout_below="@+id/password"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:onClick="onClickLogin" />
+
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_below="@id/login"-->
+            <!--android:layout_marginTop="16dp"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:text="忘记密码?"/>-->
+
+
+        </RelativeLayout>
+
+
+</RelativeLayout>

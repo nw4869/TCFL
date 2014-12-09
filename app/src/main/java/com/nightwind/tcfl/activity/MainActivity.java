@@ -26,7 +26,6 @@ import android.widget.Toast;
 import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.fragment.ArticleRecyclerFragment;
 import com.nightwind.tcfl.fragment.PersonCenterFragment;
-import com.nightwind.tcfl.fragment.SuperAwesomeCardFragment;
 import com.nightwind.tcfl.widget.PagerSlidingTabStrip;
 
 import java.util.ArrayList;
@@ -146,42 +145,42 @@ public class MainActivity extends ActionBarActivity implements PersonCenterFragm
 		mPagerSlidingTabStrip.setTextColor(Color.BLACK);
 	}
 
-	/**
-	 * 界面颜色的更改
-	 */
-	@SuppressLint("NewApi")
-	private void colorChange(int position) {
-		// 用来提取颜色的Bitmap
-		Bitmap bitmap = BitmapFactory.decodeResource(getResources(),
-				SuperAwesomeCardFragment.getBackgroundBitmapPosition(position));
-		// Palette的部分
-		Palette.generateAsync(bitmap, new Palette.PaletteAsyncListener() {
-			/**
-			 * 提取完之后的回调方法
-			 */
-			@Override
-			public void onGenerated(Palette palette) {
-				Palette.Swatch vibrant = palette.getVibrantSwatch();
-                if (vibrant == null) {
-                    System.out.println("vibrant is null");
-                    return ;
-                }
-				/* 界面颜色UI统一性处理,看起来更Material一些 */
-				mPagerSlidingTabStrip.setBackgroundColor(vibrant.getRgb());
-				mPagerSlidingTabStrip.setTextColor(vibrant.getTitleTextColor());
-				// 其中状态栏、游标、底部导航栏的颜色需要加深一下，也可以不加，具体情况在代码之后说明
-				mPagerSlidingTabStrip.setIndicatorColor(colorBurn(vibrant.getRgb()));
-
-				mToolbar.setBackgroundColor(vibrant.getRgb());
-				if (android.os.Build.VERSION.SDK_INT >= 21) {
-					Window window = getWindow();
-					// 很明显，这两货是新API才有的。
-					window.setStatusBarColor(colorBurn(vibrant.getRgb()));
-					window.setNavigationBarColor(colorBurn(vibrant.getRgb()));
-				}
-			}
-		});
-	}
+//	/**
+//	 * 界面颜色的更改
+//	 */
+//	@SuppressLint("NewApi")
+//	private void colorChange(int position) {
+//		// 用来提取颜色的Bitmap
+//		Bitmap bitmap = BitmapFactory.decodeResource(getResources(),
+//				SuperAwesomeCardFragment.getBackgroundBitmapPosition(position));
+//		// Palette的部分
+//		Palette.generateAsync(bitmap, new Palette.PaletteAsyncListener() {
+//			/**
+//			 * 提取完之后的回调方法
+//			 */
+//			@Override
+//			public void onGenerated(Palette palette) {
+//				Palette.Swatch vibrant = palette.getVibrantSwatch();
+//                if (vibrant == null) {
+//                    System.out.println("vibrant is null");
+//                    return ;
+//                }
+//				/* 界面颜色UI统一性处理,看起来更Material一些 */
+//				mPagerSlidingTabStrip.setBackgroundColor(vibrant.getRgb());
+//				mPagerSlidingTabStrip.setTextColor(vibrant.getTitleTextColor());
+//				// 其中状态栏、游标、底部导航栏的颜色需要加深一下，也可以不加，具体情况在代码之后说明
+//				mPagerSlidingTabStrip.setIndicatorColor(colorBurn(vibrant.getRgb()));
+//
+//				mToolbar.setBackgroundColor(vibrant.getRgb());
+//				if (android.os.Build.VERSION.SDK_INT >= 21) {
+//					Window window = getWindow();
+//					// 很明显，这两货是新API才有的。
+//					window.setStatusBarColor(colorBurn(vibrant.getRgb()));
+//					window.setNavigationBarColor(colorBurn(vibrant.getRgb()));
+//				}
+//			}
+//		});
+//	}
 
 	/**
 	 * 颜色加深处理

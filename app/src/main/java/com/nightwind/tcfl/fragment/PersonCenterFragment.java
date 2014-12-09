@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.nightwind.tcfl.activity.FriendsActivity;
+import com.nightwind.tcfl.activity.LoginActivity;
 import com.nightwind.tcfl.activity.MyActicleActivity;
 import com.nightwind.tcfl.activity.MyCollectionActivity;
 import com.nightwind.tcfl.activity.ProfileActivity;
@@ -138,6 +139,12 @@ public class PersonCenterFragment extends Fragment implements View.OnClickListen
                 Intent intent = new Intent(getActivity(), MyCollectionActivity.class);
                 startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+            } else if (id == 7) {
+                //退出/登录
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+
             } else {
 
                 mListener.onFragmentInteraction(id);

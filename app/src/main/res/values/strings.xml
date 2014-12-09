@@ -25,5 +25,8 @@
     <string name="action_to_not_collect">取消收藏</string>
     <string name="title_activity_my_collection">MyCollectionActivity</string>
     <string name="title_activity_my_acticle">MyActicleActivity</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_base">BaseActivity</string>
+    <string name="action_register">注册</string>
 
 </resources>
