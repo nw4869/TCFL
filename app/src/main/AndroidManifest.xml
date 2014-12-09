@@ -33,7 +33,8 @@
         </activity>
         <activity
             android:name=".activity.FriendsActivity"
-            android:label="@string/title_activity_friends" >
+            android:label="@string/title_activity_friends"
+            android:launchMode="singleTask" >
         </activity>
         <activity
             android:name=".activity.AddArticleActivity"
@@ -58,6 +59,10 @@
         <activity
             android:name=".activity.BaseActivity"
             android:label="@string/title_activity_base" >
+        </activity>
+        <activity
+            android:name=".activity.RegisterActivity"
+            android:label="@string/title_activity_register" >
         </activity>
     </application>
 

@@ -1,10 +1,9 @@
 package com.nightwind.tcfl.activity;
 
 import android.app.ProgressDialog;
-import android.content.SharedPreferences;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,30 +11,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import com.nightwind.tcfl.Auth;
 import com.nightwind.tcfl.R;
-import com.nightwind.tcfl.tool.encryptionUtil.MD5Util;
-import com.nightwind.tcfl.tool.encryptionUtil.RSAUtils;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.util.EntityUtils;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class LoginActivity extends BaseActivity {
 
@@ -44,28 +22,24 @@ public class LoginActivity extends BaseActivity {
     private EditText inputPassword;
     private ProgressDialog mDialog;
 
-//    static public final int MSG_SUCCESS = 0;
-//    static public final int MSG_PWD_ERROR = 1;
-//    static public final int MSG_URL_ERROR = 2;
-//    static public final int MSG_TOKEN_ERROR = 3;
-//    static public final int MSG_TOKEN_SUCCESS = 4;
-
     static public final int RESULT_SUCCESS = 0;
     static public final int RESULT_FAILED = 1;
+
+    private static final int REQUEST_REGISTER = 0;
 
     //Handler
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case Auth.MSG_SUCCESS:
+                case Auth.MSG_LOGIN_SUCCESS:
                     mDialog.cancel();
                     Toast.makeText(getApplicationContext(), "登录成功！" + msg.getData().getString("info"), Toast.LENGTH_SHORT).show();
                     setResult(RESULT_SUCCESS);
                     finish();
                     overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
                     break;
-                case Auth.MSG_PWD_ERROR:
+                case Auth.MSG_LOGIN_PWD_ERROR:
                     mDialog.cancel();
                     Toast.makeText(getApplicationContext(), "密码错误", Toast.LENGTH_SHORT).show();
                     break;
@@ -73,7 +47,7 @@ public class LoginActivity extends BaseActivity {
                     mDialog.cancel();
                     Toast.makeText(getApplicationContext(), "URL验证失败", Toast.LENGTH_SHORT).show();
                     break;
-                case Auth.MSG_TOKEN_ERROR:
+                case Auth.MSG_LOGIN_TOKEN_ERROR:
                     mDialog.cancel();
                     Toast.makeText(getApplicationContext(), "token验证失败", Toast.LENGTH_SHORT).show();
                     break;
@@ -105,14 +79,24 @@ public class LoginActivity extends BaseActivity {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClickLogin();
+                onClickLogin(Auth.SERVER_LOCAL_DEBUG);
+            }
+        });
+
+        //TEST
+        loginBtn.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                onClickLogin(Auth.SERVER_REMOTE);
+                Toast.makeText(LoginActivity.this, "LOGIN_REMOTE", Toast.LENGTH_SHORT).show();
+                return true;
             }
         });
 
         setResult(RESULT_FAILED);
     }
 
-    private void onClickLogin() {
+    private void onClickLogin(String server) {
         mDialog = new ProgressDialog(LoginActivity.this);
         mDialog.setTitle("登陆");
         mDialog.setMessage("正在登陆服务器，请稍后...");
@@ -122,7 +106,7 @@ public class LoginActivity extends BaseActivity {
 
         String username = String.valueOf(inputUsername.getText());
         String password = String.valueOf(inputPassword.getText());
-        Auth auth = new Auth(this);
+        Auth auth = new Auth(this, server);
         auth.login(username, password, handler);
 
     }
@@ -136,6 +120,25 @@ public class LoginActivity extends BaseActivity {
 //        checkTokenThread.start();
 //    }
 
+
+    /**
+     * 菜单栏：注册用户activity返回结果
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_REGISTER) {
+            if (resultCode == RegisterActivity.RESULT_REGISTER_SUCCESS) {
+                //注册（同时登录）登录，结束当前activity，返回成功
+                setResult(RESULT_SUCCESS);
+                finish();
+                overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
     /**
      * 创建菜单
@@ -165,6 +168,9 @@ public class LoginActivity extends BaseActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        } else if (id == R.id.action_register) {
+            Intent intent = new Intent(this, RegisterActivity.class);
+            startActivityForResult(intent, REQUEST_REGISTER);
         }
 
         return super.onOptionsItemSelected(item);

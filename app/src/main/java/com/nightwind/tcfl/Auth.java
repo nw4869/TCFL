@@ -6,8 +6,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.FragmentActivity;
-import android.view.View;
 
 import com.nightwind.tcfl.tool.encryptionUtil.MD5Util;
 import com.nightwind.tcfl.tool.encryptionUtil.RSAUtils;
@@ -25,6 +23,8 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -47,7 +47,7 @@ public class Auth {
     private static final int REQUEST_TIMEOUT = 5 * 1000;//设置请求超时10秒钟
     private static final int SO_TIMEOUT = 10 * 1000;  //设置等待数据超时时间10秒钟
     private static final int LOGIN_OK = 1;
-    public static final String SERVER_REMOTE = "http://nw48692.s155.eatj.com/";
+    public static final String SERVER_REMOTE = "http://nw48693.s155.eatj.com/";
     public static final String SERVER_LOCAL_DEBUG = "http://192.168.1.123:8081/";
 //    private static String SERVER = SERVER0;
 
@@ -72,6 +72,13 @@ public class Auth {
         mServer = server;
     }
 
+    public String getServer() {
+        return mServer;
+    }
+
+    public void setServer(String Server) {
+        this.mServer = Server;
+    }
 
     /**
      * 初始化HttpClient，并设置超时
@@ -85,14 +92,127 @@ public class Auth {
         return client;
     }
 
-    static public final int MSG_SUCCESS = 0;
-    static public final int MSG_PWD_ERROR = 1;
+    static public final int MSG_LOGIN_SUCCESS = 0;
+    static public final int MSG_LOGIN_PWD_ERROR = 1;
     static public final int MSG_URL_ERROR = 2;
-    static public final int MSG_TOKEN_ERROR = 3;
+    static public final int MSG_LOGIN_TOKEN_ERROR = 3;
+
     static public final int MSG_LOGOUT_SUCCESS = 4;
 
+    static public final int MSG_REGISTER_SUCCESS = 5;
+    static public final int MSG_REGISTER_FILED = 6;
 
 //    static public final int MSG_TOKEN_SUCCESS = 4;
+
+    class RegisterThread implements Runnable {
+
+        @Override
+        public void run() {
+
+            //信息反馈
+            Message msg = mHandler.obtainMessage();
+
+            String username = mUsername;
+            String password = mPassword;
+            System.out.println("username=" + username + ":password=" + password);
+
+            //获取PublicKey
+            String cipherPwd;
+            String strPublicKey = getPublicKey();
+            System.out.println("公钥=" + strPublicKey);
+            if (strPublicKey != null) {
+                try {
+
+                    //公钥加密
+                    cipherPwd = RSAUtils.encrypt(password, strPublicKey);
+                    System.out.println("密文：" + cipherPwd);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.out.print("加密失败");
+                    msg.what = MSG_URL_ERROR;
+                    mHandler.sendMessage(msg);
+                    //跳出
+                    return;
+                }
+
+                //URL合法，但是这一步并不验证返回结果
+                boolean registerValidate = registerServer(username, cipherPwd);
+                
+                System.out.println("----------------------------bool is :" + registerValidate + "----------response:" + responseMsg);
+                if (registerValidate) {
+
+                    boolean success = false;
+                    String token = null;
+                    try {
+                        //解析服务器返回的json
+                        JSONObject jo = new JSONObject(responseMsg);
+                        //获取状态
+                        success = jo.getBoolean("success");
+                        //获取token
+                        token = jo.getString("token");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    if (success) {
+                        //注册成功，保存token，用户名
+                        saveToken(token);
+                        System.out.println("save token:" + token);
+                        saveUsername(username);
+
+                        msg.what = MSG_REGISTER_SUCCESS;
+                        Bundle bundle = new Bundle();
+                        bundle.putString("info", responseMsg);
+                        msg.setData(bundle);
+                        mHandler.sendMessage(msg);
+                    } else {
+                        msg.what = MSG_REGISTER_FILED;
+                        mHandler.sendMessage(msg);
+                    }
+
+                } else {
+                    msg.what = MSG_URL_ERROR;
+                    mHandler.sendMessage(msg);
+                }
+            } else {
+                msg.what = MSG_URL_ERROR;
+                mHandler.sendMessage(msg);
+            }
+        }
+    }
+
+    private boolean registerServer(String username, String password) {
+        boolean registerValidate = false;
+        //使用apache HTTP客户端实现
+        String urlStr = mServer + "MyLogin/Register";
+        HttpPost request = new HttpPost(urlStr);
+        //如果传递参数多的话，可以对传递的参数进行封装
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        //添加用户名和密码
+        params.add(new BasicNameValuePair("username", username));
+        params.add(new BasicNameValuePair("password", password));
+        try {
+            //设置请求参数项
+            request.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
+            //执行请求返回相应
+            HttpResponse response = mClient.execute(request);
+
+            //判断是否请求成功
+            if (response.getStatusLine().getStatusCode() == 200) {
+                registerValidate = true;
+                //获得响应信息
+                responseMsg = EntityUtils.toString(response.getEntity());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return registerValidate;
+
+    }
+
+
+
 
     //LoginThread线程类
 
@@ -161,13 +281,13 @@ public class Auth {
                         System.out.println("save token:" + token);
                         saveUsername(username);
 
-                        msg.what = MSG_SUCCESS;
+                        msg.what = MSG_LOGIN_SUCCESS;
                         Bundle bundle = new Bundle();
                         bundle.putString("info", responseMsg);
                         msg.setData(bundle);
                         mHandler.sendMessage(msg);
                     } else {
-                        msg.what = MSG_PWD_ERROR;
+                        msg.what = MSG_LOGIN_PWD_ERROR;
                         mHandler.sendMessage(msg);
                     }
 
@@ -240,13 +360,13 @@ public class Auth {
                 if (checkToken()) {
                     if (responseMsg.contains("success")) {
 
-                        msg.what = MSG_SUCCESS;
+                        msg.what = MSG_LOGIN_SUCCESS;
                         Bundle bundle = new Bundle();
                         bundle.putString("info", responseMsg);
                         msg.setData(bundle);
                         mHandler.sendMessage(msg);
                     } else {
-                        msg.what = MSG_TOKEN_ERROR;
+                        msg.what = MSG_LOGIN_TOKEN_ERROR;
                         mHandler.sendMessage(msg);
                     }
                 } else {
@@ -254,7 +374,7 @@ public class Auth {
                     mHandler.sendMessage(msg);
                 }
             } else {
-                msg.what = MSG_TOKEN_ERROR;
+                msg.what = MSG_LOGIN_TOKEN_ERROR;
                 mHandler.sendMessage(msg);
             }
         }
@@ -360,6 +480,21 @@ public class Auth {
 
     /**
      * 对外接口
+     * 用户注册，提供账号密码，然后开启后台进程注册，信息反馈给handler
+     * @param username
+     * @param password
+     * @param handler
+     */
+    public void register(String username, String password, Handler handler) {
+        mUsername = username;
+        mPassword = password;
+        mHandler = handler;
+        Thread registerThread = new Thread(new RegisterThread());
+        registerThread.start();
+    }
+
+    /**
+     * 对外接口
      * 提供账号密码，然后开启后台进程登录，信息反馈给handler
      * @param username
      * @param password
@@ -369,15 +504,6 @@ public class Auth {
         mUsername = username;
         mPassword = password;
         mHandler = handler;
-//        switch (v.getId()) {
-//            case R.id.login:
-//                SERVER = SERVER0;
-//                break;
-//            case R.id.login_remote:
-//                SERVER = SERVER1;
-//                break;
-//        }
-
         Thread loginThread = new Thread(new LoginThread());
         loginThread.start();
     }
