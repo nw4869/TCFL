@@ -1,9 +1,6 @@
 package com.nightwind.tcfl.activity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,13 +11,11 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.graphics.Palette;
 import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Window;
 import android.widget.Toast;
 
 import com.nightwind.tcfl.R;
@@ -28,7 +23,6 @@ import com.nightwind.tcfl.fragment.ArticleRecyclerFragment;
 import com.nightwind.tcfl.fragment.PersonCenterFragment;
 import com.nightwind.tcfl.widget.PagerSlidingTabStrip;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MainActivity extends ActionBarActivity implements PersonCenterFragment.OnFragmentInteractionListener{
@@ -38,8 +32,10 @@ public class MainActivity extends ActionBarActivity implements PersonCenterFragm
 	private PagerSlidingTabStrip mPagerSlidingTabStrip;
 	private ViewPager mViewPager;
 	private Toolbar mToolbar;
-
     private HashMap<Integer, Fragment> mFragments;
+
+    public static final int REQUEST_ADD_ARTICLE_BASE = 10000;
+    public static final int REQUEST_LOGOUT = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +73,7 @@ public class MainActivity extends ActionBarActivity implements PersonCenterFragm
                     Intent intent = new Intent(MainActivity.this, AddArticleActivity.class);
                     intent.putExtra("classify", classify);
 //                    MainActivity.this.startActivity(intent);
-                    MainActivity.this.startActivityForResult(intent, classify);
+                    MainActivity.this.startActivityForResult(intent, REQUEST_ADD_ARTICLE_BASE + classify);
 //                    MainActivity.this.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
 //                    Toast.makeText(MainActivity.this, "action_add_article", Toast.LENGTH_SHORT).show();
                     break;
@@ -239,13 +235,15 @@ public class MainActivity extends ActionBarActivity implements PersonCenterFragm
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        int classify = requestCode;
-        if (resultCode == 0) {
-            //获取当前fragment
+        if (requestCode >= REQUEST_ADD_ARTICLE_BASE && requestCode < REQUEST_ADD_ARTICLE_BASE+mViewPager.getChildCount()) {
+            int classify = requestCode - REQUEST_ADD_ARTICLE_BASE;
+            if (resultCode == 0) {
+                //获取当前fragment
 //            Fragment fragment = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewPager + ":" + mViewPager.getCurrentItem());
-            Fragment fragment = mFragments.get(classify);
-            //刷新列表
-            ((ArticleRecyclerFragment)fragment).refreshList();
+                Fragment fragment = mFragments.get(classify);
+                //刷新列表
+                ((ArticleRecyclerFragment)fragment).refreshList();
+            }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

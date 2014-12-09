@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 
 import com.nightwind.tcfl.tool.encryptionUtil.MD5Util;
@@ -37,6 +38,7 @@ public class Auth {
     private Context mAppContext;
     private String mServer;
     private Handler mHandler;
+    static private HttpClient mClient;
 
     private String mUsername;
     private String mPassword;
@@ -48,14 +50,26 @@ public class Auth {
     public static final String SERVER_REMOTE = "http://nw48692.s155.eatj.com/";
     public static final String SERVER_LOCAL_DEBUG = "http://192.168.1.123:8081/";
 //    private static String SERVER = SERVER0;
-    private HttpClient mClient;
 
-    public Auth(Context context, String server, Handler handler) {
-        mAppContext = context.getApplicationContext();
-        mServer = server;
-        mHandler = handler;
 
+    protected Auth() {
         mClient = getHttpClient();
+        mServer = SERVER_LOCAL_DEBUG;
+    }
+
+    public Auth(Context context) {
+        this();
+        mAppContext = context.getApplicationContext();
+    }
+
+    /**
+     *
+     * @param context
+     * @param server 服务器地址 如"http://192.168.1.123:8081/"
+     */
+    public Auth(Context context, String server) {
+        this(context);
+        mServer = server;
     }
 
 
@@ -63,7 +77,7 @@ public class Auth {
      * 初始化HttpClient，并设置超时
      * @return
      */
-    public HttpClient getHttpClient() {
+    private HttpClient getHttpClient() {
         BasicHttpParams httpParams = new BasicHttpParams();
         HttpConnectionParams.setConnectionTimeout(httpParams, REQUEST_TIMEOUT);
         HttpConnectionParams.setSoTimeout(httpParams, SO_TIMEOUT);
@@ -75,40 +89,10 @@ public class Auth {
     static public final int MSG_PWD_ERROR = 1;
     static public final int MSG_URL_ERROR = 2;
     static public final int MSG_TOKEN_ERROR = 3;
-//    static public final int MSG_TOKEN_SUCCESS = 4;
+    static public final int MSG_LOGOUT_SUCCESS = 4;
 
-    //Handler
-//    Handler handler = new Handler() {
-//        public void handleMessage(Message msg) {
-//            switch (msg.what) {
-//                case MSG_SUCCESS:
-//                    mDialog.cancel();
-//                    Toast.makeText(getApplicationContext(), "登录成功！" + msg.getData().getString("info"), Toast.LENGTH_SHORT).show();
-//                    setResult(MSG_SUCCESS);
-//                    finish();
-//                    overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
-//                    break;
-//                case MSG_PWD_ERROR:
-//                    mDialog.cancel();
-//                    Toast.makeText(getApplicationContext(), "密码错误", Toast.LENGTH_SHORT).show();
-//                    break;
-//                case MSG_URL_ERROR:
-//                    mDialog.cancel();
-//                    Toast.makeText(getApplicationContext(), "URL验证失败", Toast.LENGTH_SHORT).show();
-//                    break;
-//                case MSG_TOKEN_ERROR:
-//                    mDialog.cancel();
-//                    Toast.makeText(getApplicationContext(), "token验证失败", Toast.LENGTH_SHORT).show();
-//                    break;
-////                case MSG_TOKEN_SUCCESS:
-////                    mDialog.cancel();
-////                    //todo
-////                    Toast.makeText(getApplicationContext(), "token验证成功", Toast.LENGTH_SHORT).show();
-////                    break;
-//            }
-//
-//        }
-//    };
+
+//    static public final int MSG_TOKEN_SUCCESS = 4;
 
     //LoginThread线程类
 
@@ -356,7 +340,7 @@ public class Auth {
      * @return
      * @throws IOException
      */
-    public String getSalt(String username) throws IOException {
+    private String getSalt(String username) throws IOException {
         String url = mServer + "MyLogin/GetSalt";
         HttpPost request = new HttpPost(url);
 
@@ -374,9 +358,17 @@ public class Auth {
     }
 
 
-    public void login(String username, String password) {
+    /**
+     * 对外接口
+     * 提供账号密码，然后开启后台进程登录，信息反馈给handler
+     * @param username
+     * @param password
+     * @param handler
+     */
+    public void login(String username, String password, Handler handler) {
         mUsername = username;
         mPassword = password;
+        mHandler = handler;
 //        switch (v.getId()) {
 //            case R.id.login:
 //                SERVER = SERVER0;
@@ -390,23 +382,61 @@ public class Auth {
         loginThread.start();
     }
 
-//    private void onClickCheckToken(View v) {
-//        mDialog = new ProgressDialog(LoginActivity.this);
-//        mDialog.setTitle("登陆");
-//        mDialog.setMessage("正在登陆服务器，请稍后...(CHECK TOKEN)");
-//        mDialog.show();
-//        Thread checkTokenThread = new Thread(new CheckTokenThread());
-//        checkTokenThread.start();
+    /**
+     * 对外接口
+     * 向服务器发送检查上一次保存的token
+     * @param handler
+     */
+    public void loginByToken(Handler handler) {
+        mHandler = handler;
+        Thread checkTokenThread = new Thread(new CheckTokenThread());
+        checkTokenThread.start();
+    }
+
+    public boolean isLogin() {
+//        SharedPreferences sp = context.getSharedPreferences("token", Activity.MODE_PRIVATE);
+//        return sp.getBoolean("isLogin", false);
+        return !(getUsername() == null || getUsername() == "");
+    }
+
+    public void logout(Handler handler) {
+        mHandler = handler;
+
+        saveUsername(null);
+        saveToken(null);
+        requestLogout();
+    }
+
+    private void requestLogout() {
+        //todo 向服务器反馈退出登录信息
+        Message msg = mHandler.obtainMessage();
+        msg.what = MSG_LOGOUT_SUCCESS;
+        mHandler.sendMessage(msg);
+    }
+
+
+//    private boolean isLogin() {
+//        SharedPreferences sp = mAppContext.getSharedPreferences("token", Activity.MODE_PRIVATE);
+//        return sp.getBoolean("isLogin", false);
+//    }
+//
+//    private void setLogin(boolean ok) {
+//        SharedPreferences sp = mAppContext.getSharedPreferences("token", Activity.MODE_PRIVATE);
+//        sp.edit().putBoolean("isLogin", ok).commit();
 //    }
 
-    private String getUsername() {
+    public String getUsername() {
         SharedPreferences sp = mAppContext.getSharedPreferences("token", Activity.MODE_PRIVATE);
         return sp.getString("username", null);
     }
 
-    private void saveUsername(String token) {
+    private void saveUsername(String username) {
         SharedPreferences sp = mAppContext.getSharedPreferences("token", Activity.MODE_PRIVATE);
-        sp.edit().putString("username", token).commit();
+        if (username == null || username.equals("")) {
+            sp.edit().remove("username").commit();
+        } else {
+            sp.edit().putString("username", username).commit();
+        }
     }
 
     private String getToken() {
@@ -416,14 +446,17 @@ public class Auth {
 
     private void saveToken(String token) {
         SharedPreferences sp = mAppContext.getSharedPreferences("token", Activity.MODE_PRIVATE);
-        sp.edit().putString("token", token).commit();
+        if (token == null || token.equals("")) {
+            sp.edit().remove("token").commit();
+        } else {
+            sp.edit().putString("token", token).commit();
+        }
     }
 
     /**
      * 清理SharedPreferences中的token
-     * @param v
-     */
-    public void cleanToken(View v) {
+     * */
+    public void cleanToken() {
         mAppContext.getSharedPreferences("token", Activity.MODE_PRIVATE).edit().clear().commit();
     }
 }

@@ -3,15 +3,21 @@ package com.nightwind.tcfl.fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.nightwind.tcfl.Auth;
 import com.nightwind.tcfl.activity.FriendsActivity;
 import com.nightwind.tcfl.activity.LoginActivity;
+import com.nightwind.tcfl.activity.MainActivity;
 import com.nightwind.tcfl.activity.MyActicleActivity;
 import com.nightwind.tcfl.activity.MyCollectionActivity;
 import com.nightwind.tcfl.activity.ProfileActivity;
@@ -33,6 +39,19 @@ public class PersonCenterFragment extends Fragment implements View.OnClickListen
 
     // TODO: Rename and change types of parameters
     private int mPosition;
+
+    private Auth mAuth;
+
+    private RelativeLayout menu0;
+    private RelativeLayout menu1;
+    private RelativeLayout menu2;
+    private RelativeLayout menu3;
+    private RelativeLayout menu4;
+    private RelativeLayout menu5;
+    private RelativeLayout menu6;
+    private RelativeLayout menu7;
+
+    private TextView mTvExit;
 
     private OnFragmentInteractionListener mListener;
 
@@ -62,6 +81,8 @@ public class PersonCenterFragment extends Fragment implements View.OnClickListen
         if (getArguments() != null) {
             mPosition = getArguments().getInt(ARG_POSITION, 0);
         }
+
+        mAuth = new Auth(getActivity());
     }
 
     @Override
@@ -71,14 +92,15 @@ public class PersonCenterFragment extends Fragment implements View.OnClickListen
         View v =  inflater.inflate(R.layout.fragment_person_center, container, false);
 
         ImageView head = (ImageView) v.findViewById(R.id.avatar);
-        RelativeLayout menu0 = (RelativeLayout) v.findViewById(R.id.menu0);
-        RelativeLayout menu1 = (RelativeLayout) v.findViewById(R.id.menu1);
-        RelativeLayout menu2 = (RelativeLayout) v.findViewById(R.id.menu2);
-        RelativeLayout menu3 = (RelativeLayout) v.findViewById(R.id.menu3);
-        RelativeLayout menu4 = (RelativeLayout) v.findViewById(R.id.menu4);
-        RelativeLayout menu5 = (RelativeLayout) v.findViewById(R.id.menu5);
-        RelativeLayout menu6 = (RelativeLayout) v.findViewById(R.id.menu6);
-        RelativeLayout menu7 = (RelativeLayout) v.findViewById(R.id.menu7);
+        menu0 = (RelativeLayout) v.findViewById(R.id.menu0);
+        menu1 = (RelativeLayout) v.findViewById(R.id.menu1);
+        menu2 = (RelativeLayout) v.findViewById(R.id.menu2);
+        menu3 = (RelativeLayout) v.findViewById(R.id.menu3);
+        menu4 = (RelativeLayout) v.findViewById(R.id.menu4);
+        menu5 = (RelativeLayout) v.findViewById(R.id.menu5);
+        menu6 = (RelativeLayout) v.findViewById(R.id.menu6);
+        menu7 = (RelativeLayout) v.findViewById(R.id.menu7);
+        mTvExit = (TextView) menu7.findViewById(R.id.exit);
 
         head.setOnClickListener(this);
         menu0.setOnClickListener(this);
@@ -89,6 +111,11 @@ public class PersonCenterFragment extends Fragment implements View.OnClickListen
         menu5.setOnClickListener(this);
         menu6.setOnClickListener(this);
         menu7.setOnClickListener(this);
+        if (mAuth.isLogin()) {
+            mTvExit.setText("退出当前账号");
+        } else {
+            mTvExit.setText("登录");
+        }
 
         return v;
     }
@@ -110,49 +137,6 @@ public class PersonCenterFragment extends Fragment implements View.OnClickListen
         mListener = null;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onListPressed(int id) {
-        if (mListener != null) {
-            if (id == 0) {
-                //我的资料
-                Intent intent = new Intent(getActivity(), ProfileActivity.class);
-                startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
-            } else if (id == 1 || id == 2) {
-                Intent intent = new Intent(getActivity(), FriendsActivity.class);
-                if (id == 1) {
-                    //所有好友
-                    intent.putExtra("online", false);
-                } else {
-                    //在线好友
-                    intent.putExtra("online", true);
-                }
-                startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
-            } else if (id == 3) {
-                //我的帖子
-                Intent intent = new Intent(getActivity(), MyActicleActivity.class);
-                startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
-            } else if (id == 4) {
-                //我的收藏
-                Intent intent = new Intent(getActivity(), MyCollectionActivity.class);
-                startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
-            } else if (id == 7) {
-                //退出/登录
-                Intent intent = new Intent(getActivity(), LoginActivity.class);
-                startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
-
-            } else {
-
-                mListener.onFragmentInteraction(id);
-            }
-
-
-        }
-    }
 
     @Override
     public void onClick(View v) {
@@ -187,6 +171,90 @@ public class PersonCenterFragment extends Fragment implements View.OnClickListen
                 id = -1;
         }
         onListPressed(id);
+    }
+
+
+    // TODO: Rename method, update argument and hook method into UI event
+    public void onListPressed(int id) {
+        if (mListener != null) {
+            mPosition = id;
+            //尚未登录
+            if (!mAuth.isLogin()) {
+                //弹出登录界面
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                startActivityForResult(intent, MainActivity.REQUEST_LOGOUT);
+
+                getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+
+            } else {
+
+                if (id == 0) {
+                    //我的资料
+                    Intent intent = new Intent(getActivity(), ProfileActivity.class);
+                    startActivity(intent);
+                    getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+                } else if (id == 1 || id == 2) {
+                    Intent intent = new Intent(getActivity(), FriendsActivity.class);
+                    if (id == 1) {
+                        //所有好友
+                        intent.putExtra("online", false);
+                    } else {
+                        //在线好友
+                        intent.putExtra("online", true);
+                    }
+                    startActivity(intent);
+                    getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+                } else if (id == 3) {
+                    //我的帖子
+                    Intent intent = new Intent(getActivity(), MyActicleActivity.class);
+                    startActivity(intent);
+                    getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+                } else if (id == 4) {
+                    //我的收藏
+                    Intent intent = new Intent(getActivity(), MyCollectionActivity.class);
+                    startActivity(intent);
+                    getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+                } else if (id == 7) {
+                    if (!mAuth.isLogin()) {
+                        //登录
+                        Intent intent = new Intent(getActivity(), LoginActivity.class);
+                        startActivity(intent);
+                        getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+                    } else {
+                        //退出
+                        mAuth.logout(mHandler);
+                    }
+
+                } else {
+                    mListener.onFragmentInteraction(id);
+                }
+            }
+        }
+    }
+
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            //退出登录成功
+            if(msg.what == Auth.MSG_LOGOUT_SUCCESS) {
+                Toast.makeText(getActivity(), "退出登录成功", Toast.LENGTH_SHORT).show();
+                mTvExit.setText("登录");
+            }
+        }
+    };
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == MainActivity.REQUEST_LOGOUT) {
+            if (resultCode == LoginActivity.RESULT_SUCCESS) {
+                //密码登陆成功
+                mTvExit.setText("退出当前账号");
+                if (mPosition != 7) {
+                    onListPressed(mPosition);
+                }
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     /**
