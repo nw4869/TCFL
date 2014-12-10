@@ -12,10 +12,10 @@ import android.view.View;
 
 import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.bean.User;
+import com.nightwind.tcfl.controller.UserController;
 import com.nightwind.tcfl.fragment.AddFriendFragment;
 import com.nightwind.tcfl.fragment.ChatFragment;
 import com.nightwind.tcfl.fragment.FriendsFragment;
-import com.nightwind.tcfl.tool.Dummy;
 
 
 public class FriendsActivity extends ActionBarActivity implements FriendsFragment.OnFragmentInteractionListener, AddFriendFragment.OnFragmentInteractionListener,
@@ -127,7 +127,7 @@ public class FriendsActivity extends ActionBarActivity implements FriendsFragmen
             }
         }  else if (id == R.id.action_add_friend) {
             //打开添加好友菜单
-            mAddFriendFragment = AddFriendFragment.newInstance(Dummy.getSelfUser().getUid());
+            mAddFriendFragment = AddFriendFragment.newInstance(UserController.getSelfUser().getUid());
             getSupportFragmentManager().beginTransaction()
                     .setCustomAnimations(R.anim.slide_right_in, R.anim.slide_left_out, R.anim.slide_left_in, R.anim.slide_right_out)
                     .add(R.id.container, mAddFriendFragment)
@@ -148,8 +148,8 @@ public class FriendsActivity extends ActionBarActivity implements FriendsFragmen
     @Override
     public void onFragmentInteraction(String username) {
 //        Toast.makeText(this, "selected" + username.toString(), Toast.LENGTH_SHORT).show();
-        User user = Dummy.getUser(username);
-        mChatFragment = ChatFragment.newInstance(Dummy.getSelfUser().getUid(), user.getUid());
+        User user = UserController.getUser(username);
+        mChatFragment = ChatFragment.newInstance(UserController.getSelfUser().getUid(), user.getUid());
         getSupportFragmentManager().beginTransaction()
                 .setCustomAnimations(R.anim.slide_right_in, R.anim.slide_left_out, R.anim.slide_left_in, R.anim.slide_right_out)
                 .add(R.id.container, mChatFragment)

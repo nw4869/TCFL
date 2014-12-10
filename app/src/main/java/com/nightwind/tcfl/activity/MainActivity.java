@@ -19,6 +19,9 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.nightwind.tcfl.R;
+import com.nightwind.tcfl.controller.ArticleController;
+import com.nightwind.tcfl.controller.ChatMsgController;
+import com.nightwind.tcfl.controller.UserController;
 import com.nightwind.tcfl.fragment.ArticleRecyclerFragment;
 import com.nightwind.tcfl.fragment.PersonCenterFragment;
 import com.nightwind.tcfl.widget.PagerSlidingTabStrip;
@@ -41,6 +44,12 @@ public class MainActivity extends ActionBarActivity implements PersonCenterFragm
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+        //gen rand data
+        new UserController();
+        new ChatMsgController();
+        new ArticleController();
+
 		initViews();
 	}
 
@@ -242,7 +251,9 @@ public class MainActivity extends ActionBarActivity implements PersonCenterFragm
 //            Fragment fragment = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewPager + ":" + mViewPager.getCurrentItem());
                 Fragment fragment = mFragments.get(classify);
                 //刷新列表
-                ((ArticleRecyclerFragment)fragment).refreshList();
+                if(fragment != null) {
+                    ((ArticleRecyclerFragment)fragment).refreshList();
+                }
             }
         }
         super.onActivityResult(requestCode, resultCode, data);

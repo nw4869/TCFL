@@ -13,8 +13,9 @@ import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.bean.Article;
 import com.nightwind.tcfl.bean.Comment;
 import com.nightwind.tcfl.bean.User;
+import com.nightwind.tcfl.controller.ArticleController;
+import com.nightwind.tcfl.controller.UserController;
 import com.nightwind.tcfl.tool.BaseTools;
-import com.nightwind.tcfl.tool.Dummy;
 
 public class AddCommentActivity extends ActionBarActivity {
 
@@ -42,7 +43,7 @@ public class AddCommentActivity extends ActionBarActivity {
             Log.e("AddCommentActivity", "getIntent Error!");
         }
 
-        mSelfUser = Dummy.getSelfUser();
+        mSelfUser = UserController.getSelfUser();
         mETContent = (EditText) findViewById(R.id.et_content);
 
 
@@ -89,7 +90,7 @@ public class AddCommentActivity extends ActionBarActivity {
 
     private boolean pushComment() {
 //        Article article = Dummy.getMyListItem(mClassify).get(mRowId);
-        Article article = Dummy.getArticle(mArticleId);
+        Article article = ArticleController.getArticle(mArticleId);
 
         Comment comment = new Comment();
 

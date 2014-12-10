@@ -1,7 +1,6 @@
 package com.nightwind.tcfl.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,7 +13,6 @@ import android.widget.TextView;
 import com.nightwind.tcfl.AvatarOnClickListener;
 import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.activity.FriendsActivity;
-import com.nightwind.tcfl.activity.ProfileActivity;
 import com.nightwind.tcfl.bean.User;
 import com.nightwind.tcfl.tool.Options;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -85,7 +83,7 @@ public class FriendsAdapter  extends RecyclerView.Adapter<FriendsAdapter.ViewHol
 
         //从服务器加载图片
 //        imageLoader.displayImage(Dummy.getImgURLList()[position%8], holder.avatar, options);
-        imageLoader.displayImage(mUsers.get(position).getAvaterUrl(), holder.avatar, options);
+        imageLoader.displayImage(mUsers.get(position).getAvatarUrl(), holder.avatar, options);
         holder.avatar.setOnClickListener(new AvatarOnClickListener(mContext, username));
     }
 

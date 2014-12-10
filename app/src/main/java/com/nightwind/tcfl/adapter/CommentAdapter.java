@@ -19,7 +19,7 @@ import com.nightwind.tcfl.activity.AddCommentActivity;
 import com.nightwind.tcfl.bean.Article;
 import com.nightwind.tcfl.bean.Comment;
 import com.nightwind.tcfl.bean.User;
-import com.nightwind.tcfl.tool.Dummy;
+import com.nightwind.tcfl.controller.UserController;
 import com.nightwind.tcfl.tool.Options;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -116,9 +116,9 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             holder.dateTime0.setText(mArticle.getDateTime());
             //从服务器加载图片
 //            imageLoader.displayImage(Dummy.getImgURLList()[position % 8], holder.imageView1, options);
-            User user = Dummy.getUser(mArticle.getUsername());
+            User user = UserController.getUser(mArticle.getUsername());
             if (user != null) {
-                imageLoader.displayImage(user.getAvaterUrl(), holder.imageView0, options);
+                imageLoader.displayImage(user.getAvatarUrl(), holder.imageView0, options);
                 holder.imageView0.setOnClickListener(new AvatarOnClickListener(mContext, user.getUsername()));
             }
 
@@ -157,9 +157,9 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 //        holder.imageView1.setImageBitmap(mCommentEntities[position].getImg());
             //从服务器加载图片
 //            imageLoader.displayImage(Dummy.getImgURLList()[position%8], holder.imageView1, options);
-            User user = Dummy.getUser(comment.getUsername());
+            User user = UserController.getUser(comment.getUsername());
             if (user != null) {
-                imageLoader.displayImage(user.getAvaterUrl(), holder.imageView1, options);
+                imageLoader.displayImage(user.getAvatarUrl(), holder.imageView1, options);
                 holder.imageView1.setOnClickListener(new AvatarOnClickListener(mContext, user.getUsername()));
             }
 

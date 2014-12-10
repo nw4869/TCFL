@@ -21,9 +21,10 @@ import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.activity.ContentActivity;
 import com.nightwind.tcfl.bean.Article;
 import com.nightwind.tcfl.bean.User;
+import com.nightwind.tcfl.controller.ArticleController;
+import com.nightwind.tcfl.controller.UserController;
 import com.nightwind.tcfl.fragment.ArticleRecyclerFragment;
 import com.nightwind.tcfl.tool.BaseTools;
-import com.nightwind.tcfl.tool.Dummy;
 import com.nightwind.tcfl.tool.Options;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -205,7 +206,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
 //                imageView1.setBackgroundResource(imgIdArray[i]);
                 //从服务器加载图片
 //                slideImageLoader.displayImage(Constants.getSlideImgURLList()[i % 8], imageView1, slideImageOptions);
-                imageLoader.displayImage(Dummy.getSlideImgURLList()[i % 8], imageView, slideImageOptions);
+                imageLoader.displayImage(ArticleController.getSlideImgURLList()[i % 8], imageView, slideImageOptions);
                 mSlideImageViews[i] = imageView;
             }
             //设置Adapter
@@ -257,9 +258,9 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
 //        holder.mImageVIew.setImageBitmap(mListItems[position].getImg());
             //从服务器加载图片
 //            imageLoader.displayImage(Dummy.getImgURLList()[position % 8], holder.mImageView, options);
-            User user = Dummy.getUser(article.getUsername());
+            User user = UserController.getUser(article.getUsername());
             if (user != null) {
-                imageLoader.displayImage(user.getAvaterUrl(), holder.mImageView, options);
+                imageLoader.displayImage(user.getAvatarUrl(), holder.mImageView, options);
                 holder.mImageView.setOnClickListener(new AvatarOnClickListener(mContext, user.getUsername()));
             }
 

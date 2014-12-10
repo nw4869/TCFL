@@ -18,7 +18,7 @@ import android.widget.EditText;
 import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.adapter.ChatAdapter;
 import com.nightwind.tcfl.bean.ChatMsg;
-import com.nightwind.tcfl.tool.Dummy;
+import com.nightwind.tcfl.controller.ChatMsgController;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -136,7 +136,7 @@ public class ChatFragment extends Fragment {
 //    }
 
     private void initData() {
-        mMsgs = Dummy.getMsg(mUid1, mUid2);
+        mMsgs = ChatMsgController.getMsg(mUid2);
     }
 
 

@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.bean.User;
-import com.nightwind.tcfl.tool.Dummy;
+import com.nightwind.tcfl.controller.UserController;
 import com.nightwind.tcfl.tool.Options;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -123,8 +123,8 @@ public class AddFriendFragment extends Fragment {
             public void onClick(View v) {
 
                 String queryUsername = String.valueOf(mEtQueryUsername.getText());
-                User selfUser = Dummy.getSelfUser();
-                User friend = Dummy.getUser(queryUsername);
+                User selfUser = UserController.getSelfUser();
+                User friend = UserController.getUser(queryUsername);
                 if (selfUser.getUid() == friend.getUid()) {
                     Toast.makeText(getActivity(), "添加好友失败，您不能添加自己为好友", Toast.LENGTH_SHORT).show();
                 } else if (selfUser.addFriend(friend.getUid())) {
@@ -143,7 +143,7 @@ public class AddFriendFragment extends Fragment {
     }
 
     private void searchAndShowResult(String queryUsername) {
-        User user = Dummy.getUser(queryUsername);
+        User user = UserController.getUser(queryUsername);
         mResult.setVisibility(View.VISIBLE);
         if (user == null) {
             mTvNotFound.setVisibility(View.VISIBLE);
@@ -154,7 +154,7 @@ public class AddFriendFragment extends Fragment {
             mTvUsername.setText(user.getUsername());
             mTvSign.setText(user.getInfo());
             //服务器下载头像
-            imageLoader.displayImage(user.getAvaterUrl(), mIVAvatar, options);
+            imageLoader.displayImage(user.getAvatarUrl(), mIVAvatar, options);
 
             hideSoftInput();
         }

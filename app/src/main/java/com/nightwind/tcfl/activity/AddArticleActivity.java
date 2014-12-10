@@ -11,8 +11,9 @@ import android.widget.Toast;
 import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.bean.Article;
 import com.nightwind.tcfl.bean.User;
+import com.nightwind.tcfl.controller.ArticleController;
+import com.nightwind.tcfl.controller.UserController;
 import com.nightwind.tcfl.tool.BaseTools;
-import com.nightwind.tcfl.tool.Dummy;
 
 public class AddArticleActivity extends ActionBarActivity {
 
@@ -33,7 +34,7 @@ public class AddArticleActivity extends ActionBarActivity {
         if (getIntent() != null) {
             mClassify = getIntent().getIntExtra("classify", 0);
         }
-        mSelfUser = Dummy.getSelfUser();
+        mSelfUser = UserController.getSelfUser();
 
         mETTitle = (EditText) findViewById(R.id.et_title);
         mETContent = (EditText) findViewById(R.id.et_content);
@@ -78,7 +79,7 @@ public class AddArticleActivity extends ActionBarActivity {
             article.setDateTime(date);
 
 
-            if (Dummy.addArticle(mClassify, article)) {
+            if (ArticleController.addArticle(mClassify, article)) {
                 Toast.makeText(this, "发布成功", Toast.LENGTH_SHORT).show();
                 setResult(0);
                 finish();

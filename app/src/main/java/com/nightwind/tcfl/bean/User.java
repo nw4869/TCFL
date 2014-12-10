@@ -9,8 +9,8 @@ public class User {
     private int uid, level, age, sex, edu;
     private String username, password, salt, email, work, info, school, tel;
     private String hobby;
-    private String avaterUrl;
-    private ArrayList<Integer> friendsList = new ArrayList<>();
+    private String avatarUrl;
+    private ArrayList<Integer> friendsUidList = new ArrayList<>();
     private boolean online;
 
     static public int eduNum = 6;
@@ -137,20 +137,20 @@ public class User {
     }
 
 
-    public String getAvaterUrl() {
-        return avaterUrl;
+    public String getAvatarUrl() {
+        return avatarUrl;
     }
 
-    public void setAvaterUrl(String avaterUrl) {
-        this.avaterUrl = avaterUrl;
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
     }
 
-    public ArrayList<Integer> getFriendsList() {
-        return friendsList;
+    public ArrayList<Integer> getFriendsUidList() {
+        return friendsUidList;
     }
 
-    public void setFriendsList(ArrayList<Integer> friendsList) {
-        this.friendsList = friendsList;
+    public void setFriendsUidList(ArrayList<Integer> friendsUidList) {
+        this.friendsUidList = friendsUidList;
     }
 
     public boolean isOnline() {
@@ -164,7 +164,7 @@ public class User {
     public User() {
     }
 
-    public User(int uid, int level, int age, int sex, int edu, String username, String password, String salt, String email, String work, String info, String school, String tel, String hobby, String avaterUrl, ArrayList<Integer> friendsList, boolean online) {
+    public User(int uid, int level, int age, int sex, int edu, String username, String password, String salt, String email, String work, String info, String school, String tel, String hobby, String avatarUrl, ArrayList<Integer> friendsUidList, boolean online) {
         this.uid = uid;
         this.level = level;
         this.age = age;
@@ -179,8 +179,8 @@ public class User {
         this.school = school;
         this.tel = tel;
         this.hobby = hobby;
-        this.avaterUrl = avaterUrl;
-        this.friendsList = friendsList;
+        this.avatarUrl = avatarUrl;
+        this.friendsUidList = friendsUidList;
         this.online = online;
     }
 
@@ -190,11 +190,11 @@ public class User {
      * @return
      */
     public boolean addFriend(int uid) {
-        if (friendsList.contains(uid)) {
+        if (friendsUidList.contains(uid)) {
             return false;
         } else {
             //todo 检查用户是否存在
-            friendsList.add(uid);
+            friendsUidList.add(uid);
             return true;
         }
     }
@@ -205,10 +205,10 @@ public class User {
      * @return
      */
     public boolean delFriend(int uid) {
-        if (!friendsList.contains(uid)) {
+        if (!friendsUidList.contains(uid)) {
             return false;
         } else {
-            friendsList.remove((Integer)uid);
+            friendsUidList.remove((Integer)uid);
             return true;
         }
     }

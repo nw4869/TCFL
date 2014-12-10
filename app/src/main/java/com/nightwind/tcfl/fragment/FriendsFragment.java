@@ -12,10 +12,9 @@ import android.view.ViewGroup;
 import com.nightwind.tcfl.adapter.FriendsAdapter;
 import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.bean.User;
-import com.nightwind.tcfl.tool.Dummy;
+import com.nightwind.tcfl.controller.UserController;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 
@@ -78,10 +77,10 @@ public class FriendsFragment extends Fragment{
     }
 
     private void initData() {
-        ArrayList<Integer> friends = Dummy.getSelfUser().getFriendsList();
+        ArrayList<Integer> friends = UserController.getSelfUser().getFriendsUidList();
         mFriendsList.clear();
         for (Integer uid: friends) {
-            User friend = Dummy.getUser(uid);
+            User friend = UserController.getUser(uid);
             //蕴含关系
             if (mOnline && !friend.isOnline()) {
                 continue;

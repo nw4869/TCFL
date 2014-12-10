@@ -18,7 +18,7 @@ import android.widget.Toast;
 import com.nightwind.tcfl.adapter.CommentAdapter;
 import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.bean.Article;
-import com.nightwind.tcfl.tool.Dummy;
+import com.nightwind.tcfl.controller.ArticleController;
 
 
 public class ContentActivity extends ActionBarActivity implements View.OnTouchListener, GestureDetector.OnGestureListener {
@@ -60,7 +60,7 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
         mArticleId = getIntent().getIntExtra("articleId", 0);
 
 //        mArticle = Dummy.getMyListItem(mClassify).get(mRowId);
-        mArticle = Dummy.getArticle(mArticleId);
+        mArticle = ArticleController.getArticle(mArticleId);
 //        mArticleId = mArticle.getId();
 
         //设置标题
@@ -156,13 +156,13 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
             ContentActivity.this.startActivityForResult(intent, 0);
         } else if (id == R.id.action_to_collect) {
 //            mArticle.setCollected(true);
-            Dummy.addCollection(mArticle);
+            ArticleController.addCollection(mArticle);
             mMenu.getItem(1).setVisible(false);
             mMenu.getItem(2).setVisible(true);
             Toast.makeText(this, "收藏成功", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.action_to_not_collect) {
 //            mArticle.setCollected(false);
-            Dummy.removeCollection(mArticle);
+            ArticleController.removeCollection(mArticle);
             mMenu.getItem(1).setVisible(true);
             mMenu.getItem(2).setVisible(false);
             Toast.makeText(this, "取消收藏", Toast.LENGTH_SHORT).show();

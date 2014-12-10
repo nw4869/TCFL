@@ -13,10 +13,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nightwind.tcfl.AvatarOnClickListener;
 import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.bean.User;
-import com.nightwind.tcfl.tool.Dummy;
+import com.nightwind.tcfl.controller.UserController;
 import com.nightwind.tcfl.tool.Options;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -57,9 +56,9 @@ public class ProfileActivity extends ActionBarActivity implements View.OnTouchLi
         if (getIntent() != null) {
             String username = getIntent().getStringExtra("username");
             if (username != null) {
-                mUser = Dummy.getUser(username);
+                mUser = UserController.getUser(username);
             } else {
-                mUser = Dummy.getSelfUser();
+                mUser = UserController.getSelfUser();
             }
         }
 
@@ -88,7 +87,7 @@ public class ProfileActivity extends ActionBarActivity implements View.OnTouchLi
         mVGStartChat = (ViewGroup) findViewById(R.id.rl_start_chat);
 
 //        mIVAvatar.setOnClickListener(new AvatarOnClickListener(this, mUser.getUsername()));
-        imageLoader.displayImage(mUser.getAvaterUrl(), mIVAvatar, options);
+        imageLoader.displayImage(mUser.getAvatarUrl(), mIVAvatar, options);
 
         mTVUsername.setText(mUser.getUsername());
         mTVSign.setText(mUser.getInfo());
@@ -99,7 +98,7 @@ public class ProfileActivity extends ActionBarActivity implements View.OnTouchLi
         mTVEdu.setText(mUser.getEduString());
         mTVHobby.setText(mUser.getHobby());
 
-        if (mUser.getUid() == Dummy.getSelfUser().getUid()) {
+        if (mUser.getUid() == UserController.getSelfUser().getUid()) {
             mVGStartChat.setVisibility(View.GONE);
         } else {
             mVGStartChat.setOnClickListener(new View.OnClickListener() {

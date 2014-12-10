@@ -18,7 +18,7 @@ import android.view.ViewGroup;
 import com.nightwind.tcfl.adapter.ArticleAdapter;
 import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.bean.Article;
-import com.nightwind.tcfl.tool.Dummy;
+import com.nightwind.tcfl.controller.ArticleController;
 
 import java.util.ArrayList;
 
@@ -215,7 +215,7 @@ public class ArticleRecyclerFragment extends Fragment {
 
     private void initData() {
         if (type == TYPE_NORMAL || type == TYPE_WITH_SLIDE_IMAGE) {
-            mArticleEntities = Dummy.getMyListItem(position);
+            mArticleEntities = ArticleController.getMyListItem(position);
         } else if (type == TYPE_COLLECTION ) {
 //            mArticleEntities.clear();
 //            ArrayList<Integer> collectionList = Dummy.getCollectionList();
@@ -223,9 +223,9 @@ public class ArticleRecyclerFragment extends Fragment {
 //                Article article = Dummy.getArticle(collectionId);
 //                mArticleEntities.add(article);
 //            }
-            mArticleEntities = Dummy.getCollectionList();
+            mArticleEntities = ArticleController.getCollectionList();
         } else if (type == TYPE_MY_ARTICLE) {
-            mArticleEntities = Dummy.getMyArticleList();
+            mArticleEntities = ArticleController.getMyArticleList();
         }
 
 

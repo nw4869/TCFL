@@ -13,8 +13,8 @@ import com.nightwind.tcfl.AvatarOnClickListener;
 import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.bean.ChatMsg;
 import com.nightwind.tcfl.bean.User;
+import com.nightwind.tcfl.controller.UserController;
 import com.nightwind.tcfl.tool.BaseTools;
-import com.nightwind.tcfl.tool.Dummy;
 import com.nightwind.tcfl.tool.Options;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -115,18 +115,18 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             holder.timeRight.setText(data.getDate());
             //从服务器加载图片
 //            imageLoader.displayImage(Dummy.getImgURLList()[0], holder.userheadRight, options);
-            User user = Dummy.getUser(uid1);
+            User user = UserController.getUser(uid1);
             if (user != null) {
-                imageLoader.displayImage(user.getAvaterUrl(), holder.userheadRight, options);
+                imageLoader.displayImage(user.getAvatarUrl(), holder.userheadRight, options);
                 holder.userheadRight.setOnClickListener(new AvatarOnClickListener(mContext, user.getUsername()));
             }
 
 
 //            User user = Dummy.getUser(mCommentItems[position].getUsername());
 //            if (user != null) {
-//                imageLoader.displayImage(user.getAvaterUrl(), holder.imageView1, options);
+//                imageLoader.displayImage(user.getAvatarUrl(), holder.imageView1, options);
 //            }
-//            imageLoader.displayImage(user.getAvaterUrl(), holder.imageView1, options);
+//            imageLoader.displayImage(user.getAvatarUrl(), holder.imageView1, options);
 
         } else {
             holder.left.setVisibility(View.VISIBLE);
@@ -138,9 +138,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             holder.timeLeft.setText(data.getDate());
             //从服务器加载图片
 //            imageLoader.displayImage(Dummy.getImgURLList()[1], holder.userheadLeft, options);
-            User user = Dummy.getUser(uid2);
+            User user = UserController.getUser(uid2);
             if (user != null) {
-                imageLoader.displayImage(user.getAvaterUrl(), holder.userheadLeft, options);
+                imageLoader.displayImage(user.getAvatarUrl(), holder.userheadLeft, options);
                 holder.userheadLeft.setOnClickListener(new AvatarOnClickListener(mContext, user.getUsername()));
             }
         }

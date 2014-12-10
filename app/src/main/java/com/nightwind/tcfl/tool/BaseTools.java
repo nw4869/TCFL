@@ -19,6 +19,10 @@ public class BaseTools {
         return dm.widthPixels;
     }
 
+
+    static private SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    static public SimpleDateFormat getDateFormat() {return sDateFormat;}
+
     /**
      * 日期转换 yyyy-MM-dd HH:mm
      *
@@ -52,6 +56,15 @@ public class BaseTools {
     }
     static public String getTime(String date) {
         return date.substring(11, 11+5);
+    }
+
+    static public String getDateNextDays(String strDate, int addDay) {
+        Date date = strToDate(strDate);
+        Calendar cldDate = Calendar.getInstance();
+        cldDate.setTime(date);
+        cldDate.add(Calendar.DATE, addDay);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        return sdf.format(cldDate.getTime());
     }
 
     /**

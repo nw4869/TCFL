@@ -12,7 +12,6 @@ import android.view.View;
 import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.bean.User;
 import com.nightwind.tcfl.fragment.ArticleRecyclerFragment;
-import com.nightwind.tcfl.tool.Dummy;
 
 public class MyCollectionActivity extends ActionBarActivity implements View.OnTouchListener, GestureDetector.OnGestureListener {
 
