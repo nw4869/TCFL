@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.nightwind.tcfl.Auth;
 import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.controller.ArticleController;
 import com.nightwind.tcfl.controller.ChatMsgController;
@@ -38,17 +39,30 @@ public class MainActivity extends ActionBarActivity implements PersonCenterFragm
     private HashMap<Integer, Fragment> mFragments;
 
     public static final int REQUEST_ADD_ARTICLE_BASE = 10000;
-    public static final int REQUEST_LOGOUT = 0;
+    public static final int REQUEST_LOGIN = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
+        Auth auth = new Auth(this);
         //gen rand data
-        new UserController();
-        new ChatMsgController();
-        new ArticleController();
+        UserController userController = new UserController(this);
+//        userController.randGenUsers(8);
+        final String username = auth.getUsername();
+        if (username != null) {
+            userController.setSelfUser(userController.getUser(username));
+        }
+        userController.closeDB();
+
+        ChatMsgController chatMsgController = new ChatMsgController(this);
+//        chatMsgController.randGenChat();
+        chatMsgController.closeDB();
+
+        ArticleController articleController = new ArticleController(this);
+        articleController.genRandArticle(50);
+        articleController.closeDB();
 
 		initViews();
 	}

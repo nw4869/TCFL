@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
+import com.nightwind.tcfl.controller.UserController;
 import com.nightwind.tcfl.tool.encryptionUtil.MD5Util;
 import com.nightwind.tcfl.tool.encryptionUtil.RSAUtils;
 
@@ -276,12 +277,16 @@ public class Auth {
                 System.out.println("----------------------------bool is :" + loginValidate + "----------response:" + responseMsg);
                 if (loginValidate) {
                     if (responseMsg.contains("success")) {
+                        //登录成功！！
 
                         //从服务器获取token
                         String token = responseMsg.replaceAll(".{0,100}\\btoken=", "").replaceAll("; ?\\b.{0,100}", "");
                         saveToken(token);
                         System.out.println("save token:" + token);
+                        //设置当前的用户
                         saveUsername(username);
+                        UserController uc = new UserController(mAppContext);
+                        uc.setSelfUser(uc.getUser(username));
 
                         msg.what = MSG_LOGIN_SUCCESS;
                         Bundle bundle = new Bundle();
@@ -530,6 +535,8 @@ public class Auth {
     public void logout(Handler handler) {
         mHandler = handler;
 
+        UserController uc = new UserController(mAppContext);
+        uc.setSelfUser(null);
         saveUsername(null);
         saveToken(null);
         requestLogout();

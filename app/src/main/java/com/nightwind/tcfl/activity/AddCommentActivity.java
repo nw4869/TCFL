@@ -1,5 +1,6 @@
 package com.nightwind.tcfl.activity;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -9,6 +10,7 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.nightwind.tcfl.Auth;
 import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.bean.Article;
 import com.nightwind.tcfl.bean.Comment;
@@ -28,11 +30,21 @@ public class AddCommentActivity extends ActionBarActivity {
     private int mRowId;
     private int mArticleId = 0;
     private int mParentComment = 0;
+    private UserController mUserController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_comment);
+
+        //先判断是否登录
+        Auth auth = new Auth(this);
+        if (!auth.isLogin()) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivityForResult(intent, MainActivity.REQUEST_LOGIN);
+            overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+            return ;
+        }
 
         if (getIntent() != null) {
 //            mClassify = getIntent().getIntExtra("classify", 0);
@@ -42,8 +54,9 @@ public class AddCommentActivity extends ActionBarActivity {
         } else {
             Log.e("AddCommentActivity", "getIntent Error!");
         }
+        mUserController = new UserController(this);
 
-        mSelfUser = UserController.getSelfUser();
+        mSelfUser = mUserController.getSelfUser();
         mETContent = (EditText) findViewById(R.id.et_content);
 
 
@@ -53,6 +66,21 @@ public class AddCommentActivity extends ActionBarActivity {
         // toolbar.setSubtitle("副标题");
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == MainActivity.REQUEST_LOGIN) {
+            if (resultCode == LoginActivity.RESULT_SUCCESS) {
+                //重启
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
+            } else {
+                finish();
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
 

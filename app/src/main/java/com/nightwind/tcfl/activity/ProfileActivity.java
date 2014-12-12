@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -46,6 +47,7 @@ public class ProfileActivity extends ActionBarActivity implements View.OnTouchLi
     //图片下载选项
     DisplayImageOptions options = Options.getListOptions();
     protected ImageLoader imageLoader = ImageLoader.getInstance();
+    private UserController mUserController;
 
 
     @Override
@@ -53,14 +55,25 @@ public class ProfileActivity extends ActionBarActivity implements View.OnTouchLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        mUserController = new UserController(this);
+
+        //未登录，跳转登录界面
+        if (mUserController.getSelfUser() == null) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivityForResult(intent, MainActivity.REQUEST_LOGIN);
+            overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+        }
+
         if (getIntent() != null) {
             String username = getIntent().getStringExtra("username");
+            Log.d("ProfileActivity getIntent", username);
             if (username != null) {
-                mUser = UserController.getUser(username);
+                mUser = mUserController.getUser(username);
             } else {
-                mUser = UserController.getSelfUser();
+                mUser = mUserController.getSelfUser();
             }
         }
+
 
         //初始化工具栏
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -98,7 +111,7 @@ public class ProfileActivity extends ActionBarActivity implements View.OnTouchLi
         mTVEdu.setText(mUser.getEduString());
         mTVHobby.setText(mUser.getHobby());
 
-        if (mUser.getUid() == UserController.getSelfUser().getUid()) {
+        if (mUser != null && mUserController.getSelfUser() != null && mUser.getUid() == mUserController.getSelfUser().getUid()) {
             mVGStartChat.setVisibility(View.GONE);
         } else {
             mVGStartChat.setOnClickListener(new View.OnClickListener() {
@@ -115,6 +128,27 @@ public class ProfileActivity extends ActionBarActivity implements View.OnTouchLi
         }
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == MainActivity.REQUEST_LOGIN) {
+            if (resultCode == LoginActivity.RESULT_SUCCESS) {
+            } else {
+                finish();
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mUserController.closeDB();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

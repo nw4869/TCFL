@@ -19,6 +19,7 @@ import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.adapter.ChatAdapter;
 import com.nightwind.tcfl.bean.ChatMsg;
 import com.nightwind.tcfl.controller.ChatMsgController;
+import com.nightwind.tcfl.controller.UserController;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -45,6 +46,8 @@ public class ChatFragment extends Fragment {
 
     private Button mbtnSend;
     private EditText mEditTextContent;
+    private UserController mUserController;
+    private ChatMsgController mChatMsgController;
 
     /**
      * Use this factory method to create a new instance of
@@ -74,12 +77,16 @@ public class ChatFragment extends Fragment {
             mUid1 = getArguments().getInt(ARG_UID1);
             mUid2 = getArguments().getInt(ARG_UID2);
         }
-        initData();
+        mUserController = new UserController(getActivity());
+        mChatMsgController = new ChatMsgController(getActivity());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        initData();
+
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_chat, container, false);
 
@@ -100,6 +107,7 @@ public class ChatFragment extends Fragment {
 
         mAdapter = new ChatAdapter(getActivity(), mMsgs, mUid1, mUid2);
         mRecyclerView.setAdapter(mAdapter);
+
 
         return rootView;
     }
@@ -123,6 +131,13 @@ public class ChatFragment extends Fragment {
         mRecyclerView.scrollToPosition(mMsgs.size() - 1);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mUserController.closeDB();
+        mChatMsgController.closeDB();
+    }
+
     //    @Override
 //    public void onAttach(Activity activity) {
 //        super.onAttach(activity);
@@ -136,7 +151,7 @@ public class ChatFragment extends Fragment {
 //    }
 
     private void initData() {
-        mMsgs = ChatMsgController.getMsg(mUid2);
+        mMsgs = mChatMsgController.getMsg(mUid2);
     }
 
 

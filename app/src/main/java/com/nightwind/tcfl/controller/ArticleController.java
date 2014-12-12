@@ -1,5 +1,7 @@
 package com.nightwind.tcfl.controller;
 
+import android.content.Context;
+
 import com.nightwind.tcfl.Auth;
 import com.nightwind.tcfl.bean.Article;
 import com.nightwind.tcfl.bean.Comment;
@@ -10,12 +12,21 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Random;
 
 /**
  * Created by wind on 2014/12/10.
  */
 public class ArticleController {
+
+    private final Context mContext;
+    private final UserController mUserController;
+
+    public ArticleController(Context context) {
+        mContext = context;
+        mUserController = new UserController(mContext);
+    }
 
 
     private static String[] IMGURLLIST;
@@ -57,14 +68,9 @@ public class ArticleController {
 //    private static ArrayList<Article> mArticles = new ArrayList<>();
     private static HashMap<Integer, Article> sArticleMap = new HashMap<>();
 
-    static {
-        for (int i = 0; i < getClassifyCount(); i++) {
-            ArrayList<Article> articleList = new ArrayList<Article>();
-            articleList.add(null);
-            sArticleListsMap.put(i, articleList);
-        }
-        genRandArticle(50);
-    }
+//    static {
+//        genRandArticle(50);
+//    }
 
     /**
      * 我的收藏
@@ -120,15 +126,22 @@ public class ArticleController {
     /**
      * 文章（帖子）
      */
-    public static void genRandArticle(int articleCount) {
+    public void genRandArticle(int articleCount) {
+
+        //添加空
+        for (int i = 0; i < getClassifyCount(); i++) {
+            ArrayList<Article> articleList = new ArrayList<Article>();
+            articleList.add(null);
+            sArticleListsMap.put(i, articleList);
+        }
 
         Random random = new Random();
 
+        ArrayList<User> userList = mUserController.getAllDBUser();
+
         for (int i = 0; i < articleCount; i++) {
             User user;
-            do {
-                user = UserController.getUser(random.nextInt(UserController.getUserCount()) + 1);
-            } while (user == null);
+            user = userList.get(random.nextInt(userList.size()));
 
 
             Article article = new Article();
@@ -167,9 +180,8 @@ public class ArticleController {
             for (int j = 1; j <= n; j++) {
                 Comment comment = new Comment();
                 User user1;
-                do {
-                    user1 = UserController.getUser(random.nextInt(UserController.getUserCount()) + 1);
-                } while (user1 == null);
+
+                user1 = userList.get(random.nextInt(userList.size()));
                 comment.setUsername(user1.getUsername());
 //                String date1 = String.format("2014-02-%02d 21:21", j);
                 Calendar cld1 = Calendar.getInstance();
@@ -190,7 +202,7 @@ public class ArticleController {
             }
 
             //加入我的帖子
-            if (user.getUid() == UserController.getSelfUser().getUid()) {
+            if (mUserController.getSelfUser() != null && user.getUid() == mUserController.getSelfUser().getUid()) {
                 addMyArticle(article);
             }
 //            mArticles.add(article);
@@ -233,5 +245,9 @@ public class ArticleController {
         sArticleMap.put(getArticleCount(), article);
         addMyArticle(article);
         return true;
+    }
+
+    public void closeDB() {
+        mUserController.closeDB();
     }
 }

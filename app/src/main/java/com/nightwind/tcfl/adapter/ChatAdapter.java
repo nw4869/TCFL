@@ -32,6 +32,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     public static int IMVT_COM_MSG = 0;
     //自己发出的信息
     public static int IMVT_TO_MSG = 1;
+    private final UserController mUserController;
 
     private List<ChatMsg> mData;
     private int uid1;
@@ -48,6 +49,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         this.mData = data;
         this.uid1 = uid1;
         this.uid2 = uid2;
+        mUserController = new UserController(mContext);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -115,7 +117,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             holder.timeRight.setText(data.getDate());
             //从服务器加载图片
 //            imageLoader.displayImage(Dummy.getImgURLList()[0], holder.userheadRight, options);
-            User user = UserController.getUser(uid1);
+            User user = mUserController.getUser(uid1);
             if (user != null) {
                 imageLoader.displayImage(user.getAvatarUrl(), holder.userheadRight, options);
                 holder.userheadRight.setOnClickListener(new AvatarOnClickListener(mContext, user.getUsername()));
@@ -138,7 +140,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             holder.timeLeft.setText(data.getDate());
             //从服务器加载图片
 //            imageLoader.displayImage(Dummy.getImgURLList()[1], holder.userheadLeft, options);
-            User user = UserController.getUser(uid2);
+            User user = mUserController.getUser(uid2);
             if (user != null) {
                 imageLoader.displayImage(user.getAvatarUrl(), holder.userheadLeft, options);
                 holder.userheadLeft.setOnClickListener(new AvatarOnClickListener(mContext, user.getUsername()));

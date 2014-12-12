@@ -1,7 +1,10 @@
 package com.nightwind.tcfl.controller;
 
+import android.content.Context;
+
 import com.nightwind.tcfl.Auth;
 import com.nightwind.tcfl.bean.User;
+import com.nightwind.tcfl.tool.localDB.UserDBManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,22 +22,34 @@ public class UserController {
 
     static private User sSelfUser;
 
-    static private ArrayList<User> sUsersList = new ArrayList<>();
+//    static private ArrayList<User> sUsersList = new ArrayList<>();
     static private HashMap<Integer, User> sUidMap = new HashMap<>();
     static private HashMap<String, User> sUsernameMap = new HashMap<>();
 
-    static {
-        randGenUsers(ORI_USER_NUM);
-        setSelfUser(getUser(1));
+//    static {
+//        randGenUsers(ORI_USER_NUM);
+//        setSelfUser(sUidMap.get(1));
+//    }
+
+    private final Context mContext;
+    private final UserDBManager mUDBMgr;
+
+    public UserController(Context context) {
+        mContext = context;
+        mUDBMgr = new UserDBManager(mContext);
     }
 
-    static public void randGenUsers(int n) {
+    public void randGenUsers(int n) {
         Random random = new Random();
         for (int i = 1; i <= n; i++) {
             int uid = i;
             User user = new User();
             user.setUid(uid);
-            user.setUsername("user" + user.getUid());
+            if (uid == 1) {
+                user.setUsername("nw");
+            } else {
+                user.setUsername("user" + user.getUid());
+            }
             user.setLevel(random.nextInt(100) + 1);
             user.setAge(random.nextInt(60) + 1);
             user.setInfo("Hello World");
@@ -58,34 +73,102 @@ public class UserController {
             //在线状态
             user.setOnline(uid % 2 == 0);
 
-            sUsersList.add(user);
+//            sUsersList.add(user);
             sUidMap.put(uid, user);
             sUsernameMap.put(user.getUsername(), user);
         }
     }
 
+    //debug
+    public ArrayList<User> getAllDBUser() {
+        return mUDBMgr.getAllUsers();
+    }
 
-    static public ArrayList<User> getUsersList() {
-        if (sUsersList != null) {
-            return sUsersList;
-        } else {
-            sUsersList = new ArrayList<>();
+
+//    static public ArrayList<User> getUsersList() {
+//        if (sUsersList != null) {
+//            return sUsersList;
+//        } else {
+//            sUsersList = new ArrayList<>();
+//        }
+//        return sUsersList;
+//    }
+
+    public User getUser(int uid) {
+        User user = sUidMap.get(uid);
+        //内存为空，从本地数据库读取
+        if (user == null) {
+            user = getUserFromDB(uid);
+            //本地数据库也为空，从服务器获取
+            if (user == null) {
+//                user = getUserFromServer(uid);
+//                //写入本地数据库
+//                insertToDB(user);
+                return null;
+            }
+            //写入内存
+            sUidMap.put(uid, user);
+            sUsernameMap.put(user.getUsername(), user);
+//            sUsersList.add(user);
         }
-        return sUsersList;
+        return user;
     }
 
-    static public User getUser(int uid) {
-        return sUidMap.get(uid);
+    //todo
+    private User getUserFromServer(int uid) {
+        return null;
     }
-    static public User getUser(String username) {
-        return sUsernameMap.get(username);
+
+    public User getUser(String username) {
+        User user = sUidMap.get(username);
+        //内存为空，从本地数据库读取
+        if (user == null) {
+            user = getUserFromDB(username);
+            //本地数据库也为空，从服务器获取
+            if (user == null) {
+//                user = getUserFromServer(username);
+//                //写入本地数据库
+//                insertToDB(user);
+                return null;
+            }
+
+            int uid = user.getUid();
+            //写入内存
+            sUidMap.put(uid, user);
+            sUsernameMap.put(user.getUsername(), user);
+//            sUsersList.add(user);
+        }
+        return user;
     }
-    static public User getSelfUser() {
+
+    private User getUserFromServer(String username) {
+        return null;
+    }
+
+    public User getSelfUser() {
+        if (sSelfUser == null) {
+            sSelfUser = getUser(new Auth(mContext).getUsername());
+        }
         return sSelfUser;
     }
-    static public void setSelfUser(User user) {
+    public void setSelfUser(User user) {
          sSelfUser = user;
     }
 
-    static public int getUserCount() { return sUsersList.size();}
+    static public int getUserCount() {
+//        return sUsersList.size();
+        return sUidMap.size();
+    }
+
+    private User getUserFromDB(int uid) {
+        return mUDBMgr.getUser(uid);
+    }
+    private User getUserFromDB(String username) {
+        return mUDBMgr.getUser(username);
+    }
+    private boolean insertToDB(User user) {
+        return mUDBMgr.insertUser(user);
+    }
+
+    public void closeDB() { mUDBMgr.closeDB();}
 }

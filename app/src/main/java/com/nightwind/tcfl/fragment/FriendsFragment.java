@@ -44,6 +44,8 @@ public class FriendsFragment extends Fragment{
     private RecyclerView.LayoutManager mLayoutManager;
 
     private OnFragmentInteractionListener mListener;
+    private UserController mUserController;
+
 
     /**
      * Use this factory method to create a new instance of
@@ -72,15 +74,15 @@ public class FriendsFragment extends Fragment{
             mOnline = getArguments().getBoolean(ARG_ONLINE);
         }
 
-
+        mUserController = new UserController(getActivity());
         initData();
     }
 
     private void initData() {
-        ArrayList<Integer> friends = UserController.getSelfUser().getFriendsUidList();
+        ArrayList<Integer> friends = mUserController.getSelfUser().getFriendsUidList();
         mFriendsList.clear();
         for (Integer uid: friends) {
-            User friend = UserController.getUser(uid);
+            User friend = mUserController.getUser(uid);
             //蕴含关系
             if (mOnline && !friend.isOnline()) {
                 continue;
@@ -110,7 +112,15 @@ public class FriendsFragment extends Fragment{
         mAdapter = new FriendsAdapter(getActivity(), mFriendsList);
         mRecyclerView.setAdapter(mAdapter);
 
+
+
         return rootView;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mUserController.closeDB();
     }
 
     // TODO: Rename method, update argument and hook method into UI event

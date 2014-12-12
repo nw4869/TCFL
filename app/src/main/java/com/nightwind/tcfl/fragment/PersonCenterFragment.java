@@ -183,7 +183,7 @@ public class PersonCenterFragment extends Fragment implements View.OnClickListen
             if (!mAuth.isLogin()) {
                 //弹出登录界面
                 Intent intent = new Intent(getActivity(), LoginActivity.class);
-                startActivityForResult(intent, MainActivity.REQUEST_LOGOUT);
+                startActivityForResult(intent, MainActivity.REQUEST_LOGIN);
 
                 getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
 
@@ -250,7 +250,7 @@ public class PersonCenterFragment extends Fragment implements View.OnClickListen
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == MainActivity.REQUEST_LOGOUT) {
+        if (requestCode == MainActivity.REQUEST_LOGIN) {
             if (resultCode == LoginActivity.RESULT_SUCCESS) {
                 //密码登陆成功
                 mTvExit.setText("退出当前账号");

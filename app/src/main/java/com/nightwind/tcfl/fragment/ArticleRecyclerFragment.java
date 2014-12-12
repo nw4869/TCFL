@@ -19,6 +19,7 @@ import com.nightwind.tcfl.adapter.ArticleAdapter;
 import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.bean.Article;
 import com.nightwind.tcfl.controller.ArticleController;
+import com.nightwind.tcfl.controller.UserController;
 
 import java.util.ArrayList;
 
@@ -48,6 +49,7 @@ public class ArticleRecyclerFragment extends Fragment {
 
     private static final int[] drawables = { R.drawable.conan1, R.drawable.conan2, R.drawable.conan3, R.drawable.conan4,
             R.drawable.conan5, R.drawable.conan6, R.drawable.conan7, R.drawable.conan8 };
+    private UserController mUserController;
 
     /**
      * Use this factory method to create a new instance of
@@ -100,6 +102,7 @@ public class ArticleRecyclerFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_my_recycler, container, false);
+        mUserController = new UserController(getActivity());
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -152,6 +155,12 @@ public class ArticleRecyclerFragment extends Fragment {
     public void onResume() {
         refreshList();
         super.onResume();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mUserController.closeDB();
     }
 
     /**

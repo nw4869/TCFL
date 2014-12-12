@@ -37,6 +37,8 @@ public class FriendsActivity extends ActionBarActivity implements FriendsFragmen
     private final int verticalMinDistance = 50;
     private final int minVelocity         = 0;
 
+    private UserController mUserController;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +52,7 @@ public class FriendsActivity extends ActionBarActivity implements FriendsFragmen
                 profileUsername = getIntent().getStringExtra("username");
             }
         }
+        mUserController = new UserController(this);
 
         if (savedInstanceState == null) {
             mFriendsListFragment = FriendsFragment.newInstance(mOnline);
@@ -57,22 +60,28 @@ public class FriendsActivity extends ActionBarActivity implements FriendsFragmen
                     .setCustomAnimations(R.anim.slide_right_in, R.anim.slide_left_out, R.anim.slide_left_in, R.anim.slide_right_out)
                     .add(R.id.container, mFriendsListFragment)
                     .commit();
-
-            mToolbar = (Toolbar) findViewById(R.id.toolbar);
-            // toolbar.setLogo(R.drawable.ic_launcher);
-            mToolbar.setTitle("Friends");// 标题的文字需在setSupportActionBar之前，不然会无效
-            // toolbar.setSubtitle("副标题");
-            setSupportActionBar(mToolbar);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-            mGestureDetector = new GestureDetector(this, this);
-
         }
+
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        // toolbar.setLogo(R.drawable.ic_launcher);
+        mToolbar.setTitle("Friends");// 标题的文字需在setSupportActionBar之前，不然会无效
+        // toolbar.setSubtitle("副标题");
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mGestureDetector = new GestureDetector(this, this);
+
 
         if (mIsFromProfile) {
             onFragmentInteraction(profileUsername);
         }
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mUserController.closeDB();
     }
 
     @Override
@@ -127,7 +136,7 @@ public class FriendsActivity extends ActionBarActivity implements FriendsFragmen
             }
         }  else if (id == R.id.action_add_friend) {
             //打开添加好友菜单
-            mAddFriendFragment = AddFriendFragment.newInstance(UserController.getSelfUser().getUid());
+            mAddFriendFragment = AddFriendFragment.newInstance(mUserController.getSelfUser().getUid());
             getSupportFragmentManager().beginTransaction()
                     .setCustomAnimations(R.anim.slide_right_in, R.anim.slide_left_out, R.anim.slide_left_in, R.anim.slide_right_out)
                     .add(R.id.container, mAddFriendFragment)
@@ -148,8 +157,8 @@ public class FriendsActivity extends ActionBarActivity implements FriendsFragmen
     @Override
     public void onFragmentInteraction(String username) {
 //        Toast.makeText(this, "selected" + username.toString(), Toast.LENGTH_SHORT).show();
-        User user = UserController.getUser(username);
-        mChatFragment = ChatFragment.newInstance(UserController.getSelfUser().getUid(), user.getUid());
+        User user = mUserController.getUser(username);
+        mChatFragment = ChatFragment.newInstance(mUserController.getSelfUser().getUid(), user.getUid());
         getSupportFragmentManager().beginTransaction()
                 .setCustomAnimations(R.anim.slide_right_in, R.anim.slide_left_out, R.anim.slide_left_in, R.anim.slide_right_out)
                 .add(R.id.container, mChatFragment)

@@ -32,6 +32,7 @@ import java.util.ArrayList;
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHolder> {
 
     private static Context mContext;
+    private final UserController mUserController;
 
     private Article mArticle;
     private ArrayList<Comment> mCommentEntities;
@@ -51,6 +52,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 //        mRowId = rowId;
 //        mArticleId = articleId;
         mArticleId = mArticle.getId();
+        mUserController = new UserController(mContext);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
@@ -116,7 +118,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             holder.dateTime0.setText(mArticle.getDateTime());
             //从服务器加载图片
 //            imageLoader.displayImage(Dummy.getImgURLList()[position % 8], holder.imageView1, options);
-            User user = UserController.getUser(mArticle.getUsername());
+            User user = mUserController.getUser(mArticle.getUsername());
             if (user != null) {
                 imageLoader.displayImage(user.getAvatarUrl(), holder.imageView0, options);
                 holder.imageView0.setOnClickListener(new AvatarOnClickListener(mContext, user.getUsername()));
@@ -157,7 +159,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 //        holder.imageView1.setImageBitmap(mCommentEntities[position].getImg());
             //从服务器加载图片
 //            imageLoader.displayImage(Dummy.getImgURLList()[position%8], holder.imageView1, options);
-            User user = UserController.getUser(comment.getUsername());
+            User user = mUserController.getUser(comment.getUsername());
             if (user != null) {
                 imageLoader.displayImage(user.getAvatarUrl(), holder.imageView1, options);
                 holder.imageView1.setOnClickListener(new AvatarOnClickListener(mContext, user.getUsername()));

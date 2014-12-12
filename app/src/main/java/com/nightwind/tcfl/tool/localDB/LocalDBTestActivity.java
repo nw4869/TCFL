@@ -44,6 +44,7 @@ public class LocalDBTestActivity extends ActionBarActivity {
         super.onDestroy();
         //应用的最后一个Activity关闭时应释放DB
         mgr.closeDB();
+        umgr.closeDB();
     }
 
 

@@ -1,5 +1,7 @@
 package com.nightwind.tcfl.controller;
 
+import android.content.Context;
+
 import com.nightwind.tcfl.bean.ChatMsg;
 
 import java.util.ArrayList;
@@ -11,13 +13,21 @@ import java.util.HashMap;
 public class ChatMsgController {
 
     private static HashMap<Integer,ArrayList<ChatMsg>> sChatMsgMap = new HashMap<>();
+    private final Context mContext;
+    private final UserController mUserController;
 
-    static {
-        randGenChat();
+//    static {
+//        randGenChat();
+//    }
+
+
+    public ChatMsgController(Context context) {
+        mContext = context;
+        mUserController = new UserController(mContext);
     }
 
-    private static void randGenChat() {
-        ArrayList<Integer> friendsUidList = UserController.getSelfUser().getFriendsUidList();
+    public void randGenChat() {
+        ArrayList<Integer> friendsUidList = mUserController.getSelfUser().getFriendsUidList();
 
         ArrayList<ChatMsg> chatMsg = new ArrayList<>();
         String[] msgArray = new String[]{"  孩子们，要好好学习，天天向上！要好好听课，不要翘课！不要挂科，多拿奖学金！三等奖学金的争取拿二等，二等的争取拿一等，一等的争取拿励志！",
@@ -41,10 +51,10 @@ public class ChatMsgController {
             chatEntity.setDate(dataArray[i]);
             if (i % 2 == 0)
             {
-                chatEntity.setName(UserController.getUser(2).getUsername());
+                chatEntity.setName(mUserController.getUser(2).getUsername());
                 chatEntity.setMsgType(true);
             }else{
-                chatEntity.setName(UserController.getUser(1).getUsername());
+                chatEntity.setName(mUserController.getUser(1).getUsername());
                 chatEntity.setMsgType(false);
             }
 
@@ -56,7 +66,6 @@ public class ChatMsgController {
         for (int i = 1; i < friendsUidList.size(); i++) {
             sChatMsgMap.put(friendsUidList.get(i), new ArrayList<>(chatMsg));
         }
-
     }
 
     /**
@@ -64,8 +73,16 @@ public class ChatMsgController {
      * @param uid 对方uid
      * @return
      */
-    public static ArrayList<ChatMsg> getMsg(int uid) {
-        return sChatMsgMap.get(uid);
+    public ArrayList<ChatMsg> getMsg(int uid) {
+        ArrayList<ChatMsg> chatMsg =  sChatMsgMap.get(uid);
+        if (chatMsg == null) {
+            chatMsg = new ArrayList<>();
+            sChatMsgMap.put(uid, chatMsg);
+        }
+        return chatMsg;
     }
 
+    public void closeDB() {
+        mUserController.closeDB();
+    }
 }

@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.nightwind.tcfl.Auth;
 import com.nightwind.tcfl.bean.User;
 
 import java.util.ArrayList;
@@ -17,14 +18,22 @@ public class UserDBManager {
 
     private static final String TABLE_NAME_USER = "user";
 
-    private DBHelper helper;
+    private static DBHelper sDBHelper;
     private SQLiteDatabase db;
 
+    public synchronized static DBHelper getInstance(Context context) {
+        if (sDBHelper == null) {
+            sDBHelper = new DBHelper(context);
+        }
+        return sDBHelper;
+    };
+
     public UserDBManager(Context context) {
-        helper = new DBHelper(context);
+//        sDBHelper = new DBHelper(context);
+        sDBHelper = getInstance(context);
         //因为getWritableDatabase内部调用了mContext.openOrCreateDatabase(mName, 0, mFactory);
         //所以要确保context已初始化,我们可以把实例化DBManager的步骤放在Activity的onCreate里
-        db = helper.getWritableDatabase();
+        db = sDBHelper.getWritableDatabase();
     }
 
     private ArrayList<User> getUserListByCursor(Cursor c) {
@@ -61,12 +70,11 @@ public class UserDBManager {
             user.setTel(tel);
             user.setSchool(school);
             user.setHobby(hobby);
-            user.setAvatarUrl(avatarUrl);
+            user.setAvatarUrl(Auth.SERVER_REMOTE + avatarUrl);
             user.setOnline(online);
 
             users.add(user);
         }
-        c.close();
         return users;
     }
 
@@ -76,17 +84,36 @@ public class UserDBManager {
 //        return c;
 //    }
 
-    public List<User> getAllUsers() {
+    public ArrayList<User> getAllUsers() {
         Cursor c = db.rawQuery("SELECT * FROM " + TABLE_NAME_USER, null);
-        return getUserListByCursor(c);
+        ArrayList<User> users =  getUserListByCursor(c);
+        c.close();
+        return users;
     }
 
     public User getUser(int uid) {
         Cursor c = db.rawQuery("SELECT * FROM " + TABLE_NAME_USER + " WHERE uid = ? ", new String[] {String.valueOf(uid)});
-        return getUserListByCursor(c).get(0);
+        List<User> users =  getUserListByCursor(c);
+        User user = null;
+        if (users.size() > 0) {
+            user = users.get(0);
+        }
+        c.close();
+        return user;
     }
 
-    private ArrayList<String> userInfo2Strings(User user) {
+    public User getUser(String username) {
+        Cursor c = db.rawQuery("SELECT * FROM " + TABLE_NAME_USER + " WHERE username = ? ", new String[] {username});
+        List<User> users =  getUserListByCursor(c);
+        User user = null;
+        if (users.size() > 0) {
+            user = users.get(0);
+        }
+        c.close();
+        return user;
+    }
+
+    public ArrayList<String> userInfo2Strings(User user) {
         ArrayList<String> binds = new ArrayList<>();
         binds.add(String.valueOf(user.getUid()));
         binds.add(user.getUsername());
@@ -104,7 +131,7 @@ public class UserDBManager {
         return binds;
     }
 
-    public boolean insertUser(User user) {
+    public synchronized boolean insertUser(User user) {
         ArrayList<String> binds = userInfo2Strings(user);
         try {
             db.execSQL("INSERT INTO " + TABLE_NAME_USER + "(uid, username, salt, level, email, tel, age, sex, work, info, edu, school, avatarUrl, hobby, online)" + "values(?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?)",
@@ -115,7 +142,7 @@ public class UserDBManager {
         return true;
     }
 
-    public boolean updateUser(User user) {
+    public synchronized boolean updateUser(User user) {
         ArrayList<String> binds = userInfo2Strings(user);
         binds.add(binds.get(0));
 
@@ -139,7 +166,7 @@ public class UserDBManager {
 
 
     public void closeDB() {
-        db.close();
+//        db.close();
     }
 
 }

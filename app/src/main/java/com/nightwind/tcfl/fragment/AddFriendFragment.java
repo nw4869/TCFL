@@ -51,6 +51,7 @@ public class AddFriendFragment extends Fragment {
     //图片下载选项
     DisplayImageOptions options = Options.getListOptions();
     protected ImageLoader imageLoader = ImageLoader.getInstance();
+    private UserController mUserController;
 
 
     /**
@@ -79,6 +80,7 @@ public class AddFriendFragment extends Fragment {
         if (getArguments() != null) {
             mUid1 = getArguments().getInt(ARG_UID1);
         }
+        mUserController = new UserController(getActivity());
     }
 
     @Override
@@ -98,6 +100,7 @@ public class AddFriendFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v =  inflater.inflate(R.layout.fragment_add_friend, container, false);
+
 
 
         mBtnSearch = (Button) v.findViewById(R.id.search);
@@ -123,8 +126,8 @@ public class AddFriendFragment extends Fragment {
             public void onClick(View v) {
 
                 String queryUsername = String.valueOf(mEtQueryUsername.getText());
-                User selfUser = UserController.getSelfUser();
-                User friend = UserController.getUser(queryUsername);
+                User selfUser = mUserController.getSelfUser();
+                User friend = mUserController.getUser(queryUsername);
                 if (selfUser.getUid() == friend.getUid()) {
                     Toast.makeText(getActivity(), "添加好友失败，您不能添加自己为好友", Toast.LENGTH_SHORT).show();
                 } else if (selfUser.addFriend(friend.getUid())) {
@@ -142,8 +145,18 @@ public class AddFriendFragment extends Fragment {
         return v;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mUserController.closeDB();
+    }
+
+    public UserController getUserController() {
+        return mUserController;
+    }
+
     private void searchAndShowResult(String queryUsername) {
-        User user = UserController.getUser(queryUsername);
+        User user = mUserController.getUser(queryUsername);
         mResult.setVisibility(View.VISIBLE);
         if (user == null) {
             mTvNotFound.setVisibility(View.VISIBLE);

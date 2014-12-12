@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +16,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
+import com.nightwind.tcfl.Auth;
 import com.nightwind.tcfl.adapter.CommentAdapter;
 import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.bean.Article;
@@ -43,8 +45,12 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
 
     private Menu mMenu;
 
+    private final int REQUEST_LOGIN = 0;
+    private final int REQUEST_ADD_ARTICLE = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("ContentActivity", "OnCreate()");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_content);
 
@@ -138,6 +144,7 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
@@ -154,18 +161,30 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
             intent.putExtra("parentComment", 0);
 //                    MainActivity.this.startActivity(intent);
             ContentActivity.this.startActivityForResult(intent, 0);
-        } else if (id == R.id.action_to_collect) {
+        } else if (id == R.id.action_to_collect || id == R.id.action_to_not_collect) {
+
+            //先判断是否登录
+            Auth auth = new Auth(this);
+            if (!auth.isLogin()) {
+                Intent intent = new Intent(this, LoginActivity.class);
+                startActivityForResult(intent, REQUEST_LOGIN);
+                overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+            } else {
+                if (id == R.id.action_to_collect) {
 //            mArticle.setCollected(true);
-            ArticleController.addCollection(mArticle);
-            mMenu.getItem(1).setVisible(false);
-            mMenu.getItem(2).setVisible(true);
-            Toast.makeText(this, "收藏成功", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.action_to_not_collect) {
+                    ArticleController.addCollection(mArticle);
+                    mMenu.getItem(1).setVisible(false);
+                    mMenu.getItem(2).setVisible(true);
+                    Toast.makeText(this, "收藏成功", Toast.LENGTH_SHORT).show();
+                } else if (id == R.id.action_to_not_collect) {
 //            mArticle.setCollected(false);
-            ArticleController.removeCollection(mArticle);
-            mMenu.getItem(1).setVisible(true);
-            mMenu.getItem(2).setVisible(false);
-            Toast.makeText(this, "取消收藏", Toast.LENGTH_SHORT).show();
+                    ArticleController.removeCollection(mArticle);
+                    mMenu.getItem(1).setVisible(true);
+                    mMenu.getItem(2).setVisible(false);
+                    Toast.makeText(this, "取消收藏", Toast.LENGTH_SHORT).show();
+                }
+            }
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -173,6 +192,13 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_LOGIN) {
+            if (resultCode == LoginActivity.RESULT_SUCCESS) {
+
+            } else {
+                finish();
+            }
+        }
         mAdapter.notifyDataSetChanged();
         super.onActivityResult(requestCode, resultCode, data);
     }
