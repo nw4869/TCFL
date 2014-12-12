@@ -1,247 +1,269 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" tools:context="com.nightwind.tcfl.fragment.PersonCenterFragment">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.nightwind.tcfl.fragment.PersonCenterFragment"
+    android:background="#FFFFFFFF">
 
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="right|top"
-        android:background="#FFFFFFFF">
-
-        <RelativeLayout
-            android:id="@+id/menu0"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/background_tab"
-            android:padding="16dp">
-            <ImageView
-                android:id="@+id/avatar"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/conan1"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
-            <TextView
-                style="@style/TextAppearance.AppCompat.Title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Person Center"
-                android:id="@+id/title"
-                android:layout_marginTop="8dp"
-                android:layout_marginLeft="16dp"
-                android:layout_alignParentTop="true"
-                android:layout_toRightOf="@+id/avatar"
-                android:layout_toEndOf="@+id/avatar" />
-
-            </RelativeLayout>
-
-
-        <View
-            android:id="@+id/divider1"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/menu0"
-            android:background="#1e000000" />
-
-        <RelativeLayout
-            android:id="@+id/menu1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/divider1"
-            android:background="@drawable/background_tab"
-            android:padding="16dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true">
-
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:id="@+id/imageView1"
-                android:src="@drawable/conan2" />
-            <TextView
-                style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="我的好友"
-                android:id="@+id/tv_menu1"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="3dp"
-                android:layout_alignTop="@+id/imageView1"
-                android:layout_toRightOf="@+id/imageView1"
-                android:layout_toEndOf="@+id/imageView1" />
-
-            </RelativeLayout>
+        android:layout_height="match_parent">
 
 
         <RelativeLayout
-            android:id="@+id/menu2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/menu1"
-            android:background="@drawable/background_tab"
-            android:padding="16dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true">
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:id="@+id/imageView2"
-                android:src="@drawable/conan3" />
-            <TextView
-                style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="在线好友"
-                android:id="@+id/tv_menu2"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="3dp"
-                android:layout_alignTop="@+id/imageView2"
-                android:layout_toRightOf="@+id/imageView2"
-                android:layout_toEndOf="@+id/imageView2" />
+            android:layout_height="match_parent"
+            android:layout_gravity="right|top">
 
-            </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/menu3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/menu2"
-            android:background="@drawable/background_tab"
-            android:padding="16dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true">
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:id="@+id/imageView3"
-                android:src="@drawable/conan4" />
-            <TextView
-                style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="我的帖子"
-                android:id="@+id/tv_menu3"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="3dp"
-                android:layout_alignTop="@+id/imageView3"
-                android:layout_toRightOf="@+id/imageView3"
-                android:layout_toEndOf="@+id/imageView3" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/menu4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/menu3"
-            android:background="@drawable/background_tab"
-            android:padding="16dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true">
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:id="@+id/imageView4"
-                android:src="@drawable/conan5" />
-            <TextView
-                style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="我的收藏"
-                android:id="@+id/tv_menu4"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="3dp"
-                android:layout_alignTop="@+id/imageView4"
-                android:layout_toRightOf="@+id/imageView4"
-                android:layout_toEndOf="@+id/imageView4" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/menu5"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/menu4"
-            android:background="@drawable/background_tab"
-            android:padding="16dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true">
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:id="@+id/imageView5"
-                android:src="@drawable/conan6" />
-            <TextView
-                style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="皮卡丘"
-                android:id="@+id/tv_menu5"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="3dp"
-                android:layout_alignTop="@+id/imageView5"
-                android:layout_toRightOf="@+id/imageView5"
-                android:layout_toEndOf="@+id/imageView5" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/menu6"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/menu5"
-            android:background="@drawable/background_tab"
-            android:padding="16dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true">
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:id="@+id/imageView6"
-                android:src="@drawable/conan7" />
-            <TextView
-                style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="找活动"
-                android:id="@+id/tv_menu6"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="3dp"
-                android:layout_alignTop="@+id/imageView6"
-                android:layout_toRightOf="@+id/imageView6"
-                android:layout_toEndOf="@+id/imageView6" />
-        </RelativeLayout>
-
-
-        <View
-            android:id="@+id/divider2"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/menu6"
-            android:layout_marginTop="16dp"
-            android:background="#1e000000" />
-
-        <RelativeLayout
-            android:id="@+id/menu7"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/background_tab"
-            android:padding="16dp"
-            android:layout_below="@id/divider2">
-            <TextView
-                android:id="@+id/exit"
-                style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
+            <RelativeLayout
+                android:id="@+id/menu0"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="退出当前账号"/>
+                android:background="@drawable/background_tab"
+                android:padding="16dp">
+
+                <ImageView
+                    android:id="@+id/avatar"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:src="@drawable/conan1" />
+
+                <TextView
+                    android:id="@+id/title"
+                    style="@style/TextAppearance.AppCompat.Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_toEndOf="@+id/avatar"
+                    android:layout_toRightOf="@+id/avatar"
+                    android:text="Person Center" />
+
             </RelativeLayout>
 
 
-    </RelativeLayout>
+            <View
+                android:id="@+id/divider1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/menu0"
+                android:background="#1e000000" />
+
+            <RelativeLayout
+                android:id="@+id/menu1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/divider1"
+                android:background="@drawable/background_tab"
+                android:padding="16dp">
+
+                <ImageView
+                    android:id="@+id/imageView1"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/conan2" />
+
+                <TextView
+                    android:id="@+id/tv_menu1"
+                    style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/imageView1"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_toEndOf="@+id/imageView1"
+                    android:layout_toRightOf="@+id/imageView1"
+                    android:text="我的好友" />
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/menu2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/menu1"
+                android:background="@drawable/background_tab"
+                android:padding="16dp">
+
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/conan3" />
+
+                <TextView
+                    android:id="@+id/tv_menu2"
+                    style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/imageView2"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_toEndOf="@+id/imageView2"
+                    android:layout_toRightOf="@+id/imageView2"
+                    android:text="在线好友" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/menu3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/menu2"
+                android:background="@drawable/background_tab"
+                android:padding="16dp">
+
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/conan4" />
+
+                <TextView
+                    android:id="@+id/tv_menu3"
+                    style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/imageView3"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_toEndOf="@+id/imageView3"
+                    android:layout_toRightOf="@+id/imageView3"
+                    android:text="我的帖子" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/menu4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/menu3"
+                android:background="@drawable/background_tab"
+                android:padding="16dp">
+
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/conan5" />
+
+                <TextView
+                    android:id="@+id/tv_menu4"
+                    style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/imageView4"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_toEndOf="@+id/imageView4"
+                    android:layout_toRightOf="@+id/imageView4"
+                    android:text="我的收藏" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/menu5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/menu4"
+                android:background="@drawable/background_tab"
+                android:padding="16dp">
+
+                <ImageView
+                    android:id="@+id/imageView5"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/conan6" />
+
+                <TextView
+                    android:id="@+id/tv_menu5"
+                    style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/imageView5"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_toEndOf="@+id/imageView5"
+                    android:layout_toRightOf="@+id/imageView5"
+                    android:text="皮卡丘" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/menu6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/menu5"
+                android:background="@drawable/background_tab"
+                android:padding="16dp">
+
+                <ImageView
+                    android:id="@+id/imageView6"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/conan7" />
+
+                <TextView
+                    android:id="@+id/tv_menu6"
+                    style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/imageView6"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_toEndOf="@+id/imageView6"
+                    android:layout_toRightOf="@+id/imageView6"
+                    android:text="找活动" />
+            </RelativeLayout>
+
+
+            <View
+                android:id="@+id/divider2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/menu6"
+                android:layout_marginTop="16dp"
+                android:background="#1e000000" />
+
+            <RelativeLayout
+                android:id="@+id/menu7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/divider2"
+                android:background="@drawable/background_tab"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/exit"
+                    style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="退出当前账号" />
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+    </ScrollView>
 
 
 </FrameLayout>

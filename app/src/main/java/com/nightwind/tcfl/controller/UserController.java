@@ -1,5 +1,6 @@
 package com.nightwind.tcfl.controller;
 
+import com.nightwind.tcfl.Auth;
 import com.nightwind.tcfl.bean.User;
 
 import java.util.ArrayList;
@@ -12,6 +13,9 @@ import java.util.Random;
 public class UserController {
 
     static private final int ORI_USER_NUM = 8;
+
+//    public static final String SERVER_REMOTE = "http://120.24.223.185/";
+//    public static final String SERVER_LOCAL_DEBUG = "http://192.168.1.123:8081/";
 
     static private User sSelfUser;
 
@@ -40,7 +44,7 @@ public class UserController {
             user.setHobby("Programming");
 
             //头像
-            user.setAvatarUrl("http://192.168.1.123/img/conan" + uid + ".jpg");
+            user.setAvatarUrl(Auth.SERVER_REMOTE +"img/conan" + uid + ".jpg");
 
             //添加好友
             int m = random.nextInt(n / 2) + 2;

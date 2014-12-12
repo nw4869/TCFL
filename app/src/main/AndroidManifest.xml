@@ -64,6 +64,10 @@
             android:name=".activity.RegisterActivity"
             android:label="@string/title_activity_register" >
         </activity>
+        <activity
+            android:name=".tool.localDB.LocalDBTestActivity"
+            android:label="@string/title_activity_local_dbtest" >
+        </activity>
     </application>
 
 </manifest>

@@ -68,7 +68,7 @@ public class RegisterActivity extends BaseActivity {
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClickRegister(Auth.SERVER_LOCAL_DEBUG);
+                onClickRegister(Auth.SERVER_REMOTE);
             }
         });
 

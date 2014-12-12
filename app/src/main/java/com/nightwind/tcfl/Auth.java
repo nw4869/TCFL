@@ -47,14 +47,16 @@ public class Auth {
     private static final int REQUEST_TIMEOUT = 5 * 1000;//设置请求超时10秒钟
     private static final int SO_TIMEOUT = 10 * 1000;  //设置等待数据超时时间10秒钟
     private static final int LOGIN_OK = 1;
-    public static final String SERVER_REMOTE = "http://nw48693.s155.eatj.com/";
+//    public static final String SERVER_REMOTE = "http://nw48693.s155.eatj.com/";
+    public static final String SERVER_REMOTE = "http://120.24.223.185/";
+
     public static final String SERVER_LOCAL_DEBUG = "http://192.168.1.123:8081/";
 //    private static String SERVER = SERVER0;
 
 
     protected Auth() {
         mClient = getHttpClient();
-        mServer = SERVER_LOCAL_DEBUG;
+        mServer = SERVER_REMOTE;
     }
 
     public Auth(Context context) {
@@ -138,7 +140,7 @@ public class Auth {
 
                 //URL合法，但是这一步并不验证返回结果
                 boolean registerValidate = registerServer(username, cipherPwd);
-                
+
                 System.out.println("----------------------------bool is :" + registerValidate + "----------response:" + responseMsg);
                 if (registerValidate) {
 

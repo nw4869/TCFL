@@ -79,7 +79,7 @@ public class LoginActivity extends BaseActivity {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClickLogin(Auth.SERVER_LOCAL_DEBUG);
+                onClickLogin(Auth.SERVER_REMOTE);
             }
         });
 
@@ -87,7 +87,7 @@ public class LoginActivity extends BaseActivity {
         loginBtn.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                onClickLogin(Auth.SERVER_REMOTE);
+                onClickLogin(Auth.SERVER_LOCAL_DEBUG);
                 Toast.makeText(LoginActivity.this, "LOGIN_REMOTE", Toast.LENGTH_SHORT).show();
                 return true;
             }

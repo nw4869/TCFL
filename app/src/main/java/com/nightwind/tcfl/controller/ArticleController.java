@@ -1,5 +1,6 @@
 package com.nightwind.tcfl.controller;
 
+import com.nightwind.tcfl.Auth;
 import com.nightwind.tcfl.bean.Article;
 import com.nightwind.tcfl.bean.Comment;
 import com.nightwind.tcfl.bean.User;
@@ -21,21 +22,21 @@ public class ArticleController {
 
     private static String[] SLIDEIMGURLLIST;
 
-    public static String[] getImgURLList() {
-        if (IMGURLLIST == null) {
-            ArrayList<String> imgList = new ArrayList<>();
-            for (int i = 1; i <= 8; i++) {
-                imgList.add("http://192.168.1.123/img/conan" + i + ".jpg");
-            }
-            IMGURLLIST = imgList.toArray(new String[imgList.size()]);
-        }
-        return IMGURLLIST;
-    }
+//    public static String[] getImgURLList() {
+//        if (IMGURLLIST == null) {
+//            ArrayList<String> imgList = new ArrayList<>();
+//            for (int i = 1; i <= 8; i++) {
+//                imgList.add(Auth.SERVER_REMOTE + "img/conan" + i + ".jpg");
+//            }
+//            IMGURLLIST = imgList.toArray(new String[imgList.size()]);
+//        }
+//        return IMGURLLIST;
+//    }
     public static String[] getSlideImgURLList() {
         if (SLIDEIMGURLLIST == null) {
             ArrayList<String> imgList = new ArrayList<>();
             for (int i = 1; i <= 8; i++) {
-                imgList.add("http://192.168.1.123/img/slide/" + i + ".jpg");
+                imgList.add( Auth.SERVER_REMOTE + "img/slide/" + i + ".jpg");
             }
             SLIDEIMGURLLIST = imgList.toArray(new String[imgList.size()]);
         }

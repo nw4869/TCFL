@@ -29,5 +29,6 @@
     <string name="title_activity_base">BaseActivity</string>
     <string name="action_register">注册</string>
     <string name="title_activity_register">RegisterActivity</string>
+    <string name="title_activity_local_dbtest">LocalDBTestActivity</string>
 
 </resources>

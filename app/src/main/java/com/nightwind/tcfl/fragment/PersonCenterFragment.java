@@ -22,6 +22,7 @@ import com.nightwind.tcfl.activity.MyActicleActivity;
 import com.nightwind.tcfl.activity.MyCollectionActivity;
 import com.nightwind.tcfl.activity.ProfileActivity;
 import com.nightwind.tcfl.R;
+import com.nightwind.tcfl.tool.localDB.LocalDBTestActivity;
 
 
 /**
@@ -212,6 +213,10 @@ public class PersonCenterFragment extends Fragment implements View.OnClickListen
                 } else if (id == 4) {
                     //我的收藏
                     Intent intent = new Intent(getActivity(), MyCollectionActivity.class);
+                    startActivity(intent);
+                    getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+                } else if (id == 6) {
+                    Intent intent = new Intent(getActivity(), LocalDBTestActivity.class);
                     startActivity(intent);
                     getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
                 } else if (id == 7) {
