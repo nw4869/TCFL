@@ -30,5 +30,9 @@
     <string name="action_register">注册</string>
     <string name="title_activity_register">RegisterActivity</string>
     <string name="title_activity_local_dbtest">LocalDBTestActivity</string>
+    <string name="title_activity_review">ReviewActivity</string>
+    <string name="title_activity_pikachu">PikachuActivity</string>
+    <string name="title_activity_contest">ContestActivity</string>
+    <string name="title_activity_show_image">ShowImageActivity</string>
 
 </resources>

@@ -20,8 +20,10 @@ import com.nightwind.tcfl.activity.LoginActivity;
 import com.nightwind.tcfl.activity.MainActivity;
 import com.nightwind.tcfl.activity.MyActicleActivity;
 import com.nightwind.tcfl.activity.MyCollectionActivity;
+import com.nightwind.tcfl.activity.PikachuActivity;
 import com.nightwind.tcfl.activity.ProfileActivity;
 import com.nightwind.tcfl.R;
+import com.nightwind.tcfl.activity.ReviewActivity;
 import com.nightwind.tcfl.tool.localDB.LocalDBTestActivity;
 
 
@@ -213,6 +215,11 @@ public class PersonCenterFragment extends Fragment implements View.OnClickListen
                 } else if (id == 4) {
                     //我的收藏
                     Intent intent = new Intent(getActivity(), MyCollectionActivity.class);
+                    startActivity(intent);
+                    getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+                } else if (id == 5) {
+                    //皮卡丘
+                    Intent intent = new Intent(getActivity(), PikachuActivity.class);
                     startActivity(intent);
                     getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
                 } else if (id == 6) {

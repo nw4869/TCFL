@@ -1,0 +1,56 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.nightwind.tcfl.activity.PikachuActivity">
+
+
+    <include layout="@layout/toolbar"
+        android:id="@+id/toolbar"/>
+
+    <FrameLayout
+        android:layout_below="@id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/iv_pikachu"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="pikachu"
+            android:src="@drawable/conan1"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/review"
+                style="@style/Base.TextAppearance.AppCompat.Large"
+                android:background="@drawable/background_tab"
+                android:clickable="true"
+                android:onClick="review"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:layout_marginTop="280dp"
+                android:text="复习"/>
+
+            <TextView
+                android:id="@+id/contest"
+                style="@style/Base.TextAppearance.AppCompat.Large"
+                android:background="@drawable/background_tab"
+                android:clickable="true"
+                android:onClick="contest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:layout_below="@id/review"
+                android:text="竞赛"/>
+
+            </RelativeLayout>
+
+
+
+        </FrameLayout>
+
+</RelativeLayout>

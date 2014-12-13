@@ -19,6 +19,7 @@ import android.view.ViewGroup.LayoutParams;
 import com.nightwind.tcfl.AvatarOnClickListener;
 import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.activity.ContentActivity;
+import com.nightwind.tcfl.activity.ShowImageActivity;
 import com.nightwind.tcfl.bean.Article;
 import com.nightwind.tcfl.bean.User;
 import com.nightwind.tcfl.controller.ArticleController;
@@ -203,10 +204,19 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
             mSlideImageViews = new ImageView[imgIdArray.length];
             for(int i=0; i< mSlideImageViews.length; i++){
                 ImageView imageView = new ImageView(mContext);
+                final String imageUrl = ArticleController.getSlideImgURLList()[i % 8];
+                imageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(mContext, ShowImageActivity.class);
+                        intent.putExtra(ShowImageActivity.ARG_IMAGE_URL, imageUrl);
+                        mContext.startActivity(intent);
+                    }
+                });
 //                imageView1.setBackgroundResource(imgIdArray[i]);
                 //从服务器加载图片
 //                slideImageLoader.displayImage(Constants.getSlideImgURLList()[i % 8], imageView1, slideImageOptions);
-                imageLoader.displayImage(ArticleController.getSlideImgURLList()[i % 8], imageView, slideImageOptions);
+                imageLoader.displayImage(imageUrl, imageView, slideImageOptions);
                 mSlideImageViews[i] = imageView;
             }
             //设置Adapter

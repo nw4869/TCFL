@@ -68,6 +68,22 @@
             android:name=".tool.localDB.LocalDBTestActivity"
             android:label="@string/title_activity_local_dbtest" >
         </activity>
+        <activity
+            android:name=".activity.ReviewActivity"
+            android:label="@string/title_activity_review" >
+        </activity>
+        <activity
+            android:name=".activity.PikachuActivity"
+            android:label="@string/title_activity_pikachu" >
+        </activity>
+        <activity
+            android:name=".activity.ContestActivity"
+            android:label="@string/title_activity_contest" >
+        </activity>
+        <activity
+            android:name=".activity.ShowImageActivity"
+            android:label="@string/title_activity_show_image" >
+        </activity>
     </application>
 
 </manifest>
