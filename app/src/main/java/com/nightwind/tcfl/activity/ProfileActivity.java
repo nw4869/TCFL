@@ -66,11 +66,15 @@ public class ProfileActivity extends ActionBarActivity implements View.OnTouchLi
 
         if (getIntent() != null) {
             String username = getIntent().getStringExtra("username");
-            Log.d("ProfileActivity getIntent", username);
             if (username != null) {
+                Log.d("ProfileActivity getIntent", username);
                 mUser = mUserController.getUser(username);
             } else {
                 mUser = mUserController.getSelfUser();
+            }
+            //SharedPrf存在，但数据库不存在了，且没连接网络，显示空的
+            if (mUser == null) {
+                mUser = new User();
             }
         }
 

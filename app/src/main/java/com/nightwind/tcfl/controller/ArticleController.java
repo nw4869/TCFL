@@ -23,15 +23,31 @@ public class ArticleController {
     private final Context mContext;
     private final UserController mUserController;
 
+    private static String[] SLIDEIMGURLLIST;
+
+    //我的帖子
+    static private ArrayList<Article> sMyArticleList = new ArrayList<>();
+    //我的收藏
+    static private ArrayList<Article> sCollectionList = new ArrayList<>();
+
+    private static int sClassifyCount = 8;
+    //分类帖子Array Map用于adapter的数据集
+    private static HashMap<Integer, ArrayList<Article>> sArticleListsMap = new HashMap<>();
+    //总帖子列表Array用于通过articleID索引查询
+//    private static ArrayList<Article> mArticles = new ArrayList<>();
+    private static HashMap<Integer, Article> sArticleMap = new HashMap<>();
+
     public ArticleController(Context context) {
         mContext = context;
         mUserController = new UserController(mContext);
+        if (sArticleMap.size() == 0) {
+            genRandArticle(6*sClassifyCount);
+        }
     }
 
 
-    private static String[] IMGURLLIST;
+//    private static String[] IMGURLLIST;
 
-    private static String[] SLIDEIMGURLLIST;
 
 //    public static String[] getImgURLList() {
 //        if (IMGURLLIST == null) {
@@ -55,18 +71,6 @@ public class ArticleController {
     }
 
 
-
-    //我的帖子
-    static private ArrayList<Article> sMyArticleList = new ArrayList<>();
-    //我的收藏
-    static private ArrayList<Article> sCollectionList = new ArrayList<>();
-
-    private static int sClassifyCount = 8;
-    //分类帖子Array Map用于adapter的数据集
-    private static HashMap<Integer, ArrayList<Article>> sArticleListsMap = new HashMap<>();
-    //总帖子列表Array用于通过articleID索引查询
-//    private static ArrayList<Article> mArticles = new ArrayList<>();
-    private static HashMap<Integer, Article> sArticleMap = new HashMap<>();
 
 //    static {
 //        genRandArticle(50);
@@ -220,22 +224,22 @@ public class ArticleController {
         ArticleController.sClassifyCount = sClassifyCount;
     }
 
-    public static int getArticleCount() {
+    public int getArticleCount() {
 //        return mArticles.size();
         return sArticleMap.size();
     }
 
-    public static ArrayList<Article> getMyListItem(int index) {
+    public ArrayList<Article> getMyListItem(int index) {
 
         return sArticleListsMap.get(index);
     }
 
-    static public Article getArticle(int articleId) {
+    public Article getArticle(int articleId) {
 //        return mArticles.get(articleId);
         return sArticleMap.get(articleId);
     }
 
-    static public boolean addArticle(int classify, Article article) {
+    public boolean addArticle(int classify, Article article) {
         sArticleListsMap.get(classify).add(article);
         article.getCommentEntities().add(null);
 

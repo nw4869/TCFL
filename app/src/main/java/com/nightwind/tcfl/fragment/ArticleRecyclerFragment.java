@@ -224,7 +224,9 @@ public class ArticleRecyclerFragment extends Fragment {
 
     private void initData() {
         if (type == TYPE_NORMAL || type == TYPE_WITH_SLIDE_IMAGE) {
-            mArticleEntities = ArticleController.getMyListItem(position);
+
+            ArticleController articleController = new ArticleController(getActivity());
+            mArticleEntities = articleController.getMyListItem(position);
         } else if (type == TYPE_COLLECTION ) {
 //            mArticleEntities.clear();
 //            ArrayList<Integer> collectionList = Dummy.getCollectionList();

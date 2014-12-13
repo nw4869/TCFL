@@ -66,7 +66,9 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
         mArticleId = getIntent().getIntExtra("articleId", 0);
 
 //        mArticle = Dummy.getMyListItem(mClassify).get(mRowId);
-        mArticle = ArticleController.getArticle(mArticleId);
+
+        ArticleController articleController = new ArticleController(this);
+        mArticle = articleController.getArticle(mArticleId);
 //        mArticleId = mArticle.getId();
 
         //设置标题

@@ -37,6 +37,9 @@ public class UserController {
     public UserController(Context context) {
         mContext = context;
         mUDBMgr = new UserDBManager(mContext);
+        if (sUidMap == null) {
+            randGenUsers(50);
+        }
     }
 
     public void randGenUsers(int n) {
@@ -120,6 +123,9 @@ public class UserController {
     }
 
     public User getUser(String username) {
+        if (username == null || username.equals("")) {
+            return null;
+        }
         User user = sUidMap.get(username);
         //内存为空，从本地数据库读取
         if (user == null) {
@@ -166,7 +172,7 @@ public class UserController {
     private User getUserFromDB(String username) {
         return mUDBMgr.getUser(username);
     }
-    private boolean insertToDB(User user) {
+    public boolean insertToDB(User user) {
         return mUDBMgr.insertUser(user);
     }
 

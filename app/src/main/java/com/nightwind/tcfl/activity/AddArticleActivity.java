@@ -108,8 +108,9 @@ public class AddArticleActivity extends ActionBarActivity {
             String date = BaseTools.getCurrentDateTime();
             article.setDateTime(date);
 
+            ArticleController articleController = new ArticleController(this);
 
-            if (ArticleController.addArticle(mClassify, article)) {
+            if (articleController.addArticle(mClassify, article)) {
                 Toast.makeText(this, "发布成功", Toast.LENGTH_SHORT).show();
                 setResult(0);
                 finish();

@@ -138,6 +138,9 @@ public class User {
 
 
     public String getAvatarUrl() {
+        if (avatarUrl == null) {
+            return "";
+        }
         return avatarUrl;
     }
 

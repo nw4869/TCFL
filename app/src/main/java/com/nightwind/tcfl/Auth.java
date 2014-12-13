@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
+import com.nightwind.tcfl.bean.User;
 import com.nightwind.tcfl.controller.UserController;
 import com.nightwind.tcfl.tool.encryptionUtil.MD5Util;
 import com.nightwind.tcfl.tool.encryptionUtil.RSAUtils;
@@ -287,6 +288,10 @@ public class Auth {
                         saveUsername(username);
                         UserController uc = new UserController(mAppContext);
                         uc.setSelfUser(uc.getUser(username));
+//                        User user = new User();
+//                        user.setUsername(username);
+//                        //尝试添加到数据库
+//                        uc.insertToDB(user);
 
                         msg.what = MSG_LOGIN_SUCCESS;
                         Bundle bundle = new Bundle();

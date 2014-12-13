@@ -46,23 +46,23 @@ public class MainActivity extends ActionBarActivity implements PersonCenterFragm
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-        Auth auth = new Auth(this);
-        //gen rand data
-        UserController userController = new UserController(this);
-//        userController.randGenUsers(8);
-        final String username = auth.getUsername();
-        if (username != null) {
-            userController.setSelfUser(userController.getUser(username));
-        }
-        userController.closeDB();
-
-        ChatMsgController chatMsgController = new ChatMsgController(this);
-//        chatMsgController.randGenChat();
-        chatMsgController.closeDB();
-
-        ArticleController articleController = new ArticleController(this);
-        articleController.genRandArticle(50);
-        articleController.closeDB();
+//        Auth auth = new Auth(this);
+//        //gen rand data
+//        UserController userController = new UserController(this);
+////        userController.randGenUsers(8);
+//        final String username = auth.getUsername();
+//        if (username != null) {
+//            userController.setSelfUser(userController.getUser(username));
+//        }
+//        userController.closeDB();
+//
+//        ChatMsgController chatMsgController = new ChatMsgController(this);
+////        chatMsgController.randGenChat();
+//        chatMsgController.closeDB();
+//
+//        ArticleController articleController = new ArticleController(this);
+////        articleController.genRandArticle(50);
+//        articleController.closeDB();
 
 		initViews();
 	}

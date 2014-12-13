@@ -118,7 +118,9 @@ public class AddCommentActivity extends ActionBarActivity {
 
     private boolean pushComment() {
 //        Article article = Dummy.getMyListItem(mClassify).get(mRowId);
-        Article article = ArticleController.getArticle(mArticleId);
+
+        ArticleController articleController = new ArticleController(this);
+        Article article = articleController.getArticle(mArticleId);
 
         Comment comment = new Comment();
 
