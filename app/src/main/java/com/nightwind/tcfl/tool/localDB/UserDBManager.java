@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.nightwind.tcfl.Auth;
 import com.nightwind.tcfl.bean.User;
+import com.nightwind.tcfl.server.ServerConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +71,7 @@ public class UserDBManager {
             user.setTel(tel);
             user.setSchool(school);
             user.setHobby(hobby);
-            user.setAvatarUrl(Auth.SERVER_REMOTE + avatarUrl);
+            user.setAvatarUrl(ServerConfig.getServer() + avatarUrl);
             user.setOnline(online);
 
             users.add(user);

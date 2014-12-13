@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.nightwind.tcfl.Auth;
 import com.nightwind.tcfl.R;
+import com.nightwind.tcfl.server.ServerConfig;
 
 public class LoginActivity extends BaseActivity {
 
@@ -79,7 +80,7 @@ public class LoginActivity extends BaseActivity {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClickLogin(Auth.SERVER_REMOTE);
+                onClickLogin(ServerConfig.getServer());
             }
         });
 
@@ -87,7 +88,7 @@ public class LoginActivity extends BaseActivity {
         loginBtn.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                onClickLogin(Auth.SERVER_LOCAL_DEBUG);
+                onClickLogin(ServerConfig.getServer());
                 Toast.makeText(LoginActivity.this, "LOGIN_REMOTE", Toast.LENGTH_SHORT).show();
                 return true;
             }

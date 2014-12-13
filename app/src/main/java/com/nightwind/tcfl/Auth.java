@@ -7,8 +7,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
-import com.nightwind.tcfl.bean.User;
 import com.nightwind.tcfl.controller.UserController;
+import com.nightwind.tcfl.server.ServerConfig;
 import com.nightwind.tcfl.tool.encryptionUtil.MD5Util;
 import com.nightwind.tcfl.tool.encryptionUtil.RSAUtils;
 
@@ -46,19 +46,12 @@ public class Auth {
     private String mPassword;
 
     private String responseMsg = "";
-    private static final int REQUEST_TIMEOUT = 5 * 1000;//设置请求超时10秒钟
-    private static final int SO_TIMEOUT = 10 * 1000;  //设置等待数据超时时间10秒钟
-    private static final int LOGIN_OK = 1;
-//    public static final String SERVER_REMOTE = "http://nw48693.s155.eatj.com/";
-    public static final String SERVER_REMOTE = "http://120.24.223.185/";
-
-    public static final String SERVER_LOCAL_DEBUG = "http://192.168.1.123:8081/";
 //    private static String SERVER = SERVER0;
 
 
     protected Auth() {
-        mClient = getHttpClient();
-        mServer = SERVER_REMOTE;
+        mClient = ServerConfig.getHttpClient();
+        mServer = ServerConfig.getServer();
     }
 
     public Auth(Context context) {
@@ -84,17 +77,6 @@ public class Auth {
         this.mServer = Server;
     }
 
-    /**
-     * 初始化HttpClient，并设置超时
-     * @return
-     */
-    private HttpClient getHttpClient() {
-        BasicHttpParams httpParams = new BasicHttpParams();
-        HttpConnectionParams.setConnectionTimeout(httpParams, REQUEST_TIMEOUT);
-        HttpConnectionParams.setSoTimeout(httpParams, SO_TIMEOUT);
-        HttpClient client = new DefaultHttpClient(httpParams);
-        return client;
-    }
 
     static public final int MSG_LOGIN_SUCCESS = 0;
     static public final int MSG_LOGIN_PWD_ERROR = 1;

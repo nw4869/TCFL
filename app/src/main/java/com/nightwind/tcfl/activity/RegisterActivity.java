@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.nightwind.tcfl.Auth;
 import com.nightwind.tcfl.R;
+import com.nightwind.tcfl.server.ServerConfig;
 
 public class RegisterActivity extends BaseActivity {
 
@@ -68,7 +69,7 @@ public class RegisterActivity extends BaseActivity {
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClickRegister(Auth.SERVER_REMOTE);
+                onClickRegister(ServerConfig.getServer());
             }
         });
 

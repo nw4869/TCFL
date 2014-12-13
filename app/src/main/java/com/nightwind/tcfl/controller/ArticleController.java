@@ -6,6 +6,7 @@ import com.nightwind.tcfl.Auth;
 import com.nightwind.tcfl.bean.Article;
 import com.nightwind.tcfl.bean.Comment;
 import com.nightwind.tcfl.bean.User;
+import com.nightwind.tcfl.server.ServerConfig;
 import com.nightwind.tcfl.tool.BaseTools;
 
 import java.util.ArrayList;
@@ -63,7 +64,7 @@ public class ArticleController {
         if (SLIDEIMGURLLIST == null) {
             ArrayList<String> imgList = new ArrayList<>();
             for (int i = 1; i <= 8; i++) {
-                imgList.add( Auth.SERVER_REMOTE + "img/slide/" + i + ".jpg");
+                imgList.add( ServerConfig.getServer() + "img/slide/" + i + ".jpg");
             }
             SLIDEIMGURLLIST = imgList.toArray(new String[imgList.size()]);
         }

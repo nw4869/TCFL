@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.nightwind.tcfl.Auth;
 import com.nightwind.tcfl.bean.User;
+import com.nightwind.tcfl.server.ServerConfig;
 import com.nightwind.tcfl.tool.localDB.UserDBManager;
 
 import java.util.ArrayList;
@@ -62,7 +63,7 @@ public class UserController {
             user.setHobby("Programming");
 
             //头像
-            user.setAvatarUrl(Auth.SERVER_REMOTE +"img/conan" + uid + ".jpg");
+            user.setAvatarUrl(ServerConfig.getServer() +"img/conan" + uid + ".jpg");
 
             //添加好友
             int m = random.nextInt(n / 2) + 2;
