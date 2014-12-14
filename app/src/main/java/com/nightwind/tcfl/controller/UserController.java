@@ -2,13 +2,26 @@ package com.nightwind.tcfl.controller;
 
 import android.content.Context;
 
+import com.google.gson.Gson;
 import com.nightwind.tcfl.Auth;
 import com.nightwind.tcfl.bean.User;
 import com.nightwind.tcfl.server.ServerConfig;
+import com.nightwind.tcfl.tool.encryptionUtil.RSAUtils;
 import com.nightwind.tcfl.tool.localDB.UserDBManager;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.HTTP;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -125,12 +138,13 @@ public class UserController {
      */
     public int saveUser(User user) {
         int ok = 0;
-        if (sUidMap.put(user.getUid(), user) == null) {
-            ok += 1;
-        }
-        if (sUsernameMap.put(user.getUsername(), user) == null) {
-            ok += 1 << 2;
-        }
+        //已在getUser的时候写入
+//        if (sUidMap.put(user.getUid(), user) == null) {
+//            ok += 1;
+//        }
+//        if (sUsernameMap.put(user.getUsername(), user) == null) {
+//            ok += 1 << 2;
+//        }
         if (!insertToDB(user)) {
             ok += 1 << 3;
         }
@@ -152,10 +166,13 @@ public class UserController {
             user = getUserFromDB(username);
             //本地数据库也为空，从服务器获取
             if (user == null) {
-//                user = getUserFromServer(username);
-//                //写入本地数据库
-//                insertToDB(user);
-                return null;
+                user = getUserFromServer(username);
+                if(user != null) {
+                    //写入本地数据库
+                    insertToDB(user);
+                } else {
+                    return null;
+                }
             }
 
             int uid = user.getUid();
@@ -167,9 +184,6 @@ public class UserController {
         return user;
     }
 
-    private User getUserFromServer(String username) {
-        return null;
-    }
 
     public User getSelfUser() {
         if (sSelfUser == null) {
@@ -194,6 +208,58 @@ public class UserController {
     }
     public boolean insertToDB(User user) {
         return mUDBMgr.insertUser(user);
+    }
+
+    private User getUserFromServer(String requestUsername) {
+        User user = null;
+
+        Auth auth = new Auth(mContext);
+        String token = auth.getToken();
+
+        String urlStr = ServerConfig.getServer() + "MyLogin/GetUserInfo";
+        HttpPost request = new HttpPost(urlStr);
+        List<NameValuePair> params = new ArrayList<>();
+        if (token == null) {
+            System.out.println("本地token不存在");
+            return null;
+        }
+
+        //RSA加密token
+        String strPublicKey = auth.getPublicKey();
+        String cipherToken;
+        try {
+            cipherToken = RSAUtils.encrypt(token, strPublicKey);
+        } catch (Exception e) {
+            System.out.println("RSA加密Token失败");
+            return null;
+        }
+
+        String selfUsername = auth.getUsername();
+        params.add(new BasicNameValuePair("token", cipherToken));
+        params.add(new BasicNameValuePair("username", selfUsername));
+        params.add(new BasicNameValuePair("requestUsername", requestUsername));
+
+        try {
+            //设置请求参数项
+            request.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
+            HttpClient Client = ServerConfig.getHttpClient();
+            //执行请求返回相应
+            HttpResponse response = Client.execute(request);
+
+            //判断是否请求成功
+            if (response.getStatusLine().getStatusCode() == 200) {
+                //获得响应信息
+                String responseMsg = EntityUtils.toString(response.getEntity());
+                JSONObject jsonObject = new JSONObject(responseMsg);
+                if(jsonObject.getBoolean("success")) {
+                    user = User.fromJson(responseMsg);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return user;
     }
 
     public void closeDB() { mUDBMgr.closeDB();}

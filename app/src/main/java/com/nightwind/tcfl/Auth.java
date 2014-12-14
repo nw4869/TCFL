@@ -473,7 +473,7 @@ public class Auth {
      * 从服务器获取公钥
      * @return
      */
-    private String getPublicKey() {
+    public String getPublicKey() {
         String urlStr = mServer + "MyLogin/GetPublicKey";
         HttpGet request = new HttpGet(urlStr);
 
@@ -606,7 +606,7 @@ public class Auth {
         }
     }
 
-    private String getToken() {
+    public String getToken() {
         SharedPreferences sp = mAppContext.getSharedPreferences("token", Activity.MODE_PRIVATE);
         return sp.getString("token", null);
     }

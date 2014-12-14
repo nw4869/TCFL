@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * Created by wind on 2014/11/29.
  */
 public class User {
-    private int uid, level, age, sex, edu;
+    private int uid = -1, level = 1, age = -1, sex = -1, edu = -1;
     private String username, password, salt, email, work, info, school, tel;
     private String hobby;
     private String avatarUrl;
@@ -23,7 +23,36 @@ public class User {
         if (0 <= edu && edu <= eduNum) {
             return eduStrings[edu];
         } else {
-            return eduStrings[0];
+//            return eduStrings[0];
+            return null;
+        }
+    }
+    public String getUidString() {
+        if (0 <= uid) {
+            return String.valueOf(uid);
+        } else {
+            return null;
+        }
+    }
+    public String getLevelString() {
+        if (0 <= level) {
+            return String.valueOf(level);
+        } else {
+            return null;
+        }
+    }
+    public String getAgeString() {
+        if (0 <= age) {
+            return String.valueOf(age == 0 ? "男" : "女");
+        } else {
+            return null;
+        }
+    }
+    public String getSexString() {
+        if (0 <= sex) {
+            return String.valueOf(sex);
+        } else {
+            return null;
         }
     }
 

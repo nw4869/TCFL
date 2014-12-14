@@ -1,5 +1,8 @@
 package com.nightwind.tcfl.tool.localDB;
 
+import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -18,9 +21,13 @@ import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.bean.User;
+import com.nightwind.tcfl.controller.UserController;
 
 public class LocalDBTestActivity extends ActionBarActivity {
 
@@ -120,6 +127,45 @@ public class LocalDBTestActivity extends ActionBarActivity {
                 cursorWrapper, new String[]{"name", "info"}, new int[]{android.R.id.text1, android.R.id.text2});
         ListView listView = (ListView) findViewById(R.id.listView);
         listView.setAdapter(adapter);
+    }
+
+    public void test(View v) {
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                UserController uc = new UserController(LocalDBTestActivity.this);
+//                TextView tv = (TextView) findViewById(R.id.et_username);
+//                String username = String.valueOf(tv.getText());
+//                User user = uc.getUser(username);
+//                Gson gson = new Gson();
+////                System.out.println(user.getUid() + " " + user.getUsername() );
+//                System.out.println(gson.toJson(user) );
+//            }
+//        }).start();
+
+        TextView tv = (TextView) findViewById(R.id.et_username);
+        String username = String.valueOf(tv.getText());
+
+        new AsyncTask<String, Void, String>() {
+
+            @Override
+            protected String doInBackground(String... params) {
+                String username = params[0];
+                UserController uc = new UserController(LocalDBTestActivity.this);
+                User user = uc.getUser(username);
+                Gson gson = new Gson();
+//                System.out.println(user.getUid() + " " + user.getUsername() );
+                String result = gson.toJson(user);
+                System.out.println(result);
+                return result;
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
+                ((TextView)findViewById(R.id.result)).setText(result);
+            }
+        }.execute(username);
     }
 
 
