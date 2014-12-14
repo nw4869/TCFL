@@ -24,7 +24,7 @@ public class AvatarOnClickListener implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         Intent intent = new Intent(context, ProfileActivity.class);
-        intent.putExtra("username", username);
+        intent.putExtra(ProfileActivity.ARG_USERNAME, username);
         context.startActivity(intent);
         ((Activity)context).overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
     }

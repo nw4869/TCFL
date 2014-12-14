@@ -24,9 +24,9 @@
         <TextView
             android:id="@+id/username"
             style="@style/TextAppearance.AppCompat.Title"
+            android:hint="username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nightwind"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
             android:layout_toRightOf="@+id/avatar"
@@ -34,9 +34,9 @@
         <TextView
             android:id="@+id/sign"
             style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
+            android:hint="sign"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="HelloWorld"
             android:ellipsize="end"
             android:maxLines="1"
             android:singleLine="false"
@@ -76,7 +76,6 @@
             style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="7级"
             android:gravity="center_horizontal"
             android:layout_marginLeft="80dp" />
     </RelativeLayout>
@@ -111,7 +110,6 @@
             style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="20岁"
             android:gravity="center_horizontal"
             android:layout_marginLeft="80dp" />
     </RelativeLayout>
@@ -146,7 +144,6 @@
             style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="男"
             android:gravity="center_horizontal"
             android:layout_marginLeft="80dp" />
     </RelativeLayout>
@@ -181,7 +178,6 @@
             style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="IT"
             android:gravity="center_horizontal"
             android:layout_marginLeft="80dp" />
     </RelativeLayout>
@@ -217,7 +213,6 @@
             style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="本科"
             android:gravity="center_horizontal"
             android:layout_marginLeft="80dp" />
     </RelativeLayout>
@@ -252,7 +247,6 @@
             style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="女"
             android:gravity="center_horizontal"
             android:layout_marginLeft="80dp" />
     </RelativeLayout>

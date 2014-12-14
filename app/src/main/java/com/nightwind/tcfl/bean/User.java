@@ -1,5 +1,7 @@
 package com.nightwind.tcfl.bean;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 
 /**
@@ -15,6 +17,7 @@ public class User {
 
     static public int eduNum = 6;
     static public String[] eduStrings = {"本科", "硕士", "博士", "专科", "中学", "小学"};
+
 
     public String getEduString() {
         if (0 <= edu && edu <= eduNum) {
@@ -214,5 +217,10 @@ public class User {
             friendsUidList.remove((Integer)uid);
             return true;
         }
+    }
+
+    public static User fromJson(String json) {
+        Gson gson = new Gson();
+        return gson.fromJson(json, User.class);
     }
 }

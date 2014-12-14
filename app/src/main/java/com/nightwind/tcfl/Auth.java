@@ -7,11 +7,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
+import com.nightwind.tcfl.bean.User;
 import com.nightwind.tcfl.controller.UserController;
 import com.nightwind.tcfl.server.ServerConfig;
 import com.nightwind.tcfl.tool.encryptionUtil.MD5Util;
 import com.nightwind.tcfl.tool.encryptionUtil.RSAUtils;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -28,7 +30,10 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -130,6 +135,7 @@ public class Auth {
 
                     boolean success = false;
                     String token = null;
+                    User user = null;
                     try {
                         //解析服务器返回的json
                         JSONObject jo = new JSONObject(responseMsg);
@@ -137,6 +143,7 @@ public class Auth {
                         success = jo.getBoolean("success");
                         //获取token
                         token = jo.getString("token");
+                        user = User.fromJson(responseMsg);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -146,6 +153,8 @@ public class Auth {
                         saveToken(token);
                         System.out.println("save token:" + token);
                         saveUsername(username);
+                        UserController uc = new UserController(mAppContext);
+                        uc.saveUser(user);
 
                         msg.what = MSG_REGISTER_SUCCESS;
                         Bundle bundle = new Bundle();
@@ -188,7 +197,26 @@ public class Auth {
             if (response.getStatusLine().getStatusCode() == 200) {
                 registerValidate = true;
                 //获得响应信息
-                responseMsg = EntityUtils.toString(response.getEntity());
+                responseMsg = EntityUtils.toString(response.getEntity(), "UTF-8");
+                System.out.println(responseMsg);
+//                String responseMsg = EntityUtils.toString(response.getEntity(), "GBK");
+//                System.out.println(responseMsg);
+//                responseMsg = EntityUtils.toString(response.getEntity(), "UTF-8");
+//                System.out.println(responseMsg);
+//                responseMsg = EntityUtils.toString(response.getEntity(), "iso8859-1");
+//                System.out.println(responseMsg);
+
+//                StringBuffer strBuf = new StringBuffer();
+//                HttpEntity httpEnt = response.getEntity();
+//                InputStream inputStream = httpEnt.getContent();
+//                String htmlCharset = "UTF-8";
+//                BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, htmlCharset));
+//                String singleLine = "";
+//                while ((singleLine = br.readLine()) != null) {
+//                    strBuf.append(singleLine);
+//                }
+//                responseMsg = strBuf.toString();
+
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -259,21 +287,38 @@ public class Auth {
                 boolean loginValidate = loginServer(username, cipherPwd);
                 System.out.println("----------------------------bool is :" + loginValidate + "----------response:" + responseMsg);
                 if (loginValidate) {
-                    if (responseMsg.contains("success")) {
-                        //登录成功！！
+                    boolean success = false;
+                    String token = null;
+                    User user = null;
+                    try {
+                        //解析服务器返回的json
+                        JSONObject jo = new JSONObject(responseMsg);
+                        //获取状态
+                        success = jo.getBoolean("success");
+                        //获取token
+                        token = jo.getString("token");
+                        user = User.fromJson(responseMsg);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
 
-                        //从服务器获取token
-                        String token = responseMsg.replaceAll(".{0,100}\\btoken=", "").replaceAll("; ?\\b.{0,100}", "");
+                    if (success) {
+                        //登录成功！！
+//                        //从服务器获取token
+//                        String token = responseMsg.replaceAll(".{0,100}\\btoken=", "").replaceAll("; ?\\b.{0,100}", "");
+//                        saveToken(token);
+//                        System.out.println("save token:" + token);
+//                        //设置当前的用户
+//                        saveUsername(username);
+//                        UserController uc = new UserController(mAppContext);
+//                        uc.setSelfUser(uc.getUser(username));
+                        //登录成功！！，保存token，用户名
                         saveToken(token);
                         System.out.println("save token:" + token);
-                        //设置当前的用户
                         saveUsername(username);
                         UserController uc = new UserController(mAppContext);
-                        uc.setSelfUser(uc.getUser(username));
-//                        User user = new User();
-//                        user.setUsername(username);
-//                        //尝试添加到数据库
-//                        uc.insertToDB(user);
+                        uc.saveUser(user);
+
 
                         msg.what = MSG_LOGIN_SUCCESS;
                         Bundle bundle = new Bundle();

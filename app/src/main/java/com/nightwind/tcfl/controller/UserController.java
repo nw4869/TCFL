@@ -118,6 +118,25 @@ public class UserController {
         return user;
     }
 
+    /**
+     *
+     * @param user
+     * @return 0表示成功
+     */
+    public int saveUser(User user) {
+        int ok = 0;
+        if (sUidMap.put(user.getUid(), user) == null) {
+            ok += 1;
+        }
+        if (sUsernameMap.put(user.getUsername(), user) == null) {
+            ok += 1 << 2;
+        }
+        if (!insertToDB(user)) {
+            ok += 1 << 3;
+        }
+        return ok;
+    }
+
     //todo
     private User getUserFromServer(int uid) {
         return null;
