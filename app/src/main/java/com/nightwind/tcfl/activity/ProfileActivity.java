@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nightwind.tcfl.Auth;
 import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.bean.User;
 import com.nightwind.tcfl.controller.UserController;
@@ -74,28 +75,18 @@ public class ProfileActivity extends BaseActivity {
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     void init() {
-
+        String username = new Auth(this).getUsername();
         if (getIntent() != null) {
-            String username = getIntent().getStringExtra("username");
+            String tmpUsername = getIntent().getStringExtra("username");
             if (username != null) {
                 Log.d("ProfileActivity getIntent", username);
-//                mUser = mUserController.getUser(username);
-                Bundle args = new Bundle();
-                args.putString(ARG_USERNAME, username);
-                LoaderManager lm = getLoaderManager();
-                lm.initLoader(LOAD_USER, args, new UserLoaderCallbacks());
-            } else {
-                mUser = mUserController.getSelfUser();
-                updateUI();
+                username = tmpUsername;
             }
-//            //SharedPrf存在，但数据库不存在了，且没连接网络，显示空的
-//            if (mUser == null) {
-//                mUser = new User();
-//            }
-        } else {
-            mUser = mUserController.getSelfUser();
-            updateUI();
         }
+        Bundle args = new Bundle();
+        args.putString(ARG_USERNAME, username);
+        LoaderManager lm = getLoaderManager();
+        lm.initLoader(LOAD_USER, args, new UserLoaderCallbacks());
 
 
     }

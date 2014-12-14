@@ -124,7 +124,10 @@ public class UserDBManager {
         binds.add(user.getTel());
         binds.add(String.valueOf(user.getAge()));
         binds.add(String.valueOf(user.getSex()));
+        binds.add(user.getWork());
         binds.add(user.getInfo());
+        binds.add(String.valueOf(user.getEdu()));
+        binds.add(user.getSchool());
         binds.add(user.getAvatarUrl());
         binds.add(user.getHobby());
         binds.add(String.valueOf(user.isOnline() == true ? 1 : 0));
