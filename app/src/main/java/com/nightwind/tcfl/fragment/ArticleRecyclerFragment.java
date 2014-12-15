@@ -1,5 +1,8 @@
 package com.nightwind.tcfl.fragment;
 
+import android.annotation.TargetApi;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -7,6 +10,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,13 +24,16 @@ import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.bean.Article;
 import com.nightwind.tcfl.controller.ArticleController;
 import com.nightwind.tcfl.controller.UserController;
+import com.nightwind.tcfl.server.ArticleAbstractsLoader;
 
 import java.util.ArrayList;
 
 
 public class ArticleRecyclerFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_POSITION = "position";
+    private static final java.lang.String ARG_CLASSIFY = "classify";
+    private static final java.lang.String ARG_BEGIN_PAGE = "beginPage";
+    private static final java.lang.String ARG_END_PAGE = "endPage";
     private static final String ARG_TYPE = "type";
 
     public static final int TYPE_NORMAL = 0;
@@ -50,6 +57,8 @@ public class ArticleRecyclerFragment extends Fragment {
     private static final int[] drawables = { R.drawable.conan1, R.drawable.conan2, R.drawable.conan3, R.drawable.conan4,
             R.drawable.conan5, R.drawable.conan6, R.drawable.conan7, R.drawable.conan8 };
     private UserController mUserController;
+    private int beginPage;
+    private int endPage;
 
     /**
      * Use this factory method to create a new instance of
@@ -60,7 +69,9 @@ public class ArticleRecyclerFragment extends Fragment {
     public static ArticleRecyclerFragment newInstance(int position, int type) {
         ArticleRecyclerFragment fragment = new ArticleRecyclerFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_POSITION, position);
+        args.putInt(ARG_CLASSIFY, position);
+        args.putInt(ARG_BEGIN_PAGE, 0);
+        args.putInt(ARG_END_PAGE, 0);
         args.putInt(ARG_TYPE, type);
         fragment.setArguments(args);
         return fragment;
@@ -91,13 +102,42 @@ public class ArticleRecyclerFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            position = getArguments().getInt(ARG_POSITION, 0);
+            position = getArguments().getInt(ARG_CLASSIFY, 0);
             type = getArguments().getInt(ARG_TYPE);
+            beginPage = getArguments().getInt(ARG_BEGIN_PAGE, 0);
+            endPage = getArguments().getInt(ARG_END_PAGE, 0);
         }
         initData();
     }
 
-    @Override
+    private void initData() {
+
+        Bundle args = new Bundle();
+        args.putInt(ARG_CLASSIFY, position);
+        args.putInt(ARG_BEGIN_PAGE, beginPage);
+        args.putInt(ARG_END_PAGE, endPage);
+        args.putInt(ARG_TYPE, type);
+        getLoaderManager().initLoader(type, args, new ArticleAbstractsLoaderCallbacks());
+
+//        if (type == TYPE_NORMAL || type == TYPE_WITH_SLIDE_IMAGE) {
+//
+//            ArticleController articleController = new ArticleController(getActivity());
+//            mArticleEntities = articleController.getMyListItem(position);
+//        } else if (type == TYPE_COLLECTION) {
+////            mArticleEntities.clear();
+////            ArrayList<Integer> collectionList = Dummy.getCollectionList();
+////            for (Integer collectionId: collectionList) {
+////                Article article = Dummy.getArticle(collectionId);
+////                mArticleEntities.add(article);
+////            }
+//            mArticleEntities = ArticleController.getCollectionList();
+//        } else if (type == TYPE_MY_ARTICLE) {
+//            mArticleEntities = ArticleController.getMyArticleList();
+//        }
+    }
+
+
+        @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -138,7 +178,36 @@ public class ArticleRecyclerFragment extends Fragment {
 //            listItems[i] = listItem;
 //        }
 
+        updateUI();
 
+        return v;
+    }
+
+
+
+    //异步加载回调
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public class ArticleAbstractsLoaderCallbacks implements LoaderManager.LoaderCallbacks<ArrayList<Article>> {
+        @Override
+        public Loader<ArrayList<Article>> onCreateLoader(int id, Bundle args) {
+            return new ArticleAbstractsLoader(getActivity(), args.getInt(ARG_CLASSIFY), args.getInt(ARG_BEGIN_PAGE), args.getInt(ARG_END_PAGE), args.getInt(ARG_TYPE));
+        }
+
+        @Override
+        public void onLoadFinished(Loader<ArrayList<Article>> loader, ArrayList<Article> data) {
+            mArticleEntities = data;
+            if (mArticleEntities != null) {
+                updateUI();
+            }
+        }
+
+        @Override
+        public void onLoaderReset(Loader<ArrayList<Article>> loader) {
+            //Do nothing
+        }
+    }
+
+    private void updateUI() {
 //        mAdapter = new ArticleAdapter(getActivity(), myDataset, bitmaps);
 //        mAdapter = new ArticleAdapter(getActivity(), listItems);
         if (type == TYPE_COLLECTION || type == TYPE_MY_ARTICLE) {
@@ -148,8 +217,9 @@ public class ArticleRecyclerFragment extends Fragment {
         }
         mRecyclerView.setAdapter(mAdapter);
 
-        return v;
     }
+
+
 
     @Override
     public void onResume() {
@@ -222,23 +292,6 @@ public class ArticleRecyclerFragment extends Fragment {
     }
 
 
-    private void initData() {
-        if (type == TYPE_NORMAL || type == TYPE_WITH_SLIDE_IMAGE) {
-
-            ArticleController articleController = new ArticleController(getActivity());
-            mArticleEntities = articleController.getMyListItem(position);
-        } else if (type == TYPE_COLLECTION ) {
-//            mArticleEntities.clear();
-//            ArrayList<Integer> collectionList = Dummy.getCollectionList();
-//            for (Integer collectionId: collectionList) {
-//                Article article = Dummy.getArticle(collectionId);
-//                mArticleEntities.add(article);
-//            }
-            mArticleEntities = ArticleController.getCollectionList();
-        } else if (type == TYPE_MY_ARTICLE) {
-            mArticleEntities = ArticleController.getMyArticleList();
-        }
-
 
 //        final int NUM_ITEM = 30;
 //        //加载bitmap
@@ -253,7 +306,6 @@ public class ArticleRecyclerFragment extends Fragment {
 ////            listItem.setImg(bitmap);
 //            mArticleEntities.get(i).setImg(bitmap);
 //        }
-    }
     public void refreshList() {
 
         mAdapter.notifyDataSetChanged();

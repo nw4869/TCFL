@@ -235,6 +235,11 @@ public class ArticleController {
         return sArticleListsMap.get(index);
     }
 
+    public ArrayList<Article> getArticleAbstracts(int classify, int beginPage, int endPage) {
+        //todo 完善分页
+        return getMyListItem(classify);
+    }
+
     public Article getArticle(int articleId) {
 //        return mArticles.get(articleId);
         return sArticleMap.get(articleId);

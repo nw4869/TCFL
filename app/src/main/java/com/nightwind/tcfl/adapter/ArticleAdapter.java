@@ -1,8 +1,13 @@
 package com.nightwind.tcfl.adapter;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.LoaderManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.Loader;
+import android.os.Build;
+import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
@@ -25,6 +30,7 @@ import com.nightwind.tcfl.bean.User;
 import com.nightwind.tcfl.controller.ArticleController;
 import com.nightwind.tcfl.controller.UserController;
 import com.nightwind.tcfl.fragment.ArticleRecyclerFragment;
+import com.nightwind.tcfl.server.ArticleAbstractsLoader;
 import com.nightwind.tcfl.tool.BaseTools;
 import com.nightwind.tcfl.tool.Options;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -74,7 +80,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
     DisplayImageOptions slideImageOptions = Options.getSlideImageOptions();
 //    protected ImageLoader slideImageLoader = ImageLoader.getInstance();
 
-	// Provide a reference to the views for each data item
+    // Provide a reference to the views for each data item
 	// Complex data items may need more than one view per item, and
 	// you provide access to all the views for a data item in a view holder
 	public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -133,7 +139,13 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
         mClassify = colId;
     }
 
-    //我的收藏
+
+    /**
+     * 我的收藏
+     * @param context
+     * @param articleList
+     * @param type
+     */
     public ArticleAdapter(Context context, ArrayList<Article> articleList, int type) {
         if (type == ArticleRecyclerFragment.TYPE_COLLECTION || type ==ArticleRecyclerFragment.TYPE_MY_ARTICLE) {
             mContext = context;

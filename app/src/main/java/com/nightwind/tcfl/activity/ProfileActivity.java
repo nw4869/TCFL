@@ -1,10 +1,10 @@
 package com.nightwind.tcfl.activity;
 
 import android.annotation.TargetApi;
-import android.app.LoaderManager;
 import android.content.Intent;
-import android.content.Loader;
 import android.os.Build;
+import android.support.v4.content.Loader;
+import android.support.v4.app.LoaderManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -85,7 +85,8 @@ public class ProfileActivity extends BaseActivity {
         }
         Bundle args = new Bundle();
         args.putString(ARG_USERNAME, username);
-        LoaderManager lm = getLoaderManager();
+//        LoaderManager lm = getLoaderManager();
+        LoaderManager lm = getSupportLoaderManager();
         lm.initLoader(LOAD_USER, args, new UserLoaderCallbacks());
 
 
