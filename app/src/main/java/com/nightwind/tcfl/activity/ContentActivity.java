@@ -2,6 +2,8 @@ package com.nightwind.tcfl.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,10 +23,13 @@ import com.nightwind.tcfl.adapter.CommentAdapter;
 import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.bean.Article;
 import com.nightwind.tcfl.controller.ArticleController;
+import com.nightwind.tcfl.server.ArticleLoader;
 
 
 public class ContentActivity extends ActionBarActivity implements View.OnTouchListener, GestureDetector.OnGestureListener {
 
+    private static final java.lang.String ARG_ARTICLE_ID = "articleId";
+    private static final int LOAD_ARTICLE = 0;
     private Article mArticle;
 
     //Comment Items
@@ -61,38 +66,7 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-//        mClassify = getIntent().getIntExtra("classify", 0);
-//        mRowId = getIntent().getIntExtra("rowId", 0);
         mArticleId = getIntent().getIntExtra("articleId", 0);
-
-//        mArticle = Dummy.getMyListItem(mClassify).get(mRowId);
-
-        ArticleController articleController = new ArticleController(this);
-        mArticle = articleController.getArticle(mArticleId);
-//        mArticleId = mArticle.getId();
-
-        //设置标题
-        getSupportActionBar().setTitle(mArticle.getTitle());
-
-//        //随机指定bitmap
-//        Random random = new Random();
-//        for (int i = 0; i < mArticle.getCommentNum(); i++) {
-//            mArticle.getCommentEntities()[i].setImg(Constants.getMyListItem().get(random.nextInt(mArticle.getCommentNum())).getImg());
-//        }
-//
-//        TextView tvUsername = (TextView) findViewById(R.id.username);
-//        TextView tvDateTime = (TextView) findViewById(R.id.datetime);
-//        TextView tvTitle = (TextView) findViewById(R.id.title);
-//        LinearLayout contentLayout = (LinearLayout) findViewById(R.id.contentLayout);
-//        TextView tvContent = new TextView(this);
-//
-//
-//        tvUsername.setText(mArticle.getUsername());
-//        tvTitle.setText(mArticle.getTitle());
-//        tvDateTime.setText(mArticle.getDateTime());
-//
-//        tvContent.setText(mArticle.getContent());
-//        contentLayout.addView(tvContent);
 
 
         mRecyclerView = (RecyclerView) findViewById(R.id.comment_recycler_view);
@@ -103,11 +77,52 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
 
 //        mAdapter = new CommentAdapter(this, mArticle.getCommentEntities());
 //        mAdapter = new CommentAdapter(this, mArticle, mClassify, mRowId, mArticleId);
-        mAdapter = new CommentAdapter(this, mArticle);
-        mRecyclerView.setAdapter(mAdapter);
+//        mAdapter = new CommentAdapter(this, mArticle);
+//        mRecyclerView.setAdapter(mAdapter);
 
         mGestureDetector = new GestureDetector(this,  this);
 
+        //异步加载
+        Bundle args = new Bundle();
+        args.putInt(ARG_ARTICLE_ID, mArticleId);
+        getSupportLoaderManager().initLoader(LOAD_ARTICLE, args, new ArticleLoaderCallbacks());
+    }
+
+    public class ArticleLoaderCallbacks implements LoaderManager.LoaderCallbacks<Article> {
+
+        @Override
+        public Loader<Article> onCreateLoader(int id, Bundle args) {
+            return new ArticleLoader(ContentActivity.this, args.getInt(ARG_ARTICLE_ID));
+        }
+
+        @Override
+        public void onLoadFinished(Loader<Article> loader, Article data) {
+            mArticle = data;
+            if (mArticle != null) {
+                updateUI();
+            }
+        }
+
+        @Override
+        public void onLoaderReset(Loader<Article> loader) {
+            //do nothing
+        }
+    }
+
+
+    private void updateUI() {
+
+//        ArticleController articleController = new ArticleController(this);
+//        mArticle = articleController.getArticle(mArticleId);
+        //设置标题
+        getSupportActionBar().setTitle(mArticle.getTitle());
+
+        mAdapter = new CommentAdapter(this, mArticle);
+        mRecyclerView.setAdapter(mAdapter);
+
+        if (mMenu != null) {
+            iniMenu();
+        }
     }
 
     @Override
@@ -117,8 +132,15 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
 
         mMenu = menu;
 
+        if (mArticle != null) {
+            iniMenu();
+        }
+        return true;
+    }
+
+    private void iniMenu() {
         // ShareActionProvider配置
-		mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menu
+        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(mMenu
                 .findItem(R.id.action_share));
         String content = mArticle.getContent();
         Intent intent = new Intent(Intent.ACTION_SEND);
@@ -135,7 +157,6 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
             mMenu.getItem(1).setVisible(true);
             mMenu.getItem(2).setVisible(false);
         }
-        return true;
     }
 
 

@@ -164,7 +164,7 @@ public class ArticleRecyclerFragment extends Fragment {
 //            listItem.setTitle("Title " + (i + 1));
 //            listItem.setNewsAbstract("Abstract " + (i + 1));
 //            listItem.setUsername("UserName " + (i + 1));
-//            listItem.setDateTime((i+1) + "min ago");
+//            listItem.setDate((i+1) + "min ago");
 //            listItem.setCommentNum((i + 1));
 //
 //            Bitmap bitmap;

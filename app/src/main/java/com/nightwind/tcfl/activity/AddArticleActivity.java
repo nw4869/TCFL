@@ -1,6 +1,8 @@
 package com.nightwind.tcfl.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -27,6 +29,7 @@ public class AddArticleActivity extends ActionBarActivity {
 
     private User mSelfUser;
     private int mClassify = 0;
+    private ProgressDialog mDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +80,43 @@ public class AddArticleActivity extends ActionBarActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    class AddArticleTask extends AsyncTask<Article, Void, Integer> {
+
+        @Override
+        protected Integer doInBackground(Article... params) {
+            ArticleController ac = new ArticleController(AddArticleActivity.this);
+            Article article = params[0];
+            int id = -1;
+            article = ac.addArticleToServer( article.getClassify(), article.getTitle(), article.getContent());
+            if (article != null) {
+                id = article.getId();
+            }
+            return id;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mDialog = new ProgressDialog(AddArticleActivity.this);
+//            mDialog.setTitle("发布帖子");
+            mDialog.setMessage("正在发布帖子，请稍后...");
+            mDialog.show();
+        }
+
+        @Override
+        protected void onPostExecute(Integer id) {
+            super.onPostExecute(id);
+            mDialog.cancel();
+            if (id != -1) {
+                Toast.makeText(AddArticleActivity.this, "发布成功", Toast.LENGTH_SHORT).show();
+                setResult(0);
+                finish();
+            } else {
+                Toast.makeText(AddArticleActivity.this, "发布失败", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -106,17 +146,18 @@ public class AddArticleActivity extends ActionBarActivity {
             article.setUsername(mSelfUser.getUsername());
 
             String date = BaseTools.getCurrentDateTime();
-            article.setDateTime(date);
+            article.setDate(date);
 
             ArticleController articleController = new ArticleController(this);
 
-            if (articleController.addArticle(mClassify, article)) {
-                Toast.makeText(this, "发布成功", Toast.LENGTH_SHORT).show();
-                setResult(0);
-                finish();
-            } else {
-                Toast.makeText(this, "发布失败", Toast.LENGTH_SHORT).show();
-            }
+//            if (articleController.saveArticle(mClassify, article) != -1) {
+//                Toast.makeText(this, "发布成功", Toast.LENGTH_SHORT).show();
+//                setResult(0);
+//                finish();
+//            } else {
+//                Toast.makeText(this, "发布失败", Toast.LENGTH_SHORT).show();
+//            }
+            new AddArticleTask().execute(article);
 
         } else if (id == android.R.id.home) {
             setResult(1);

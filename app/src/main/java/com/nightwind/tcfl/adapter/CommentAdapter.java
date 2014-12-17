@@ -115,7 +115,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
             holder.title0.setText(mArticle.getTitle());
             holder.username0.setText(mArticle.getUsername());
-            holder.dateTime0.setText(mArticle.getDateTime());
+            holder.dateTime0.setText(mArticle.getDate());
             //从服务器加载图片
 //            imageLoader.displayImage(Dummy.getImgURLList()[position % 8], holder.imageView1, options);
             User user = mUserController.getUser(mArticle.getUsername());

@@ -1,5 +1,7 @@
 package com.nightwind.tcfl.bean;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 
 /**
@@ -13,10 +15,11 @@ public class Article {
     private String content;
 //    private int uid;
     private String username;
-    private String dateTime;
+    private String date;
     private boolean collected;
 //    private int commentNum;
 //    private Bitmap img;
+    private int commentNum;
     private ArrayList<Comment> commentEntities = new ArrayList<>();
 
     public int getClassify() {
@@ -67,21 +70,22 @@ public class Article {
         this.username = username;
     }
 
-    public String getDateTime() {
-        return dateTime;
+    public String getDate() {
+        return date;
     }
 
-    public void setDateTime(String dateTime) {
-        this.dateTime = dateTime;
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public int getCommentNum() {
-        return commentEntities.size() - 1;
+//        return commentEntities.size() - 1;
+        return commentNum;
     }
 
-//    public void setCommentNum(int commentNum) {
-//        this.commentNum = commentNum;
-//    }
+    public void setCommentNum(int commentNum) {
+        this.commentNum = commentNum;
+    }
 
 //    public Bitmap getImg() {
 //        return img;
@@ -126,6 +130,17 @@ public class Article {
 
     public boolean addComment(Comment comment) {
         commentEntities.add(comment);
+        return true;
+    }
+
+
+    public static Article fromJson(String json) {
+        Gson gson = new Gson();
+        return gson.fromJson(json, Article.class);
+    }
+
+    public boolean isExpired() {
+        //todo 是否过期
         return true;
     }
 

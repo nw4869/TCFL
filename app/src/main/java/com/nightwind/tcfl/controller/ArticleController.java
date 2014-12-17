@@ -8,12 +8,22 @@ import com.nightwind.tcfl.bean.Comment;
 import com.nightwind.tcfl.bean.User;
 import com.nightwind.tcfl.server.ServerConfig;
 import com.nightwind.tcfl.tool.BaseTools;
+import com.nightwind.tcfl.tool.encryptionUtil.RSAUtils;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.HTTP;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -165,7 +175,7 @@ public class ArticleController {
             cld.add(Calendar.DATE, i);
             String date = BaseTools.getDateFormat().format(cld.getTime());
 
-            article.setDateTime(date);
+            article.setDate(date);
 //            article.setCommentNum((i + 1));
 
 //                Bitmap bitmap;
@@ -242,19 +252,123 @@ public class ArticleController {
 
     public Article getArticle(int articleId) {
 //        return mArticles.get(articleId);
-        return sArticleMap.get(articleId);
+        Article article =  sArticleMap.get(articleId);
+        //内存为空或者已经过期
+        if (article == null || article != null && article.isExpired()) {
+            article = getArticleFromServer(articleId);
+            sArticleMap.put(articleId, article);
+        }
+        return article;
     }
 
-    public boolean addArticle(int classify, Article article) {
+    /**
+     *
+     * @param classify
+     * @param article
+     * @return 添加的articleId
+     */
+    private int saveArticle(int classify, Article article) {
         sArticleListsMap.get(classify).add(article);
         article.getCommentEntities().add(null);
 
-        //
-        article.setId(getArticleCount());
-//        mArticles.add(article);
-        sArticleMap.put(getArticleCount(), article);
+        //todo articleId
+        int articleId = article.getId();
+        if (articleId == -1) {
+            articleId = getArticleCount();
+            article.setId(articleId);
+        }
+        sArticleMap.put(articleId, article);
         addMyArticle(article);
-        return true;
+        return articleId;
+    }
+
+    public Article addArticleToServer(int classify, String title, String content) {
+        Article article = null;
+
+        Auth auth = new Auth(mContext);
+        String token = auth.getToken();
+
+        String urlStr = ServerConfig.getServer() + "MyLogin/AddArticle";
+        HttpPost request = new HttpPost(urlStr);
+        List<NameValuePair> params = new ArrayList<>();
+        if (token == null) {
+            System.out.println("本地token不存在");
+            return null;
+        }
+        //RSA加密token
+        String strPublicKey = auth.getPublicKey();
+        String cipherToken;
+        try {
+            cipherToken = RSAUtils.encrypt(token, strPublicKey);
+        } catch (Exception e) {
+            System.out.println("RSA加密Token失败");
+            return null;
+        }
+
+        String selfUsername = auth.getUsername();
+        params.add(new BasicNameValuePair("token", cipherToken));
+        params.add(new BasicNameValuePair("username", selfUsername));
+        params.add(new BasicNameValuePair("title", title));
+        params.add(new BasicNameValuePair("content", content));
+        params.add(new BasicNameValuePair("classify", String.valueOf(classify)));
+
+        try {
+            //设置请求参数项
+            request.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
+            HttpClient Client = ServerConfig.getHttpClient();
+            //执行请求返回相应
+            HttpResponse response = Client.execute(request);
+
+            //判断是否请求成功
+            if (response.getStatusLine().getStatusCode() == 200) {
+                //获得响应信息
+                String responseMsg = EntityUtils.toString(response.getEntity());
+                JSONObject jsonObject = new JSONObject(responseMsg);
+                if(jsonObject.getBoolean("success")) {
+                    article = Article.fromJson(responseMsg);
+                    //保存到内存
+                    saveArticle(classify, article);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return article;
+    }
+
+    public Article getArticleFromServer(int articleId) {
+        Article article = null;
+
+        String urlStr = ServerConfig.getServer() + "MyLogin/GetArticle";
+        HttpPost request = new HttpPost(urlStr);
+
+        List<NameValuePair> params = new ArrayList<>();
+        params.add(new BasicNameValuePair("articleId", String.valueOf(articleId)));
+
+        try {
+            //设置请求参数项
+            request.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
+            HttpClient Client = ServerConfig.getHttpClient();
+            //执行请求返回相应
+            HttpResponse response = Client.execute(request);
+
+            //判断是否请求成功
+            if (response.getStatusLine().getStatusCode() == 200) {
+                //获得响应信息
+                String responseMsg = EntityUtils.toString(response.getEntity());
+                JSONObject jsonObject = new JSONObject(responseMsg);
+                if(jsonObject.getBoolean("success")) {
+                    article = Article.fromJson(responseMsg);
+                    //todo 评论部分
+                    article.getCommentEntities().add(null);
+                    //写入内存
+                    sArticleMap.put(articleId, article);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return article;
     }
 
     public void closeDB() {

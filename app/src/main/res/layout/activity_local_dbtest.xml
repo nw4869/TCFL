@@ -45,11 +45,26 @@
                 android:layout_height="wrap_content"
                 android:text="test"
                 android:onClick="test"/>
-            <TextView
-                android:id="@+id/result"
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <EditText
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            </LinearLayout>
+                android:layout_height="wrap_content"
+                android:ems="13"
+                android:id="@+id/et_articleId"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ATC"
+                android:onClick="test1"/>
+        </LinearLayout>
+        <TextView
+            android:id="@+id/result"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="result"/>
         <ListView
             android:id="@+id/listView"
             android:layout_width="fill_parent"

@@ -1,13 +1,8 @@
 package com.nightwind.tcfl.adapter;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.LoaderManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.Loader;
-import android.os.Build;
-import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
@@ -30,7 +25,6 @@ import com.nightwind.tcfl.bean.User;
 import com.nightwind.tcfl.controller.ArticleController;
 import com.nightwind.tcfl.controller.UserController;
 import com.nightwind.tcfl.fragment.ArticleRecyclerFragment;
-import com.nightwind.tcfl.server.ArticleAbstractsLoader;
 import com.nightwind.tcfl.tool.BaseTools;
 import com.nightwind.tcfl.tool.Options;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -267,7 +261,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
             Article article = mListItems.get(position);
             holder.mTextView1.setText(article.getTitle());
             holder.mTextView2.setText(article.getNewsAbstract());
-            String date = article.getDateTime();
+            String date = article.getDate();
             String newDate = date;
             if (BaseTools.isInCurrentYear(date)) {
                 newDate = BaseTools.getMonthAndDay(date) + " " +BaseTools.getTime(date);
