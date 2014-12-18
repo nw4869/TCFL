@@ -22,15 +22,21 @@ import com.nightwind.tcfl.Auth;
 import com.nightwind.tcfl.adapter.CommentAdapter;
 import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.bean.Article;
+import com.nightwind.tcfl.bean.Comment;
 import com.nightwind.tcfl.controller.ArticleController;
 import com.nightwind.tcfl.server.ArticleLoader;
+import com.nightwind.tcfl.server.CommentLoader;
+
+import java.util.List;
 
 
 public class ContentActivity extends ActionBarActivity implements View.OnTouchListener, GestureDetector.OnGestureListener {
 
     private static final java.lang.String ARG_ARTICLE_ID = "articleId";
     private static final int LOAD_ARTICLE = 0;
+    private static final int LOAD_COMMENT = 1;
     private Article mArticle;
+    private List<Comment> mCommentList;
 
     //Comment Items
     private RecyclerView mRecyclerView;
@@ -86,6 +92,15 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
         Bundle args = new Bundle();
         args.putInt(ARG_ARTICLE_ID, mArticleId);
         getSupportLoaderManager().initLoader(LOAD_ARTICLE, args, new ArticleLoaderCallbacks());
+        getSupportLoaderManager().initLoader(LOAD_COMMENT, args, new CommentLoaderCallbacks());
+    }
+
+    //线程锁
+    synchronized private void replaceComment() {
+        if (mCommentList != null && mArticle !=null) {
+            mArticle.setCommentEntities(mCommentList);
+
+        }
     }
 
     public class ArticleLoaderCallbacks implements LoaderManager.LoaderCallbacks<Article> {
@@ -99,6 +114,7 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
         public void onLoadFinished(Loader<Article> loader, Article data) {
             mArticle = data;
             if (mArticle != null) {
+                replaceComment();
                 updateUI();
             }
         }
@@ -109,6 +125,27 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
         }
     }
 
+    public class CommentLoaderCallbacks implements LoaderManager.LoaderCallbacks<List<Comment>> {
+
+        @Override
+        public Loader<List<Comment>> onCreateLoader(int id, Bundle args) {
+            return new CommentLoader(ContentActivity.this, args.getInt(ARG_ARTICLE_ID));
+        }
+
+        @Override
+        public void onLoadFinished(Loader<List<Comment>> loader, List<Comment> data) {
+            mCommentList = data;
+            if (mArticle != null) {
+                replaceComment();
+                updateUI();
+            }
+        }
+
+        @Override
+        public void onLoaderReset(Loader<List<Comment>> loader) {
+            //do nothing
+        }
+    }
 
     private void updateUI() {
 
@@ -181,7 +218,7 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
 //            intent.putExtra("classify", mClassify);
 //            intent.putExtra("rowId", mRowId);
             intent.putExtra("articleId", mArticleId);
-            intent.putExtra("parentComment", 0);
+            intent.putExtra("parentComment", -1);
 //                    MainActivity.this.startActivity(intent);
             ContentActivity.this.startActivityForResult(intent, 0);
         } else if (id == R.id.action_to_collect || id == R.id.action_to_not_collect) {
@@ -222,7 +259,9 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
                 finish();
             }
         }
-        mAdapter.notifyDataSetChanged();
+        if (mAdapter !=null) {
+            mAdapter.notifyDataSetChanged();
+        }
         super.onActivityResult(requestCode, resultCode, data);
     }
 

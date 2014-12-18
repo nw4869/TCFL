@@ -1,16 +1,29 @@
 package com.nightwind.tcfl.bean;
 
-import android.graphics.Bitmap;
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by wind on 2014/11/28.
  */
 public class Comment {
+    int id;
     private String content;
     private String username;
     private String dateTime;
-    private int parentComment = 0;
+    private int parentId = -1;
     private int articleId;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getContent() {
         return content;
@@ -36,12 +49,12 @@ public class Comment {
         this.dateTime = dateTime;
     }
 
-    public int getParentComment() {
-        return parentComment;
+    public int getParentId() {
+        return parentId;
     }
 
-    public void setParentComment(int parent) {
-        this.parentComment = parent;
+    public void setParentId(int parent) {
+        this.parentId = parent;
     }
 
     public int getArticleId() {
@@ -50,5 +63,21 @@ public class Comment {
 
     public void setArticleId(int articleId) {
         this.articleId = articleId;
+    }
+
+    public static Comment fromJson(String json) {
+        Gson gson = new Gson();
+        return gson.fromJson(json, Comment.class);
+    }
+
+    public static List<Comment> fromJsonCommentList(String json) {
+        Gson gson = new Gson();
+//        return gson.fromJson(json, List.class);
+        Comment[] comments = gson.fromJson(json, Comment[].class);
+        List<Comment> commentList = new ArrayList<>();
+        for(Comment comment: comments) {
+            commentList.add(comment);
+        }
+        return commentList;
     }
 }

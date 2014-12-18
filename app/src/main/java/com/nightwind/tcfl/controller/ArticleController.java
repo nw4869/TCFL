@@ -1,6 +1,7 @@
 package com.nightwind.tcfl.controller;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.nightwind.tcfl.Auth;
 import com.nightwind.tcfl.bean.Article;
@@ -373,5 +374,105 @@ public class ArticleController {
 
     public void closeDB() {
         mUserController.closeDB();
+    }
+
+    public Comment addCommentToServer(int articleId, String content, int parentComment) {
+        Comment comment = null;
+
+        Auth auth = new Auth(mContext);
+        String token = auth.getToken();
+
+        String urlStr = ServerConfig.getServer() + "MyLogin/AddComment";
+        HttpPost request = new HttpPost(urlStr);
+        List<NameValuePair> params = new ArrayList<>();
+        if (token == null) {
+            System.out.println("本地token不存在");
+            return null;
+        }
+        //RSA加密token
+        String strPublicKey = auth.getPublicKey();
+        String cipherToken;
+        try {
+            cipherToken = RSAUtils.encrypt(token, strPublicKey);
+        } catch (Exception e) {
+            System.out.println("RSA加密Token失败");
+            return null;
+        }
+
+        String selfUsername = auth.getUsername();
+        String strArticleId = String.valueOf(articleId);
+        String strPrtCmt = String.valueOf(parentComment);
+        params.add(new BasicNameValuePair("token", cipherToken));
+        params.add(new BasicNameValuePair("username", selfUsername));
+        params.add(new BasicNameValuePair("articleId", strArticleId));
+        params.add(new BasicNameValuePair("content", content));
+        params.add(new BasicNameValuePair("parentId", strPrtCmt));
+
+        try {
+            //设置请求参数项
+            request.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
+            HttpClient Client = ServerConfig.getHttpClient();
+            //执行请求返回相应
+            HttpResponse response = Client.execute(request);
+
+            //判断是否请求成功
+            if (response.getStatusLine().getStatusCode() == 200) {
+                //获得响应信息
+                String responseMsg = EntityUtils.toString(response.getEntity());
+                JSONObject jsonObject = new JSONObject(responseMsg);
+                if(jsonObject.getBoolean("success")) {
+                    comment = Comment.fromJson(responseMsg);
+                    //保存到内存
+//                    saveArticle(classify, article);
+                }
+            } else {
+                Log.d("getComment", "response != 200");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return comment;
+    }
+
+    public List<Comment> getArticleComment(int articleId) {
+        List<Comment> commentList = new ArrayList<>();
+
+        String urlStr = ServerConfig.getServer() + "MyLogin/GetComment";
+        HttpPost request = new HttpPost(urlStr);
+
+        List<NameValuePair> params = new ArrayList<>();
+        params.add(new BasicNameValuePair("articleId", String.valueOf(articleId)));
+
+        try {
+            //设置请求参数项
+            request.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
+            HttpClient Client = ServerConfig.getHttpClient();
+            //执行请求返回相应
+            HttpResponse response = Client.execute(request);
+
+            //判断是否请求成功
+            if (response.getStatusLine().getStatusCode() == 200) {
+                //获得响应信息
+                String responseMsg = EntityUtils.toString(response.getEntity());
+//                JSONObject jsonObject = new JSONObject(responseMsg);
+//                if(jsonObject.getBoolean("success"))
+                try {
+                    commentList = Comment.fromJsonCommentList(responseMsg);
+                    if (commentList.size() == 0) {
+                        //
+                    }
+                    commentList.add(0, null);
+                    //debug
+                    Log.d("getArticleCommentList", commentList.toString());
+                    //todo 写入内存
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return commentList;
     }
 }

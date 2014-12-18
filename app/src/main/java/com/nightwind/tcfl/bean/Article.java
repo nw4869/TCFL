@@ -3,6 +3,7 @@ package com.nightwind.tcfl.bean;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by wind on 2014/11/28.
@@ -20,7 +21,7 @@ public class Article {
 //    private int commentNum;
 //    private Bitmap img;
     private int commentNum;
-    private ArrayList<Comment> commentEntities = new ArrayList<>();
+    private List<Comment> commentEntities = new ArrayList<>();
 
     public int getClassify() {
         return classify;
@@ -111,11 +112,11 @@ public class Article {
     }
 
 
-    public ArrayList<Comment> getCommentEntities() {
+    public List<Comment> getCommentEntities() {
         return commentEntities;
     }
 
-    public void setCommentEntities(ArrayList<Comment> commentEntities) {
+    public void setCommentEntities(List<Comment> commentEntities) {
         this.commentEntities = commentEntities;
     }
 

@@ -25,6 +25,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by wind on 2014/11/28.
@@ -35,7 +36,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     private final UserController mUserController;
 
     private Article mArticle;
-    private ArrayList<Comment> mCommentEntities;
+    private List<Comment> mCommentEntities;
 //    private int mClassify;
 //    private int mRowId;
     private int mArticleId;
@@ -144,9 +145,9 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             Comment comment = mCommentEntities.get(position);
 
             //是否回复某个评论
-            if (comment.getParentComment() != 0) {
+            if (comment.getParentId() != -1) {
                 holder.TvReplySome.setVisibility(View.VISIBLE);
-                Comment parentComment = mCommentEntities.get(comment.getParentComment());
+                Comment parentComment = mCommentEntities.get(comment.getParentId());
                 String parentContent = "回复" + parentComment.getUsername() + ": " + parentComment.getContent();
                 holder.TvReplySome.setText(parentContent);
             } else {

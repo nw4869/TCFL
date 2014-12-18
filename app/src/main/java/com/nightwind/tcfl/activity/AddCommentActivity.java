@@ -1,6 +1,8 @@
 package com.nightwind.tcfl.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -12,12 +14,10 @@ import android.widget.Toast;
 
 import com.nightwind.tcfl.Auth;
 import com.nightwind.tcfl.R;
-import com.nightwind.tcfl.bean.Article;
 import com.nightwind.tcfl.bean.Comment;
 import com.nightwind.tcfl.bean.User;
 import com.nightwind.tcfl.controller.ArticleController;
 import com.nightwind.tcfl.controller.UserController;
-import com.nightwind.tcfl.tool.BaseTools;
 
 public class AddCommentActivity extends ActionBarActivity {
 
@@ -31,6 +31,7 @@ public class AddCommentActivity extends ActionBarActivity {
     private int mArticleId = 0;
     private int mParentComment = 0;
     private UserController mUserController;
+    private ProgressDialog mDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +50,8 @@ public class AddCommentActivity extends ActionBarActivity {
         if (getIntent() != null) {
 //            mClassify = getIntent().getIntExtra("classify", 0);
 //            mRowId = getIntent().getIntExtra("rowId", 1);
-            mParentComment = getIntent().getIntExtra("parentComment", 0);
-            mArticleId = getIntent().getIntExtra("articleId", 0);
+            mParentComment = getIntent().getIntExtra("parentComment", -1);
+            mArticleId = getIntent().getIntExtra("articleId", -1);
         } else {
             Log.e("AddCommentActivity", "getIntent Error!");
         }
@@ -66,6 +67,8 @@ public class AddCommentActivity extends ActionBarActivity {
         // toolbar.setSubtitle("副标题");
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        setResult(1);
     }
 
     @Override
@@ -102,13 +105,7 @@ public class AddCommentActivity extends ActionBarActivity {
         if (id == R.id.action_settings) {
             return true;
         } else if(id == R.id.action_push_comment) {
-            if (pushComment()) {
-                Toast.makeText(this, "回复成功", Toast.LENGTH_SHORT).show();
-                setResult(0);
-                finish();
-            } else {
-                Toast.makeText(this, "回复失败", Toast.LENGTH_SHORT).show();
-            }
+            pushComment();
         } else if (id == android.R.id.home) {
             finish();
         }
@@ -116,20 +113,62 @@ public class AddCommentActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private boolean pushComment() {
+    private void pushComment() {
 //        Article article = Dummy.getMyListItem(mClassify).get(mRowId);
 
-        ArticleController articleController = new ArticleController(this);
-        Article article = articleController.getArticle(mArticleId);
+//        ArticleController articleController = new ArticleController(this);
+//        Article article = articleController.getArticle(mArticleId);
 
         Comment comment = new Comment();
 
-        comment.setParentComment(mParentComment);
+        comment.setArticleId(mArticleId);
+        comment.setParentId(mParentComment);
         String content = String.valueOf(mETContent.getText());
         comment.setContent(content);
-        comment.setUsername(mSelfUser.getUsername());
-        comment.setDateTime(BaseTools.getCurrentDateTime());
+//        comment.setUsername(mSelfUser.getUsername());
+//        comment.setDateTime(BaseTools.getCurrentDateTime());
 
-        return article.addComment(comment);
+//        return article.addComment(comment);
+
+        new AddArticleTask().execute(comment);
     }
+
+
+    class AddArticleTask extends AsyncTask<Comment, Void, Integer> {
+
+        @Override
+        protected Integer doInBackground(Comment... params) {
+            ArticleController ac = new ArticleController(AddCommentActivity.this);
+            Comment comment = params[0];
+            int id = -1;
+            comment = ac.addCommentToServer(comment.getArticleId(), comment.getContent(), comment.getParentId());
+            if (comment != null) {
+                id = comment.getId();
+            }
+            return id;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mDialog = new ProgressDialog(AddCommentActivity.this);
+//            mDialog.setTitle("回复");
+            mDialog.setMessage("正在回复，请稍后...");
+            mDialog.show();
+        }
+
+        @Override
+        protected void onPostExecute(Integer id) {
+            super.onPostExecute(id);
+            mDialog.cancel();
+            if (id != -1) {
+                Toast.makeText(AddCommentActivity.this, "回复成功", Toast.LENGTH_SHORT).show();
+                setResult(0);
+                finish();
+            } else {
+                Toast.makeText(AddCommentActivity.this, "回复失败", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
 }
