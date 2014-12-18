@@ -37,6 +37,7 @@ public class ArticleController {
 
     private static String[] SLIDEIMGURLLIST;
 
+    static private int numPerPage = 20;
     //我的帖子
     static private ArrayList<Article> sMyArticleList = new ArrayList<>();
     //我的收藏
@@ -57,6 +58,14 @@ public class ArticleController {
         }
     }
 
+
+    public static int getNumPerPage() {
+        return numPerPage;
+    }
+
+    public static void setNumPerPage(int numPerPage) {
+        ArticleController.numPerPage = numPerPage;
+    }
 
 //    private static String[] IMGURLLIST;
 
@@ -248,7 +257,51 @@ public class ArticleController {
 
     public ArrayList<Article> getArticleAbstracts(int classify, int beginPage, int endPage) {
         //todo 完善分页
-        return getMyListItem(classify);
+//        return getMyListItem(classify);
+        ArrayList<Article> articleList = new ArrayList<>();
+
+        String urlStr = ServerConfig.getServer() + "MyLogin/GetArticleList";
+        HttpPost request = new HttpPost(urlStr);
+
+        int begin = beginPage * getNumPerPage();
+        int num = (endPage - beginPage) * getNumPerPage();
+
+        List<NameValuePair> params = new ArrayList<>();
+        params.add(new BasicNameValuePair("classify", String.valueOf(classify)));
+        params.add(new BasicNameValuePair("begin", String.valueOf(begin)));
+        params.add(new BasicNameValuePair("num", String.valueOf(num)));
+
+        try {
+            //设置请求参数项
+            request.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
+            HttpClient Client = ServerConfig.getHttpClient();
+            //执行请求返回相应
+            HttpResponse response = Client.execute(request);
+
+            //判断是否请求成功
+            if (response.getStatusLine().getStatusCode() == 200) {
+                //获得响应信息
+                String responseMsg = EntityUtils.toString(response.getEntity());
+//                JSONObject jsonObject = new JSONObject(responseMsg);
+//                if(jsonObject.getBoolean("success"))
+                try {
+                    articleList = Article.fromJsonArticles(responseMsg);
+                    articleList.add(0, null);
+                    for (Article article: articleList) {
+                        if (article != null) {
+                            article.getCommentEntities().add(0, null);
+                        }
+                    }
+                    //写入内存
+                    sArticleListsMap.put(classify, articleList);
+                } catch (Exception e) {
+                    Log.e("GetArticleList", "JSON ERROR");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return articleList;
     }
 
     public Article getArticle(int articleId) {

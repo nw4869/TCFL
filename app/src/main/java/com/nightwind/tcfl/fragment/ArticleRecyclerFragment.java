@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +42,7 @@ public class ArticleRecyclerFragment extends Fragment {
     public static final int TYPE_COLLECTION = 2;
     public static final int TYPE_MY_ARTICLE = 3;
 
+    private int lastPosition = 0;
 
     private int position;
     private int type;
@@ -59,6 +61,7 @@ public class ArticleRecyclerFragment extends Fragment {
     private UserController mUserController;
     private int beginPage;
     private int endPage;
+    private boolean firstLoadData = true;
 
     /**
      * Use this factory method to create a new instance of
@@ -71,7 +74,7 @@ public class ArticleRecyclerFragment extends Fragment {
         Bundle args = new Bundle();
         args.putInt(ARG_CLASSIFY, position);
         args.putInt(ARG_BEGIN_PAGE, 0);
-        args.putInt(ARG_END_PAGE, 0);
+        args.putInt(ARG_END_PAGE, 1);
         args.putInt(ARG_TYPE, type);
         fragment.setArguments(args);
         return fragment;
@@ -105,7 +108,7 @@ public class ArticleRecyclerFragment extends Fragment {
             position = getArguments().getInt(ARG_CLASSIFY, 0);
             type = getArguments().getInt(ARG_TYPE);
             beginPage = getArguments().getInt(ARG_BEGIN_PAGE, 0);
-            endPage = getArguments().getInt(ARG_END_PAGE, 0);
+            endPage = getArguments().getInt(ARG_END_PAGE, 1);
         }
         initData();
     }
@@ -148,6 +151,18 @@ public class ArticleRecyclerFragment extends Fragment {
         // in content do not change the layout size of the RecyclerView
         mRecyclerView = (RecyclerView) v.findViewById(R.id.my_recycler_view);
         mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    //todo 记录位置
+                    lastPosition = recyclerView.getScrollY();
+
+                }
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+        });
 
         // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(getActivity());
@@ -198,7 +213,10 @@ public class ArticleRecyclerFragment extends Fragment {
             mArticleEntities = data;
             if (mArticleEntities != null) {
                 updateUI();
+//                mRecyclerView.scrollTo(0, lastPosition);
+                mRecyclerView.scrollToPosition(lastPosition);
             }
+            firstLoadData = false;
         }
 
         @Override
@@ -223,7 +241,9 @@ public class ArticleRecyclerFragment extends Fragment {
 
     @Override
     public void onResume() {
-        refreshList();
+        if (!firstLoadData) {
+            refreshList();
+        }
         super.onResume();
     }
 
@@ -307,6 +327,12 @@ public class ArticleRecyclerFragment extends Fragment {
 //            mArticleEntities.get(i).setImg(bitmap);
 //        }
     public void refreshList() {
+        Bundle args = new Bundle();
+        args.putInt(ARG_CLASSIFY, position);
+        args.putInt(ARG_BEGIN_PAGE, beginPage);
+        args.putInt(ARG_END_PAGE, endPage);
+        args.putInt(ARG_TYPE, type);
+        getLoaderManager().restartLoader(type, args, new ArticleAbstractsLoaderCallbacks());
 
         mAdapter.notifyDataSetChanged();
     }

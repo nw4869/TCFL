@@ -145,4 +145,13 @@ public class Article {
         return true;
     }
 
+    public static ArrayList<Article> fromJsonArticles(String responseMsg) {
+        Gson gson = new Gson();
+        Article[] articles = gson.fromJson(responseMsg, Article[].class);
+        ArrayList<Article> articleList = new ArrayList<>();
+        for(Article article: articles) {
+            articleList.add(article);
+        }
+        return articleList;
+    }
 }

@@ -142,6 +142,7 @@ public class AddArticleActivity extends ActionBarActivity {
             String content = String.valueOf(mETContent.getText());
 
             article.setTitle(title);
+            article.setClassify(mClassify);
             article.setContent(content);
             article.setUsername(mSelfUser.getUsername());
 
