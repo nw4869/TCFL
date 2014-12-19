@@ -23,7 +23,6 @@ import android.view.ViewGroup;
 import com.nightwind.tcfl.adapter.ArticleAdapter;
 import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.bean.Article;
-import com.nightwind.tcfl.controller.ArticleController;
 import com.nightwind.tcfl.controller.UserController;
 import com.nightwind.tcfl.server.ArticleAbstractsLoader;
 
@@ -42,7 +41,6 @@ public class ArticleRecyclerFragment extends Fragment {
     public static final int TYPE_COLLECTION = 2;
     public static final int TYPE_MY_ARTICLE = 3;
 
-    private int lastPosition = 0;
 
     private int position;
     private int type;
@@ -62,6 +60,8 @@ public class ArticleRecyclerFragment extends Fragment {
     private int beginPage;
     private int endPage;
     private boolean firstLoadData = true;
+    private int lastPosition = 0;
+    private int lastOffset = 0;
 
     /**
      * Use this factory method to create a new instance of
@@ -155,9 +155,11 @@ public class ArticleRecyclerFragment extends Fragment {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    //todo 记录位置
-                    lastPosition = recyclerView.getScrollY();
-
+                    //记录位置
+                    View topView = mLayoutManager.getChildAt(0);          //获取可视的第一个view
+                    lastOffset = topView.getTop();                         //获取与该view的顶部的偏移量
+                    lastPosition = mLayoutManager.getPosition(topView);  //得到该View的数组位置
+//                    Log.d("onScroll", "position = " + lastPosition);
                 }
                 super.onScrollStateChanged(recyclerView, newState);
             }
@@ -213,8 +215,9 @@ public class ArticleRecyclerFragment extends Fragment {
             mArticleEntities = data;
             if (mArticleEntities != null) {
                 updateUI();
-//                mRecyclerView.scrollTo(0, lastPosition);
-                mRecyclerView.scrollToPosition(lastPosition);
+                //mLayoutManager.scrollToPosition(lastPosition);
+                //这样更精确
+                ((LinearLayoutManager)mLayoutManager).scrollToPositionWithOffset(lastPosition, lastOffset);
             }
             firstLoadData = false;
         }
