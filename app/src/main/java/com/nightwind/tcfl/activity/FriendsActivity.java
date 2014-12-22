@@ -164,6 +164,11 @@ public class FriendsActivity extends BaseActivity implements FriendsFragment.OnF
     }
 
     @Override
+    protected void ToolBarClose() {
+        slideClose();
+    }
+
+    @Override
     protected void slideClose() {
         hideSoftInput();
         if (currentFragmentStackTop == 0) { //在列表界面时右划关闭activity

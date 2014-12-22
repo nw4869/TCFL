@@ -88,6 +88,8 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
 
         mGestureDetector = new GestureDetector(this,  this);
 
+        getSupportActionBar().setTitle("");
+
         //异步加载
         Bundle args = new Bundle();
         args.putInt(ARG_ARTICLE_ID, mArticleId);

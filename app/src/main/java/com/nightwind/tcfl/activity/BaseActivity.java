@@ -59,12 +59,18 @@ public abstract class BaseActivity extends ActionBarActivity implements View.OnT
 
         //noinspection SimplifiableIfStatement
          if (id == android.R.id.home) {
-            backKeyClose();
+            ToolBarClose();
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+
+    @Override
+    public void onBackPressed() {
+        backKeyClose();
+        super.onBackPressed();
+    }
 
     //右划关闭
 
@@ -122,6 +128,10 @@ public abstract class BaseActivity extends ActionBarActivity implements View.OnT
         mGestureDetector.onTouchEvent(ev);
         return super.dispatchTouchEvent(ev);
 //        return !mGestureDetector.onTouchEvent(ev);
+    }
+    protected void ToolBarClose() {
+        finish();
+        overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
     }
 
     protected void backKeyClose() {

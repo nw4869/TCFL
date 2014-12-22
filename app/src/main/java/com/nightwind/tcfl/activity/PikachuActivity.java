@@ -19,6 +19,8 @@ public class PikachuActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getSupportActionBar().setTitle("皮卡丘");
     }
 
     public void review(View v) {
