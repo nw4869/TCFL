@@ -57,7 +57,7 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
     private Menu mMenu;
 
     private final int REQUEST_LOGIN = 0;
-    private final int REQUEST_ADD_ARTICLE = 1;
+    private final int REQUEST_ADD_COMMENT = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -220,7 +220,7 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
             intent.putExtra("articleId", mArticleId);
             intent.putExtra("parentComment", -1);
 //                    MainActivity.this.startActivity(intent);
-            ContentActivity.this.startActivityForResult(intent, 0);
+            ContentActivity.this.startActivityForResult(intent, REQUEST_ADD_COMMENT);
         } else if (id == R.id.action_to_collect || id == R.id.action_to_not_collect) {
 
             //先判断是否登录
@@ -254,15 +254,26 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_LOGIN) {
             if (resultCode == LoginActivity.RESULT_SUCCESS) {
-
+                refreshData();
             } else {
                 finish();
+            }
+        } else if (requestCode == REQUEST_ADD_COMMENT) {
+            if (resultCode == AddCommentActivity.RESULT_ADD_SUCCESS) {
+                refreshData();
             }
         }
         if (mAdapter !=null) {
             mAdapter.notifyDataSetChanged();
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void refreshData() {
+        Bundle args = new Bundle();
+        args.putInt(ARG_ARTICLE_ID, mArticleId);
+        getSupportLoaderManager().restartLoader(LOAD_ARTICLE, args, new ArticleLoaderCallbacks());
+        getSupportLoaderManager().restartLoader(LOAD_COMMENT, args, new CommentLoaderCallbacks());
     }
 
     ///////////////////////////////////////////////////////

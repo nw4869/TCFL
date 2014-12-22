@@ -7,6 +7,7 @@ import com.nightwind.tcfl.Auth;
 import com.nightwind.tcfl.bean.Article;
 import com.nightwind.tcfl.bean.Comment;
 import com.nightwind.tcfl.bean.User;
+import com.nightwind.tcfl.fragment.ArticleRecyclerFragment;
 import com.nightwind.tcfl.server.ServerConfig;
 import com.nightwind.tcfl.tool.BaseTools;
 import com.nightwind.tcfl.tool.encryptionUtil.RSAUtils;
@@ -53,9 +54,9 @@ public class ArticleController {
     public ArticleController(Context context) {
         mContext = context;
         mUserController = new UserController(mContext);
-        if (sArticleMap.size() == 0) {
-            genRandArticle(6*sClassifyCount);
-        }
+//        if (sArticleMap.size() == 0) {
+//            genRandArticle(6*sClassifyCount);
+//        }
     }
 
 
@@ -255,7 +256,85 @@ public class ArticleController {
         return sArticleListsMap.get(index);
     }
 
-    public ArrayList<Article> getArticleAbstracts(int classify, int beginPage, int endPage) {
+    static public final int GET_ARTICLE_TYPE_NORMAL = 0;
+    static public final int GET_ARTICLE_TYPE_MY_ARTICLE = 1;
+    static public final int GET_ARTICLE_TYPE_MY_COLLECTION = 2;
+
+    /**
+     *
+     * @param beginPage
+     * @param endPage
+     * @param type GET_ARTICLE_TYPE_MY_ARTICLE, GET_ARTICLE_TYPE_MY_COLLECTION
+     * @return
+     */
+    public ArrayList<Article> getMyArticleAbstracts(String requestUsername, int beginPage, int endPage, int type) {
+        ArrayList<Article> articleList = new ArrayList<>();
+
+        String urlStr = ServerConfig.getServer() + "MyLogin/GetMyArticleAbstracts";
+        HttpPost request = new HttpPost(urlStr);
+
+        int begin = beginPage * getNumPerPage();
+        int num = (endPage - beginPage) * getNumPerPage();
+
+        List<NameValuePair> params = new ArrayList<>();
+
+        final Auth auth = new Auth(mContext);
+        String username = auth.getUsername();
+        String token = auth.getToken();
+
+        //RSA加密token
+        String strPublicKey = auth.getPublicKey();
+        String cipherToken;
+        try {
+            cipherToken = RSAUtils.encrypt(token, strPublicKey);
+        } catch (Exception e) {
+            System.out.println("RSA加密Token失败");
+            return null;
+        }
+
+        //身份认证
+        params.add(new BasicNameValuePair("username", username));
+        params.add(new BasicNameValuePair("token", cipherToken));
+
+        params.add(new BasicNameValuePair("requestUsername", requestUsername));
+        params.add(new BasicNameValuePair("begin", String.valueOf(begin)));
+        params.add(new BasicNameValuePair("num", String.valueOf(num)));
+
+        try {
+            //设置请求参数项
+            request.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
+            HttpClient Client = ServerConfig.getHttpClient();
+            //执行请求返回相应
+            HttpResponse response = Client.execute(request);
+
+            //判断是否请求成功
+            if (response.getStatusLine().getStatusCode() == 200) {
+                //获得响应信息
+                String responseMsg = EntityUtils.toString(response.getEntity());
+//                JSONObject jsonObject = new JSONObject(responseMsg);
+//                if(jsonObject.getBoolean("success"))
+                try {
+                    articleList = Article.fromJsonArticles(responseMsg);
+                    articleList.add(0, null);
+                    for (Article article: articleList) {
+                        if (article != null) {
+                            article.getCommentEntities().add(0, null);
+                        }
+                    }
+                    //写入内存
+                    sMyArticleList = articleList;
+                } catch (Exception e) {
+                    Log.e("getMyArticleAbstracts", "JSON ERROR");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return articleList;
+    }
+
+    public ArrayList<Article> getArticleAbstracts(int classify, int beginPage, int endPage, int type) {
         //todo 完善分页
 //        return getMyListItem(classify);
         ArrayList<Article> articleList = new ArrayList<>();
@@ -267,7 +346,14 @@ public class ArticleController {
         int num = (endPage - beginPage) * getNumPerPage();
 
         List<NameValuePair> params = new ArrayList<>();
-        params.add(new BasicNameValuePair("classify", String.valueOf(classify)));
+        if (type == ArticleRecyclerFragment.TYPE_NORMAL || type == ArticleRecyclerFragment.TYPE_WITH_SLIDE_IMAGE) {
+            params.add(new BasicNameValuePair("classify", String.valueOf(classify)));
+        }
+//        else if (type == ArticleRecyclerFragment.TYPE_MY_ARTICLE) {
+//            params.add(new BasicNameValuePair("uid", String.valueOf(classify)));
+//        } else if (type == ArticleRecyclerFragment.TYPE_COLLECTION) {
+//
+//        }
         params.add(new BasicNameValuePair("begin", String.valueOf(begin)));
         params.add(new BasicNameValuePair("num", String.valueOf(num)));
 

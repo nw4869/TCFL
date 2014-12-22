@@ -18,12 +18,11 @@ import com.nightwind.tcfl.Auth;
 import com.nightwind.tcfl.activity.FriendsActivity;
 import com.nightwind.tcfl.activity.LoginActivity;
 import com.nightwind.tcfl.activity.MainActivity;
-import com.nightwind.tcfl.activity.MyActicleActivity;
+import com.nightwind.tcfl.activity.MyArticleActivity;
 import com.nightwind.tcfl.activity.MyCollectionActivity;
 import com.nightwind.tcfl.activity.PikachuActivity;
 import com.nightwind.tcfl.activity.ProfileActivity;
 import com.nightwind.tcfl.R;
-import com.nightwind.tcfl.activity.ReviewActivity;
 import com.nightwind.tcfl.tool.localDB.LocalDBTestActivity;
 
 
@@ -209,7 +208,7 @@ public class PersonCenterFragment extends Fragment implements View.OnClickListen
                     getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
                 } else if (id == 3) {
                     //我的帖子
-                    Intent intent = new Intent(getActivity(), MyActicleActivity.class);
+                    Intent intent = new Intent(getActivity(), MyArticleActivity.class);
                     startActivity(intent);
                     getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
                 } else if (id == 4) {

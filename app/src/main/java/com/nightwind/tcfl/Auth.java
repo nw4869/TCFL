@@ -600,9 +600,9 @@ public class Auth {
     private void saveUsername(String username) {
         SharedPreferences sp = mAppContext.getSharedPreferences("token", Activity.MODE_PRIVATE);
         if (username == null || username.equals("")) {
-            sp.edit().remove("username").commit();
+            sp.edit().remove("username").apply();
         } else {
-            sp.edit().putString("username", username).commit();
+            sp.edit().putString("username", username).apply();
         }
     }
 
@@ -614,9 +614,9 @@ public class Auth {
     private void saveToken(String token) {
         SharedPreferences sp = mAppContext.getSharedPreferences("token", Activity.MODE_PRIVATE);
         if (token == null || token.equals("")) {
-            sp.edit().remove("token").commit();
+            sp.edit().remove("token").apply();
         } else {
-            sp.edit().putString("token", token).commit();
+            sp.edit().putString("token", token).apply();
         }
     }
 

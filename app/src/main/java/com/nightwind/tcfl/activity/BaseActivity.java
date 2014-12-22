@@ -121,6 +121,7 @@ public abstract class BaseActivity extends ActionBarActivity implements View.OnT
     public boolean dispatchTouchEvent(MotionEvent ev) {
         mGestureDetector.onTouchEvent(ev);
         return super.dispatchTouchEvent(ev);
+//        return !mGestureDetector.onTouchEvent(ev);
     }
 
     protected void backKeyClose() {

@@ -2,6 +2,7 @@ package com.nightwind.tcfl.server;
 
 import android.content.Context;
 
+import com.nightwind.tcfl.Auth;
 import com.nightwind.tcfl.bean.Article;
 import com.nightwind.tcfl.controller.ArticleController;
 import com.nightwind.tcfl.fragment.ArticleRecyclerFragment;
@@ -37,14 +38,15 @@ public class ArticleAbstractsLoader extends DataLoader<ArrayList<Article>> {
         ArticleController ac = new ArticleController(getContext());
         ArrayList<Article> result = null;
 
-        ArticleController articleController = new ArticleController(getContext());
         if (mType == ArticleRecyclerFragment.TYPE_NORMAL || mType == ArticleRecyclerFragment.TYPE_WITH_SLIDE_IMAGE) {
 //            result = articleController.getMyListItem(mClassify);
-            result =  ac.getArticleAbstracts(mClassify, mBeginPage, mEndPage);
+            result =  ac.getArticleAbstracts(mClassify, mBeginPage, mEndPage, ArticleRecyclerFragment.TYPE_NORMAL);
         } else if (mType == ArticleRecyclerFragment.TYPE_COLLECTION) {
             result = ArticleController.getCollectionList();
         } else if (mType == ArticleRecyclerFragment.TYPE_MY_ARTICLE) {
-            result = ArticleController.getMyArticleList();
+//            result = ArticleController.getMyArticleList();
+            String username = new Auth(getContext()).getUsername();
+            result =  ac.getMyArticleAbstracts(username, mBeginPage, mEndPage, ArticleRecyclerFragment.TYPE_MY_ARTICLE);
         }
         return result;
     }

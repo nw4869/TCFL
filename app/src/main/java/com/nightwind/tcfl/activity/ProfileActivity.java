@@ -79,8 +79,8 @@ public class ProfileActivity extends BaseActivity {
         if (getIntent() != null) {
             String tmpUsername = getIntent().getStringExtra("username");
             if (tmpUsername != null) {
-                Log.d("ProfileActivity getIntent", username);
                 username = tmpUsername;
+                Log.d("ProfileActivity getIntent", username);
             }
         }
         Bundle args = new Bundle();

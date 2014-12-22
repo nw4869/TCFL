@@ -42,7 +42,7 @@ public class Options {
                 .preProcessor(new MyBitmapProcessor())
                 .resetViewBeforeLoading(true)// 设置图片在下载前是否重置，复位
 //				.displayer(new RoundedBitmapDisplayer(20))//是否设置为圆角，弧度为多少
-                .displayer(new FadeInBitmapDisplayer(100))// 淡入
+//                .displayer(new FadeInBitmapDisplayer(100))// 淡入
                 .build();
         return options;
     }
@@ -71,8 +71,8 @@ public class Options {
                         // 设置图片加入缓存前，对bitmap进行设置
 //                .preProcessor(new MyBitmapProcessor())
                 .resetViewBeforeLoading(true)// 设置图片在下载前是否重置，复位
-				.displayer(new RoundedBitmapDisplayer(20))//是否设置为圆角，弧度为多少
-                .displayer(new FadeInBitmapDisplayer(100))// 淡入
+//				.displayer(new RoundedBitmapDisplayer(20))//是否设置为圆角，弧度为多少
+//                .displayer(new FadeInBitmapDisplayer(100))// 淡入
                 .build();
         return options;
     }

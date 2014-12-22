@@ -21,6 +21,9 @@ import com.nightwind.tcfl.controller.UserController;
 
 public class AddCommentActivity extends ActionBarActivity {
 
+    public static final int RESULT_ADD_SUCCESS = 0;
+    public static final int RESULT_ADD_FAILED = 0;
+
     private Toolbar mToolbar;
 
     private EditText mETContent;
@@ -68,7 +71,7 @@ public class AddCommentActivity extends ActionBarActivity {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        setResult(1);
+        setResult(RESULT_ADD_FAILED);
     }
 
     @Override
@@ -163,7 +166,7 @@ public class AddCommentActivity extends ActionBarActivity {
             mDialog.cancel();
             if (id != -1) {
                 Toast.makeText(AddCommentActivity.this, "回复成功", Toast.LENGTH_SHORT).show();
-                setResult(0);
+                setResult(RESULT_ADD_SUCCESS);
                 finish();
             } else {
                 Toast.makeText(AddCommentActivity.this, "回复失败", Toast.LENGTH_SHORT).show();

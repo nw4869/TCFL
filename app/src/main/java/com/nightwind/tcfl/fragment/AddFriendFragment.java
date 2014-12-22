@@ -1,10 +1,13 @@
 package com.nightwind.tcfl.fragment;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,6 +22,7 @@ import android.widget.Toast;
 import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.bean.User;
 import com.nightwind.tcfl.controller.UserController;
+import com.nightwind.tcfl.server.UserLoader;
 import com.nightwind.tcfl.tool.Options;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -33,6 +37,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
  */
 public class AddFriendFragment extends Fragment {
     private static final String ARG_UID1 = "uid1";
+    private static final java.lang.String ARG_USERNAME = "queryUsername";
+    private static final int LOAD_USER = 0;
 
     private int mUid1;
 
@@ -52,6 +58,8 @@ public class AddFriendFragment extends Fragment {
     DisplayImageOptions options = Options.getListOptions();
     protected ImageLoader imageLoader = ImageLoader.getInstance();
     private UserController mUserController;
+    private User mQueryUser;
+    private ProgressDialog mDialog;
 
 
     /**
@@ -117,7 +125,16 @@ public class AddFriendFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String queryUsername = String.valueOf(mEtQueryUsername.getText());
-                searchAndShowResult(queryUsername);
+//                ShowResult(queryUsername);
+                Bundle args = new Bundle();
+                args.putString(ARG_USERNAME, queryUsername);
+                getLoaderManager().restartLoader(LOAD_USER, args, new UserLoaderCallbacks());
+
+                mDialog = new ProgressDialog(getActivity());
+                mDialog.setMessage("正在查询...");
+                mDialog.show();
+
+                mResult.setVisibility(View.GONE);
             }
         });
 
@@ -155,8 +172,30 @@ public class AddFriendFragment extends Fragment {
         return mUserController;
     }
 
-    private void searchAndShowResult(String queryUsername) {
-        User user = mUserController.getUser(queryUsername);
+    public class UserLoaderCallbacks implements LoaderManager.LoaderCallbacks<User> {
+        @Override
+        public Loader<User> onCreateLoader(int id, Bundle args) {
+            return new UserLoader(getActivity(), args.getString(ARG_USERNAME));
+        }
+
+        @Override
+        public void onLoadFinished(Loader<User> loader, User user) {
+            mQueryUser = user;
+//            if (mQueryUser != null)
+            {
+                ShowResult();
+            }
+        }
+
+        @Override
+        public void onLoaderReset(Loader<User> loader) {
+            //Do nothing
+        }
+    }
+
+    private void ShowResult() {
+        mDialog.cancel();
+        User user = mQueryUser;
         mResult.setVisibility(View.VISIBLE);
         if (user == null) {
             mTvNotFound.setVisibility(View.VISIBLE);

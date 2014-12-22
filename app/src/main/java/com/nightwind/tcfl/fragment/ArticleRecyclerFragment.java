@@ -13,6 +13,7 @@ import android.graphics.RectF;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -54,14 +55,15 @@ public class ArticleRecyclerFragment extends Fragment {
     //数据集
     ArrayList<Article> mArticleEntities = new ArrayList<Article>();
 
-    private static final int[] drawables = { R.drawable.conan1, R.drawable.conan2, R.drawable.conan3, R.drawable.conan4,
-            R.drawable.conan5, R.drawable.conan6, R.drawable.conan7, R.drawable.conan8 };
+    private static final int[] drawables = {R.drawable.conan1, R.drawable.conan2, R.drawable.conan3, R.drawable.conan4,
+            R.drawable.conan5, R.drawable.conan6, R.drawable.conan7, R.drawable.conan8};
     private UserController mUserController;
     private int beginPage;
     private int endPage;
     private boolean firstLoadData = true;
     private int lastPosition = 0;
     private int lastOffset = 0;
+    private SwipeRefreshLayout mSwipeLayout;
 
     /**
      * Use this factory method to create a new instance of
@@ -82,7 +84,6 @@ public class ArticleRecyclerFragment extends Fragment {
 
 
     /**
-     *
      * 用于我的收藏，我的帖子，type必须为TYPE_COLLECTION 或 TYPE_MY_ARTICLE
      *
      * @param type
@@ -140,7 +141,7 @@ public class ArticleRecyclerFragment extends Fragment {
     }
 
 
-        @Override
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -152,14 +153,30 @@ public class ArticleRecyclerFragment extends Fragment {
         mRecyclerView = (RecyclerView) v.findViewById(R.id.my_recycler_view);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int lastVisibleItem = ((LinearLayoutManager) mLayoutManager).findLastVisibleItemPosition();
+                int totalItemCount = mLayoutManager.getItemCount();
+                //lastVisibleItem >= totalItemCount - 4 表示剩下4个item自动加载
+                // dy>0 表示向下滑动
+                if (lastVisibleItem >= totalItemCount - 4 && dy > 0) {
+//                    loadPage(currentQueryMap);
+                    //自动加载
+                }
+            }
+
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     //记录位置
                     View topView = mLayoutManager.getChildAt(0);          //获取可视的第一个view
-                    lastOffset = topView.getTop();                         //获取与该view的顶部的偏移量
-                    lastPosition = mLayoutManager.getPosition(topView);  //得到该View的数组位置
+                    if (topView != null) {                                  //没有元素的时候topView为null
+                        lastOffset = topView.getTop();                         //获取与该view的顶部的偏移量
+                        lastPosition = mLayoutManager.getPosition(topView);  //得到该View的数组位置
 //                    Log.d("onScroll", "position = " + lastPosition);
+                    }
                 }
                 super.onScrollStateChanged(recyclerView, newState);
             }
@@ -169,6 +186,16 @@ public class ArticleRecyclerFragment extends Fragment {
         // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
+
+        //下拉刷新
+        mSwipeLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_refresh);
+        mSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshList();
+            }
+        });
+
 
         // specify an adapter (see also next example)
 
@@ -201,7 +228,6 @@ public class ArticleRecyclerFragment extends Fragment {
     }
 
 
-
     //异步加载回调
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public class ArticleAbstractsLoaderCallbacks implements LoaderManager.LoaderCallbacks<ArrayList<Article>> {
@@ -217,7 +243,7 @@ public class ArticleRecyclerFragment extends Fragment {
                 updateUI();
                 //mLayoutManager.scrollToPosition(lastPosition);
                 //这样更精确
-                ((LinearLayoutManager)mLayoutManager).scrollToPositionWithOffset(lastPosition, lastOffset);
+                ((LinearLayoutManager) mLayoutManager).scrollToPositionWithOffset(lastPosition, lastOffset);
             }
             firstLoadData = false;
         }
@@ -238,14 +264,14 @@ public class ArticleRecyclerFragment extends Fragment {
         }
         mRecyclerView.setAdapter(mAdapter);
 
+        mSwipeLayout.setRefreshing(false);
     }
-
 
 
     @Override
     public void onResume() {
         if (!firstLoadData) {
-            refreshList();
+//            refreshList();
         }
         super.onResume();
     }
@@ -258,6 +284,7 @@ public class ArticleRecyclerFragment extends Fragment {
 
     /**
      * 转换图片成圆形
+     *
      * @param bitmap 传入Bitmap对象
      * @return
      */
@@ -265,7 +292,7 @@ public class ArticleRecyclerFragment extends Fragment {
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
         float roundPx;
-        float left,top,right,bottom,dst_left,dst_top,dst_right,dst_bottom;
+        float left, top, right, bottom, dst_left, dst_top, dst_right, dst_bottom;
         if (width <= height) {
             roundPx = width / 2;
             top = 0;
@@ -299,8 +326,8 @@ public class ArticleRecyclerFragment extends Fragment {
 
         final int color = 0xff424242;
         final Paint paint = new Paint();
-        final Rect src = new Rect((int)left, (int)top, (int)right, (int)bottom);
-        final Rect dst = new Rect((int)dst_left, (int)dst_top, (int)dst_right, (int)dst_bottom);
+        final Rect src = new Rect((int) left, (int) top, (int) right, (int) bottom);
+        final Rect dst = new Rect((int) dst_left, (int) dst_top, (int) dst_right, (int) dst_bottom);
         final RectF rectF = new RectF(dst);
 
         paint.setAntiAlias(true);
@@ -315,8 +342,7 @@ public class ArticleRecyclerFragment extends Fragment {
     }
 
 
-
-//        final int NUM_ITEM = 30;
+    //        final int NUM_ITEM = 30;
 //        //加载bitmap
 //        for (int i = 0; i < NUM_ITEM; i++) {
 //            Bitmap bitmap;

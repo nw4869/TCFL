@@ -18,8 +18,7 @@ import com.nightwind.tcfl.fragment.ChatFragment;
 import com.nightwind.tcfl.fragment.FriendsFragment;
 
 
-public class FriendsActivity extends ActionBarActivity implements FriendsFragment.OnFragmentInteractionListener, AddFriendFragment.OnFragmentInteractionListener,
-        View.OnTouchListener, GestureDetector.OnGestureListener{
+public class FriendsActivity extends BaseActivity implements FriendsFragment.OnFragmentInteractionListener, AddFriendFragment.OnFragmentInteractionListener{
 
     FriendsFragment mFriendsListFragment;
     ChatFragment mChatFragment;
@@ -32,17 +31,17 @@ public class FriendsActivity extends ActionBarActivity implements FriendsFragmen
 
     private boolean mIsFromProfile = false;
 
-    //这三个用于右划关闭activity
-    private GestureDetector mGestureDetector;
-    private final int verticalMinDistance = 50;
-    private final int minVelocity         = 0;
-
     private UserController mUserController;
+
+    @Override
+    int getLayoutResID() {
+        return R.layout.activity_friends;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_friends);
+//        setContentView(R.layout.activity_friends);
 
         String profileUsername = null;
         if (getIntent() != null) {
@@ -61,15 +60,6 @@ public class FriendsActivity extends ActionBarActivity implements FriendsFragmen
                     .add(R.id.container, mFriendsListFragment)
                     .commit();
         }
-
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        // toolbar.setLogo(R.drawable.ic_launcher);
-        mToolbar.setTitle("Friends");// 标题的文字需在setSupportActionBar之前，不然会无效
-        // toolbar.setSubtitle("副标题");
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        mGestureDetector = new GestureDetector(this, this);
 
 
         if (mIsFromProfile) {
@@ -120,21 +110,23 @@ public class FriendsActivity extends ActionBarActivity implements FriendsFragmen
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
-        } else if (id == android.R.id.home) {
-            hideSoftInput();
-            if (currentFragmentStackTop == 0) {
-                //结束该Activiy
-                finish();
-                overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
-//                mIsShowingList = !mIsShowingList;
-            } else {
-                //返回上一个fragment
-                getSupportActionBar().setTitle("Friends");
-                mMenu.getItem(0).setVisible(true);  //显示添加好友
-                getSupportFragmentManager().popBackStack();
-                currentFragmentStackTop--;
-            }
-        }  else if (id == R.id.action_add_friend) {
+        }
+//        else if (id == android.R.id.home) {
+//            hideSoftInput();
+//            if (currentFragmentStackTop == 0) {
+//                //结束该Activiy
+//                finish();
+//                overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
+////                mIsShowingList = !mIsShowingList;
+//            } else {
+//                //返回上一个fragment
+//                getSupportActionBar().setTitle("Friends");
+//                mMenu.getItem(0).setVisible(true);  //显示添加好友
+//                getSupportFragmentManager().popBackStack();
+//                currentFragmentStackTop--;
+//            }
+//        }
+        else if (id == R.id.action_add_friend) {
             //打开添加好友菜单
             mAddFriendFragment = AddFriendFragment.newInstance(mUserController.getSelfUser().getUid());
             getSupportFragmentManager().beginTransaction()
@@ -171,24 +163,45 @@ public class FriendsActivity extends ActionBarActivity implements FriendsFragmen
         }
     }
 
-    /**
-     * 返回键
-     * @param keyCode
-     * @param event
-     * @return
-     */
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            hideSoftInput();
+    protected void slideClose() {
+        hideSoftInput();
+        if (currentFragmentStackTop == 0) { //在列表界面时右划关闭activity
+            finish();
+            overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
+        } else {
+            //返回上一个fragment
             getSupportActionBar().setTitle("Friends");
+            mMenu.getItem(0).setVisible(true);  //显示添加好友
+            getSupportFragmentManager().popBackStack();
             currentFragmentStackTop--;
-            if (currentFragmentStackTop == 0) {
-                mMenu.getItem(0).setVisible(true);  //显示添加好友
-            }
         }
-        return super.onKeyDown(keyCode, event);
     }
+
+    @Override
+    protected void backKeyClose() {
+//        super.backKeyClose();
+        hideSoftInput();
+        getSupportActionBar().setTitle("Friends");
+        currentFragmentStackTop--;
+        if (currentFragmentStackTop == 0) {
+            mMenu.getItem(0).setVisible(true);  //显示添加好友
+        }
+    }
+
+//    /**
+//     * 返回键
+//     * @param keyCode
+//     * @param event
+//     * @return
+//     */
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//        if (keyCode == KeyEvent.KEYCODE_BACK) {
+//
+//        }
+//        return super.onKeyDown(keyCode, event);
+//    }
 
     /**
      * 添加好友时返回，TRUE表示添加成功
@@ -206,73 +219,35 @@ public class FriendsActivity extends ActionBarActivity implements FriendsFragmen
 
 
 
-    @Override
-    public boolean onDown(MotionEvent e) {
-        return false;
-    }
-
-    @Override
-    public void onShowPress(MotionEvent e) {
-
-    }
-
-    @Override
-    public boolean onSingleTapUp(MotionEvent e) {
-        return false;
-    }
-
-    @Override
-    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-//        mToolbar.setFocusableInTouchMode(true);
-//        mToolbar.requestFocusFromTouch();
-        return false;
-    }
-
-    @Override
-    public void onLongPress(MotionEvent e) {
-
-    }
-
-    @Override
-    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-
-        float absdx = Math.abs(e2.getX() - e1.getX());
-        float absdy = Math.abs(e2.getY() - e1.getY());
-        System.out.println("x` = " + (e1.getX() - e2.getX()) + " y` = " + Math.abs(e1.getY() - e2.getY()));
-
-        if (e1.getX() - e2.getX() > verticalMinDistance && Math.abs(velocityX) > minVelocity) {
-
-        } else if (absdx > 1.5*absdy && e2.getX() - e1.getX() > verticalMinDistance && Math.abs(velocityX) > minVelocity) {
-
-            hideSoftInput();
-            if (currentFragmentStackTop == 0) { //在列表界面时右划关闭activity
-                finish();
-                overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
-                return true;
-            } else {
-                //返回上一个fragment
-                getSupportActionBar().setTitle("Friends");
-                mMenu.getItem(0).setVisible(true);  //显示添加好友
-                getSupportFragmentManager().popBackStack();
-                currentFragmentStackTop--;
-            }
-
-        }
-
-        return false;
-    }
-
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
+//    @Override
+//    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+//
+//        float absdx = Math.abs(e2.getX() - e1.getX());
+//        float absdy = Math.abs(e2.getY() - e1.getY());
+//        System.out.println("x` = " + (e1.getX() - e2.getX()) + " y` = " + Math.abs(e1.getY() - e2.getY()));
+//
+//        if (e1.getX() - e2.getX() > verticalMinDistance && Math.abs(velocityX) > minVelocity) {
+//
+//        } else if (absdx > 1.5*absdy && e2.getX() - e1.getX() > verticalMinDistance && Math.abs(velocityX) > minVelocity) {
+//
+//            hideSoftInput();
+//            if (currentFragmentStackTop == 0) { //在列表界面时右划关闭activity
+//                finish();
+//                overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
+//                return true;
+//            } else {
+//                //返回上一个fragment
+//                getSupportActionBar().setTitle("Friends");
+//                mMenu.getItem(0).setVisible(true);  //显示添加好友
+//                getSupportFragmentManager().popBackStack();
+//                currentFragmentStackTop--;
+//            }
+//
+//        }
+//
 //        return false;
-        return mGestureDetector.onTouchEvent(event);
-    }
+//    }
 
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        mGestureDetector.onTouchEvent(ev);
-        return super.dispatchTouchEvent(ev);
-    }
 
     public void hideSoftInput() {
         if (mChatFragment != null) {
