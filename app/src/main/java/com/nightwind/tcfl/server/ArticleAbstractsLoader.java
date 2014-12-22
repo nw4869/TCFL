@@ -40,13 +40,15 @@ public class ArticleAbstractsLoader extends DataLoader<ArrayList<Article>> {
 
         if (mType == ArticleRecyclerFragment.TYPE_NORMAL || mType == ArticleRecyclerFragment.TYPE_WITH_SLIDE_IMAGE) {
 //            result = articleController.getMyListItem(mClassify);
-            result =  ac.getArticleAbstracts(mClassify, mBeginPage, mEndPage, ArticleRecyclerFragment.TYPE_NORMAL);
+            result =  ac.getArticleAbstracts(mClassify, mBeginPage, mEndPage, ArticleController.GET_ARTICLE_TYPE_NORMAL);
         } else if (mType == ArticleRecyclerFragment.TYPE_COLLECTION) {
-            result = ArticleController.getCollectionList();
+//            result = ac.getCollectionList();
+            String username = new Auth(getContext()).getUsername();
+            result =  ac.getMyArticleAbstracts(username, mBeginPage, mEndPage, ArticleController.GET_ARTICLE_TYPE_MY_COLLECTION);
         } else if (mType == ArticleRecyclerFragment.TYPE_MY_ARTICLE) {
 //            result = ArticleController.getMyArticleList();
             String username = new Auth(getContext()).getUsername();
-            result =  ac.getMyArticleAbstracts(username, mBeginPage, mEndPage, ArticleRecyclerFragment.TYPE_MY_ARTICLE);
+            result =  ac.getMyArticleAbstracts(username, mBeginPage, mEndPage, ArticleController.GET_ARTICLE_TYPE_MY_ARTICLE);
         }
         return result;
     }

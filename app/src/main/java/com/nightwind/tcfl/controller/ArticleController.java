@@ -42,7 +42,7 @@ public class ArticleController {
     //我的帖子
     static private ArrayList<Article> sMyArticleList = new ArrayList<>();
     //我的收藏
-    static private ArrayList<Article> sCollectionList = new ArrayList<>();
+    static private ArrayList<Article> sCollectionList = new ArrayList<>() ;
 
     private static int sClassifyCount = 8;
     //分类帖子Array Map用于adapter的数据集
@@ -57,6 +57,12 @@ public class ArticleController {
 //        if (sArticleMap.size() == 0) {
 //            genRandArticle(6*sClassifyCount);
 //        }
+        if (sCollectionList.size() == 0) {
+            sCollectionList.add(null);
+        }
+        if (sMyArticleList.size() == 0) {
+            sMyArticleList.add(null);
+        }
     }
 
 
@@ -101,10 +107,10 @@ public class ArticleController {
     /**
      * 我的收藏
      */
-    public static ArrayList<Article> getCollectionList() {
+    public ArrayList<Article> getCollectionList() {
         return sCollectionList;
     }
-    public static boolean addCollection(Article article) {
+    public boolean addCollection(Article article) {
         if (sCollectionList.contains(article)) {
             return false;
         } else {
@@ -113,7 +119,7 @@ public class ArticleController {
             return true;
         }
     }
-    public static boolean removeCollection(Article article) {
+    public boolean removeCollection(Article article) {
         if (!sCollectionList.contains(article)) {
             return false;
         } else {
@@ -128,10 +134,10 @@ public class ArticleController {
      *我的帖子
      *
      */
-    public static ArrayList<Article> getMyArticleList() {
+    public ArrayList<Article> getMyArticleList() {
         return sMyArticleList;
     }
-    public static boolean addMyArticle(Article article) {
+    public boolean addMyArticle(Article article) {
         if (sMyArticleList.contains(article)) {
             return false;
         } else {
@@ -139,7 +145,7 @@ public class ArticleController {
             return true;
         }
     }
-    public static boolean removeMyArticle(Article article) {
+    public boolean removeMyArticle(Article article) {
         if (!sMyArticleList.contains(article)) {
             return false;
         } else {
@@ -269,8 +275,8 @@ public class ArticleController {
      */
     public ArrayList<Article> getMyArticleAbstracts(String requestUsername, int beginPage, int endPage, int type) {
         ArrayList<Article> articleList = new ArrayList<>();
-
-        String urlStr = ServerConfig.getServer() + "MyLogin/GetMyArticleAbstracts";
+        String urlStr = null;
+            urlStr = ServerConfig.getServer() + "MyLogin/GetMyArticleAbstracts";
         HttpPost request = new HttpPost(urlStr);
 
         int begin = beginPage * getNumPerPage();
@@ -299,6 +305,8 @@ public class ArticleController {
         params.add(new BasicNameValuePair("requestUsername", requestUsername));
         params.add(new BasicNameValuePair("begin", String.valueOf(begin)));
         params.add(new BasicNameValuePair("num", String.valueOf(num)));
+        params.add(new BasicNameValuePair("type", String.valueOf(type)));
+
 
         try {
             //设置请求参数项
@@ -319,6 +327,12 @@ public class ArticleController {
                     for (Article article: articleList) {
                         if (article != null) {
                             article.getCommentEntities().add(0, null);
+                            if (type == GET_ARTICLE_TYPE_MY_ARTICLE) {
+                                //
+                            }
+                            if (type == GET_ARTICLE_TYPE_MY_COLLECTION) {
+                                article.setCollected(true);
+                            }
                         }
                     }
                     //写入内存
@@ -346,9 +360,9 @@ public class ArticleController {
         int num = (endPage - beginPage) * getNumPerPage();
 
         List<NameValuePair> params = new ArrayList<>();
-        if (type == ArticleRecyclerFragment.TYPE_NORMAL || type == ArticleRecyclerFragment.TYPE_WITH_SLIDE_IMAGE) {
+//        if (type == GET_ARTICLE_TYPE_NORMAL) {
             params.add(new BasicNameValuePair("classify", String.valueOf(classify)));
-        }
+//        }
 //        else if (type == ArticleRecyclerFragment.TYPE_MY_ARTICLE) {
 //            params.add(new BasicNameValuePair("uid", String.valueOf(classify)));
 //        } else if (type == ArticleRecyclerFragment.TYPE_COLLECTION) {
@@ -614,4 +628,5 @@ public class ArticleController {
         }
         return commentList;
     }
+
 }

@@ -232,13 +232,15 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
             } else {
                 if (id == R.id.action_to_collect) {
 //            mArticle.setCollected(true);
-                    ArticleController.addCollection(mArticle);
+                    ArticleController ac = new ArticleController(this);
+                    ac.addCollection(mArticle);
                     mMenu.getItem(1).setVisible(false);
                     mMenu.getItem(2).setVisible(true);
                     Toast.makeText(this, "收藏成功", Toast.LENGTH_SHORT).show();
                 } else if (id == R.id.action_to_not_collect) {
 //            mArticle.setCollected(false);
-                    ArticleController.removeCollection(mArticle);
+                    ArticleController ac = new ArticleController(this);
+                    ac.removeCollection(mArticle);
                     mMenu.getItem(1).setVisible(true);
                     mMenu.getItem(2).setVisible(false);
                     Toast.makeText(this, "取消收藏", Toast.LENGTH_SHORT).show();
