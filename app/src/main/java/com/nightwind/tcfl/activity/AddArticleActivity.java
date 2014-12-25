@@ -27,9 +27,10 @@ public class AddArticleActivity extends ActionBarActivity {
     private EditText mETTitle;
     private EditText mETContent;
 
-    private User mSelfUser;
+//    private User mSelfUser;
     private int mClassify = 0;
     private ProgressDialog mDialog;
+    private String mUsername;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +51,8 @@ public class AddArticleActivity extends ActionBarActivity {
         }
 
         UserController userController = new UserController(this);
-        mSelfUser = userController.getSelfUser();
+//        mSelfUser = userController.getSelfUser();
+        mUsername = new Auth(this).getUsername();
         userController.closeDB();
 
         mETTitle = (EditText) findViewById(R.id.et_title);
@@ -144,12 +146,12 @@ public class AddArticleActivity extends ActionBarActivity {
             article.setTitle(title);
             article.setClassify(mClassify);
             article.setContent(content);
-            article.setUsername(mSelfUser.getUsername());
+            article.setUsername(mUsername);
 
             String date = BaseTools.getCurrentDateTime();
             article.setDate(date);
 
-            ArticleController articleController = new ArticleController(this);
+//            ArticleController articleController = new ArticleController(this);
 
 //            if (articleController.saveArticle(mClassify, article) != -1) {
 //                Toast.makeText(this, "发布成功", Toast.LENGTH_SHORT).show();

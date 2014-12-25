@@ -233,6 +233,35 @@
                     android:text="找活动" />
             </RelativeLayout>
 
+            <RelativeLayout
+                android:id="@+id/menu7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/menu6"
+                android:background="@drawable/background_tab"
+                android:padding="16dp">
+
+                <ImageView
+                    android:id="@+id/imageView7"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/kenan" />
+
+                <TextView
+                    android:id="@+id/tv_menu7"
+                    style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/imageView7"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_toEndOf="@+id/imageView7"
+                    android:layout_toRightOf="@+id/imageView7"
+                    android:text="翻译" />
+            </RelativeLayout>
+
 
             <View
                 android:id="@+id/divider2"
@@ -240,12 +269,12 @@
                 android:layout_height="1dp"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/menu6"
+                android:layout_below="@+id/menu7"
                 android:layout_marginTop="16dp"
                 android:background="#1e000000" />
 
             <RelativeLayout
-                android:id="@+id/menu7"
+                android:id="@+id/menu_exit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/divider2"

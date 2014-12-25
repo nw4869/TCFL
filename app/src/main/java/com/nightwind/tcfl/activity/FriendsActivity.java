@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.nightwind.tcfl.Auth;
 import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.bean.User;
 import com.nightwind.tcfl.controller.UserController;
@@ -128,7 +129,7 @@ public class FriendsActivity extends BaseActivity implements FriendsFragment.OnF
 //        }
         else if (id == R.id.action_add_friend) {
             //打开添加好友菜单
-            mAddFriendFragment = AddFriendFragment.newInstance(mUserController.getSelfUser().getUid());
+            mAddFriendFragment = AddFriendFragment.newInstance();
             getSupportFragmentManager().beginTransaction()
                     .setCustomAnimations(R.anim.slide_right_in, R.anim.slide_left_out, R.anim.slide_left_in, R.anim.slide_right_out)
                     .add(R.id.container, mAddFriendFragment)
@@ -149,8 +150,10 @@ public class FriendsActivity extends BaseActivity implements FriendsFragment.OnF
     @Override
     public void onFragmentInteraction(String username) {
 //        Toast.makeText(this, "selected" + username.toString(), Toast.LENGTH_SHORT).show();
-        User user = mUserController.getUser(username);
-        mChatFragment = ChatFragment.newInstance(mUserController.getSelfUser().getUid(), user.getUid());
+//        User user = mUserController.getUser(username);
+//        mChatFragment = ChatFragment.newInstance(mUserController.getSelfUser().getUid(), user.getUid());
+        String selfUsername = new Auth(this).getUsername();
+        mChatFragment = ChatFragment.newInstance(selfUsername, username);
         getSupportFragmentManager().beginTransaction()
                 .setCustomAnimations(R.anim.slide_right_in, R.anim.slide_left_out, R.anim.slide_left_in, R.anim.slide_right_out)
                 .add(R.id.container, mChatFragment)

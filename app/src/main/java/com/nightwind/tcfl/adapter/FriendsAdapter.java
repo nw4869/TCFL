@@ -19,6 +19,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by wind on 2014/12/3.
@@ -26,13 +27,13 @@ import java.util.ArrayList;
 public class FriendsAdapter  extends RecyclerView.Adapter<FriendsAdapter.ViewHolder>{
     private static Context mContext;
 
-    private ArrayList<User> mUsers;
+    private List<User> mUsers;
 
     //图片下载选项
     DisplayImageOptions options = Options.getListOptions();
     protected ImageLoader imageLoader = ImageLoader.getInstance();
 
-    public FriendsAdapter(Context context, ArrayList<User> users) {
+    public FriendsAdapter(Context context, List<User> users) {
         mUsers = users;
         mContext = context;
     }
@@ -78,7 +79,7 @@ public class FriendsAdapter  extends RecyclerView.Adapter<FriendsAdapter.ViewHol
         holder.username.setText(username);
         holder.sign.setText(mUsers.get(position).getInfo());
 
-        int color = mUsers.get(position).isOnline() ? Color.GREEN : Color.RED;
+        int color = mUsers.get(position).getOnline() == 1 ? Color.GREEN : Color.RED;
         holder.online.setBackgroundColor(color);
 
         //从服务器加载图片

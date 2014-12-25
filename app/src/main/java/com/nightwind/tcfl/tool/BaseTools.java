@@ -20,7 +20,7 @@ public class BaseTools {
     }
 
 
-    static private SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    static private SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     static public SimpleDateFormat getDateFormat() {return sDateFormat;}
 
     /**
@@ -30,7 +30,7 @@ public class BaseTools {
      * @return
      */
     static public Date strToDate(String str) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        SimpleDateFormat format = sDateFormat;
         Date date = null;
         try {
             date = format.parse(str);
@@ -45,7 +45,7 @@ public class BaseTools {
      * @return
      */
     static public String getCurrentDateTime() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        SimpleDateFormat sdf = sDateFormat;
         Date dt = new Date();
         String dts = sdf.format(dt);
         return dts;
@@ -63,7 +63,7 @@ public class BaseTools {
         Calendar cldDate = Calendar.getInstance();
         cldDate.setTime(date);
         cldDate.add(Calendar.DATE, addDay);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        SimpleDateFormat sdf = sDateFormat;
         return sdf.format(cldDate.getTime());
     }
 

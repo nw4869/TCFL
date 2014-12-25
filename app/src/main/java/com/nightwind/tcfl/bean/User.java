@@ -3,6 +3,7 @@ package com.nightwind.tcfl.bean;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by wind on 2014/11/29.
@@ -13,7 +14,7 @@ public class User {
     private String hobby;
     private String avatarUrl;
     private ArrayList<Integer> friendsUidList = new ArrayList<>();
-    private boolean online;
+    private int online;
 
     static public int eduNum = 6;
     static public String[] eduStrings = {"本科", "硕士", "博士", "专科", "中学", "小学"};
@@ -188,18 +189,18 @@ public class User {
         this.friendsUidList = friendsUidList;
     }
 
-    public boolean isOnline() {
+    public int getOnline() {
         return online;
     }
 
-    public void setOnline(boolean online) {
+    public void setOnline(int online) {
         this.online = online;
     }
 
     public User() {
     }
 
-    public User(int uid, int level, int age, int sex, int edu, String username, String password, String salt, String email, String work, String info, String school, String tel, String hobby, String avatarUrl, ArrayList<Integer> friendsUidList, boolean online) {
+    public User(int uid, int level, int age, int sex, int edu, String username, String password, String salt, String email, String work, String info, String school, String tel, String hobby, String avatarUrl, ArrayList<Integer> friendsUidList, int online) {
         this.uid = uid;
         this.level = level;
         this.age = age;
@@ -251,5 +252,15 @@ public class User {
     public static User fromJson(String json) {
         Gson gson = new Gson();
         return gson.fromJson(json, User.class);
+    }
+
+    public static List<User> fromJsonUserList(String json) {
+        Gson gson = new Gson();
+        User[] articles = gson.fromJson(json, User[].class);
+        ArrayList<User> userList = new ArrayList<>();
+        for(User user: articles) {
+            userList.add(user);
+        }
+        return userList;
     }
 }

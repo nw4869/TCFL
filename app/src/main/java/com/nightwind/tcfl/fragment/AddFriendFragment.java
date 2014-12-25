@@ -3,6 +3,7 @@ package com.nightwind.tcfl.fragment;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -19,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nightwind.tcfl.Auth;
 import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.bean.User;
 import com.nightwind.tcfl.controller.UserController;
@@ -36,11 +38,11 @@ import com.nostra13.universalimageloader.core.ImageLoader;
  * create an instance of this fragment.
  */
 public class AddFriendFragment extends Fragment {
-    private static final String ARG_UID1 = "uid1";
     private static final java.lang.String ARG_USERNAME = "queryUsername";
     private static final int LOAD_USER = 0;
+    private static final int LOAD_SELF_USER = 1;
+    private static final String ARG_SELF_USER = "selfUser";
 
-    private int mUid1;
 
     private OnFragmentInteractionListener mListener;
 
@@ -58,6 +60,7 @@ public class AddFriendFragment extends Fragment {
     DisplayImageOptions options = Options.getListOptions();
     protected ImageLoader imageLoader = ImageLoader.getInstance();
     private UserController mUserController;
+    private User mSelfUser;
     private User mQueryUser;
     private ProgressDialog mDialog;
 
@@ -66,14 +69,12 @@ public class AddFriendFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param uid1 Parameter 1.
      * @return A new instance of fragment AddFriendFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static AddFriendFragment newInstance(int uid1) {
+    public static AddFriendFragment newInstance() {
         AddFriendFragment fragment = new AddFriendFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_UID1, uid1);
         fragment.setArguments(args);
         return fragment;
     }
@@ -86,9 +87,14 @@ public class AddFriendFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mUid1 = getArguments().getInt(ARG_UID1);
+
         }
         mUserController = new UserController(getActivity());
+
+        Bundle args = new Bundle();
+        args.putString(ARG_USERNAME, new Auth(getActivity()).getUsername());
+        args.putBoolean(ARG_SELF_USER, true);
+        getLoaderManager().initLoader(LOAD_SELF_USER, args, new UserLoaderCallbacks());
     }
 
     @Override
@@ -102,6 +108,7 @@ public class AddFriendFragment extends Fragment {
             }
         });
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -143,15 +150,21 @@ public class AddFriendFragment extends Fragment {
             public void onClick(View v) {
 
                 String queryUsername = String.valueOf(mEtQueryUsername.getText());
-                User selfUser = mUserController.getSelfUser();
-                User friend = mUserController.getUser(queryUsername);
+//                User selfUser = mUserController.getSelfUser();
+//                User friend = mUserController.getUser(queryUsername);
+                User selfUser = mSelfUser;
+                User friend = mQueryUser;
                 if (selfUser.getUid() == friend.getUid()) {
                     Toast.makeText(getActivity(), "添加好友失败，您不能添加自己为好友", Toast.LENGTH_SHORT).show();
-                } else if (selfUser.addFriend(friend.getUid())) {
-                    Toast.makeText(getActivity(), "添加好友成功", Toast.LENGTH_SHORT).show();
-                    mListener.onFragmentInteraction(true);
-                } else {
-                    Toast.makeText(getActivity(), "添加好友失败，您已添加该好友", Toast.LENGTH_SHORT).show();
+                }
+//                else if (selfUser.addFriend(friend.getUid())) {
+//                    Toast.makeText(getActivity(), "添加好友成功", Toast.LENGTH_SHORT).show();
+//                    mListener.onFragmentInteraction(true);
+//                } else {
+//                    Toast.makeText(getActivity(), "添加好友失败，您已添加该好友", Toast.LENGTH_SHORT).show();
+//                }
+                 else {
+                    new AddFriendTask().execute(friend.getUsername());
                 }
             }
         });
@@ -160,6 +173,34 @@ public class AddFriendFragment extends Fragment {
         mResult.setVisibility(View.GONE);
 
         return v;
+    }
+
+    public class AddFriendTask extends AsyncTask<String, Void, Boolean> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mDialog = new ProgressDialog(getActivity());
+            mDialog.setMessage("正在添加...");
+            mDialog.show();
+        }
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            UserController uc = new UserController(getActivity());
+            return uc.addFriend(params[0]);
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+            if (aBoolean) {
+                Toast.makeText(getActivity(), "添加好友成功", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getActivity(), "添加好友失败", Toast.LENGTH_SHORT).show();
+            }
+            mDialog.cancel();
+        }
     }
 
     @Override
@@ -173,16 +214,20 @@ public class AddFriendFragment extends Fragment {
     }
 
     public class UserLoaderCallbacks implements LoaderManager.LoaderCallbacks<User> {
+        boolean mIsSelfUser = false;
         @Override
         public Loader<User> onCreateLoader(int id, Bundle args) {
+            mIsSelfUser = args.getBoolean(ARG_SELF_USER, false);
             return new UserLoader(getActivity(), args.getString(ARG_USERNAME));
         }
 
         @Override
         public void onLoadFinished(Loader<User> loader, User user) {
-            mQueryUser = user;
-//            if (mQueryUser != null)
+            if (mIsSelfUser)
             {
+                mSelfUser = user;
+            } else {
+                mQueryUser = user;
                 ShowResult();
             }
         }

@@ -54,7 +54,7 @@ public class UserDBManager {
             String school = c.getString(c.getColumnIndex("school"));
             String avatarUrl = c.getString(c.getColumnIndex("avatarUrl"));
             String hobby = c.getString(c.getColumnIndex("hobby"));
-            boolean online = c.getInt(c.getColumnIndex("online")) == 1;
+            int online = c.getInt(c.getColumnIndex("online"));
 
 
             User user = new User();
@@ -71,7 +71,8 @@ public class UserDBManager {
             user.setTel(tel);
             user.setSchool(school);
             user.setHobby(hobby);
-            user.setAvatarUrl(ServerConfig.getServer() + avatarUrl);
+//            user.setAvatarUrl(ServerConfig.getServer() + avatarUrl);
+            user.setAvatarUrl(avatarUrl);
             user.setOnline(online);
 
             users.add(user);
@@ -130,7 +131,7 @@ public class UserDBManager {
         binds.add(user.getSchool());
         binds.add(user.getAvatarUrl());
         binds.add(user.getHobby());
-        binds.add(String.valueOf(user.isOnline() == true ? 1 : 0));
+        binds.add(String.valueOf(user.getOnline()));
 //        return binds.toArray(new String[binds.size()]);
         return binds;
     }

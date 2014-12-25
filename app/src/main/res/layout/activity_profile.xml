@@ -17,14 +17,12 @@
             android:id="@+id/avatar"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/conan1"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
         <TextView
             android:id="@+id/username"
             style="@style/TextAppearance.AppCompat.Title"
-            android:hint="username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
@@ -34,7 +32,7 @@
         <TextView
             android:id="@+id/sign"
             style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
-            android:hint="sign"
+            android:hint="your sign"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
@@ -269,7 +267,8 @@
         android:paddingRight="8dp"
         android:paddingLeft="8dp"
         android:layout_below="@+id/divider7"
-        android:layout_centerHorizontal="true">
+        android:layout_centerHorizontal="true"
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/iv_chat"

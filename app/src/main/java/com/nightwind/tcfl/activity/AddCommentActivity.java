@@ -28,12 +28,12 @@ public class AddCommentActivity extends ActionBarActivity {
 
     private EditText mETContent;
 
-    private User mSelfUser;
-    private int mClassify;
-    private int mRowId;
+//    private User mSelfUser;
+//    private int mClassify;
+//    private int mRowId;
     private int mArticleId = 0;
     private int mParentComment = 0;
-    private UserController mUserController;
+//    private UserController mUserController;
     private ProgressDialog mDialog;
 
     @Override
@@ -58,9 +58,9 @@ public class AddCommentActivity extends ActionBarActivity {
         } else {
             Log.e("AddCommentActivity", "getIntent Error!");
         }
-        mUserController = new UserController(this);
+//        mUserController = new UserController(this);
 
-        mSelfUser = mUserController.getSelfUser();
+//        mSelfUser = mUserController.getSelfUser();
         mETContent = (EditText) findViewById(R.id.et_content);
 
 

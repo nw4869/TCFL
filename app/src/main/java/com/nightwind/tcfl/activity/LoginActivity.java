@@ -35,7 +35,8 @@ public class LoginActivity extends BaseActivity {
             switch (msg.what) {
                 case Auth.MSG_LOGIN_SUCCESS:
                     mDialog.cancel();
-                    Toast.makeText(getApplicationContext(), "登录成功！" + msg.getData().getString("info"), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getApplicationContext(), "登录成功！" + msg.getData().getString("info"), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "登录成功！", Toast.LENGTH_SHORT).show();
                     setResult(RESULT_SUCCESS);
                     finish();
                     overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);

@@ -12,7 +12,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "tcfl.db";
     private static final String TABLE_NAME_USER = "user";
-    private static final String CREATE_TABLE_USER = "CREATE TABLE \"user\" ( \"uid\" INTEGER(11) NOT NULL, \"username\" TEXT(255) NOT NULL, \"password\" TEXT(255) NOT NULL, \"salt\" TEXT(36) NOT NULL, \"level\" INTEGER(11) NOT NULL, \"email\" TEXT(255), \"tel\" TEXT(255), \"age\" INTEGER(11), \"sex\" INTEGER(1), \"work\" TEXT(255), \"info\" TEXT(255), \"edu\" INTEGER(255), \"school\" TEXT(255), PRIMARY KEY (\"uid\") );";
+    private static final String CREATE_TABLE_USER = "CREATE TABLE \"user\" ( \"uid\" INTEGER, \"username\" TEXT(255), \"salt\" TEXT(36), \"level\" INTEGER, \"email\" TEXT(255), \"tel\" TEXT(255), \"age\" INTEGER, \"sex\" INTEGER, \"work\" TEXT(255), \"info\" TEXT(255), \"edu\" INTEGER, \"school\" TEXT(255), \"avatarUrl\" TEXT(255), \"hobby\" TEXT(255), \"online\" INTEGER, PRIMARY KEY (\"uid\" ASC) );";
     private static final int DATABASE_VERSION = 1;
 
     public DBHelper(Context context) {

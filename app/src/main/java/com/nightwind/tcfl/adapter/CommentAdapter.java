@@ -119,11 +119,13 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             holder.dateTime0.setText(mArticle.getDate());
             //从服务器加载图片
 //            imageLoader.displayImage(Dummy.getImgURLList()[position % 8], holder.imageView1, options);
-            User user = mUserController.getUser(mArticle.getUsername());
-            if (user != null) {
-                imageLoader.displayImage(user.getAvatarUrl(), holder.imageView0, options);
-                holder.imageView0.setOnClickListener(new AvatarOnClickListener(mContext, user.getUsername()));
-            }
+//            User user = mUserController.getUser(mArticle.getUsername());
+//            if (user != null) {
+//                imageLoader.displayImage(user.getAvatarUrl(), holder.imageView0, options);
+//                holder.imageView0.setOnClickListener(new AvatarOnClickListener(mContext, user.getUsername()));
+//            }
+                imageLoader.displayImage(mArticle.getAvatarUrl(), holder.imageView0, options);
+                holder.imageView0.setOnClickListener(new AvatarOnClickListener(mContext, mArticle.getUsername()));
 
             //test:ContentLayout
             String content = mArticle.getContent();
@@ -160,11 +162,13 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 //        holder.imageView1.setImageBitmap(mCommentEntities[position].getImg());
             //从服务器加载图片
 //            imageLoader.displayImage(Dummy.getImgURLList()[position%8], holder.imageView1, options);
-            User user = mUserController.getUser(comment.getUsername());
-            if (user != null) {
-                imageLoader.displayImage(user.getAvatarUrl(), holder.imageView1, options);
-                holder.imageView1.setOnClickListener(new AvatarOnClickListener(mContext, user.getUsername()));
-            }
+//            User user = mUserController.getUser(comment.getUsername());
+//            if (user != null) {
+//                imageLoader.displayImage(user.getAvatarUrl(), holder.imageView1, options);
+//                holder.imageView1.setOnClickListener(new AvatarOnClickListener(mContext, user.getUsername()));
+//            }
+            imageLoader.displayImage(comment.getAvatarUrl(), holder.imageView1, options);
+            holder.imageView1.setOnClickListener(new AvatarOnClickListener(mContext, comment.getUsername()));
 
             //回复按钮
             holder.commentIcon.setOnClickListener(new View.OnClickListener() {

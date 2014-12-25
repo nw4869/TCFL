@@ -70,7 +70,7 @@ public class MainActivity extends ActionBarActivity implements PersonCenterFragm
 	private void initViews() {
 		mToolbar = (Toolbar) findViewById(R.id.toolbar);
 		// toolbar.setLogo(R.drawable.ic_launcher);
-		mToolbar.setTitle("TCFL");// 标题的文字需在setSupportActionBar之前，不然会无效
+		mToolbar.setTitle(R.string.app_name);// 标题的文字需在setSupportActionBar之前，不然会无效
 		// toolbar.setSubtitle("副标题");
 		setSupportActionBar(mToolbar);
 		/* 这些通过ActionBar来设置也是一样的，注意要在setSupportActionBar(toolbar);之后，不然就报错了 */
@@ -276,7 +276,7 @@ public class MainActivity extends ActionBarActivity implements PersonCenterFragm
     /* ***************FragmentPagerAdapter***************** */
 	public class MyPagerAdapter extends FragmentPagerAdapter {
 
-		private final String[] TITLES = { "主页", "热门推荐", "热门收藏", "本月热榜", "今日热榜", "专栏", "科技", "随机" };
+		private final String[] TITLES = { "语言", "文化历史", "风景美食", "最爱", "礼仪常识", "随机" };
 
 		public MyPagerAdapter(FragmentManager fm) {
 			super(fm);

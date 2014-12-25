@@ -52,6 +52,7 @@ public class PersonCenterFragment extends Fragment implements View.OnClickListen
     private RelativeLayout menu5;
     private RelativeLayout menu6;
     private RelativeLayout menu7;
+    private RelativeLayout menuExit;
 
     private TextView mTvExit;
 
@@ -102,7 +103,8 @@ public class PersonCenterFragment extends Fragment implements View.OnClickListen
         menu5 = (RelativeLayout) v.findViewById(R.id.menu5);
         menu6 = (RelativeLayout) v.findViewById(R.id.menu6);
         menu7 = (RelativeLayout) v.findViewById(R.id.menu7);
-        mTvExit = (TextView) menu7.findViewById(R.id.exit);
+        menuExit = (RelativeLayout) v.findViewById(R.id.menu_exit);
+        mTvExit = (TextView) menuExit.findViewById(R.id.exit);
 
         head.setOnClickListener(this);
         menu0.setOnClickListener(this);
@@ -113,6 +115,7 @@ public class PersonCenterFragment extends Fragment implements View.OnClickListen
         menu5.setOnClickListener(this);
         menu6.setOnClickListener(this);
         menu7.setOnClickListener(this);
+        menuExit.setOnClickListener(this);
         if (mAuth.isLogin()) {
             mTvExit.setText("退出当前账号");
         } else {
@@ -120,6 +123,16 @@ public class PersonCenterFragment extends Fragment implements View.OnClickListen
         }
 
         return v;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mAuth.isLogin()) {
+            mTvExit.setText("退出当前账号");
+        } else {
+            mTvExit.setText("登录");
+        }
     }
 
     @Override
@@ -168,6 +181,9 @@ public class PersonCenterFragment extends Fragment implements View.OnClickListen
                 break;
             case R.id.menu7:
                 id = 7;
+                break;
+            case R.id.menu_exit:
+                id = 8;
                 break;
             default:
                 id = -1;
@@ -222,10 +238,14 @@ public class PersonCenterFragment extends Fragment implements View.OnClickListen
                     startActivity(intent);
                     getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
                 } else if (id == 6) {
-                    Intent intent = new Intent(getActivity(), LocalDBTestActivity.class);
-                    startActivity(intent);
-                    getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+                    //找活动
+//                    Intent intent = new Intent(getActivity(), LocalDBTestActivity.class);
+//                    startActivity(intent);
+//                    getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
                 } else if (id == 7) {
+
+
+                } else if(id == 8) {
                     if (!mAuth.isLogin()) {
                         //登录
                         Intent intent = new Intent(getActivity(), LoginActivity.class);
@@ -235,7 +255,6 @@ public class PersonCenterFragment extends Fragment implements View.OnClickListen
                         //退出
                         mAuth.logout(mHandler);
                     }
-
                 } else {
                     mListener.onFragmentInteraction(id);
                 }
@@ -260,7 +279,7 @@ public class PersonCenterFragment extends Fragment implements View.OnClickListen
             if (resultCode == LoginActivity.RESULT_SUCCESS) {
                 //密码登陆成功
                 mTvExit.setText("退出当前账号");
-                if (mPosition != 7) {
+                if (mPosition != 8) {
                     onListPressed(mPosition);
                 }
             }

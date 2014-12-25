@@ -16,6 +16,7 @@ public class Comment {
     private String dateTime;
     private int parentId = -1;
     private int articleId;
+    private String avatarUrl;
 
     public int getId() {
         return id;
@@ -63,6 +64,14 @@ public class Comment {
 
     public void setArticleId(int articleId) {
         this.articleId = articleId;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
     }
 
     public static Comment fromJson(String json) {

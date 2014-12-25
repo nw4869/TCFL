@@ -1,6 +1,11 @@
 
 package com.nightwind.tcfl.bean;
 
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class ChatMsg {
     private static final String TAG = ChatMsg.class.getSimpleName();
     //名字
@@ -8,9 +13,9 @@ public class ChatMsg {
     //日期
     private String date;
     //聊天内容
-    private String text;
+    private String content;
     //是否为对方发来的信息
-    private boolean isComMeg = true;
+    private int isComing = 1;
 
     public String getName() {
         return name;
@@ -28,37 +33,41 @@ public class ChatMsg {
         this.date = date;
     }
 
-    public String getText() {
-        return text;
+    public String getContent() {
+        return content;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setContent(String text) {
+        this.content = text;
     }
 
     public boolean getMsgType() {
-        return isComMeg;
+        return isComing == 1;
     }
 
     public void setMsgType(boolean isComMsg) {
-    	isComMeg = isComMsg;
+    	isComing = (isComMsg==true?1:0) ;
     }
 
     public ChatMsg() {
     }
 
-    public boolean isComMeg() {
-        return isComMeg;
+    public int getComMeg() {
+        return isComing;
     }
 
-    public void setComMeg(boolean isComMeg) {
-        this.isComMeg = isComMeg;
+    public void setComMeg(int isComMeg) {
+        this.isComing = isComMeg;
     }
 
-    public ChatMsg(String name, String date, String text, boolean isComMeg) {
-        this.name = name;
-        this.date = date;
-        this.text = text;
-        this.isComMeg = isComMeg;
+
+    public static List<ChatMsg> fromJsonUserList(String json) {
+        Gson gson = new Gson();
+        ChatMsg[] chatMsgs = gson.fromJson(json, ChatMsg[].class);
+        ArrayList<ChatMsg> chatMsgs1 = new ArrayList<>();
+        for(ChatMsg chatMsg: chatMsgs) {
+            chatMsgs1.add(chatMsg);
+        }
+        return chatMsgs1;
     }
 }

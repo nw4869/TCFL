@@ -22,9 +22,9 @@ public class Options {
 //				// 设置图片在下载期间显示的图片
 //				.showImageOnLoading(R.drawable.small_image_holder_listpage)
 //				// 设置图片Uri为空或是错误的时候显示的图片
-                .showImageForEmptyUri(R.drawable.kenan)
+                .showImageForEmptyUri(R.drawable.ic_account_circle_grey600_48dp)
 //				// 设置图片加载/解码过程中错误时候显示的图片
-                .showImageOnFail(R.drawable.kenan)
+                .showImageOnFail(R.drawable.ic_account_circle_grey600_48dp)
                 .cacheInMemory(true)
                         // 设置下载的图片是否缓存在内存中
                 .cacheOnDisc(true)
@@ -42,7 +42,7 @@ public class Options {
                 .preProcessor(new MyBitmapProcessor())
                 .resetViewBeforeLoading(true)// 设置图片在下载前是否重置，复位
 //				.displayer(new RoundedBitmapDisplayer(20))//是否设置为圆角，弧度为多少
-//                .displayer(new FadeInBitmapDisplayer(100))// 淡入
+                .displayer(new FadeInBitmapDisplayer(200))// 淡入
                 .build();
         return options;
     }

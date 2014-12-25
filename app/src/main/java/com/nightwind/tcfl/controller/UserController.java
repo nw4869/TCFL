@@ -1,9 +1,11 @@
 package com.nightwind.tcfl.controller;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.nightwind.tcfl.Auth;
+import com.nightwind.tcfl.bean.Article;
 import com.nightwind.tcfl.bean.User;
 import com.nightwind.tcfl.server.ServerConfig;
 import com.nightwind.tcfl.tool.encryptionUtil.RSAUtils;
@@ -88,7 +90,7 @@ public class UserController {
                 }
             }
             //在线状态
-            user.setOnline(uid % 2 == 0);
+//            user.setOnline(uid % 2 == 0);
 
 //            sUsersList.add(user);
             sUidMap.put(uid, user);
@@ -160,27 +162,29 @@ public class UserController {
         if (username == null || username.equals("")) {
             return null;
         }
-        User user = sUidMap.get(username);
-        //内存为空，从本地数据库读取
-        if (user == null) {
-            user = getUserFromDB(username);
-            //本地数据库也为空，从服务器获取
-            if (user == null) {
-                user = getUserFromServer(username);
-                if(user != null) {
-                    //写入本地数据库
-                    insertToDB(user);
-                } else {
-                    return null;
-                }
-            }
-
-            int uid = user.getUid();
-            //写入内存
-            sUidMap.put(uid, user);
-            sUsernameMap.put(user.getUsername(), user);
-//            sUsersList.add(user);
-        }
+        //debug停用缓存
+//        User user = sUsernameMap.get(username);
+//        //内存为空，从本地数据库读取
+//        if (user == null) {
+//            user = getUserFromDB(username);
+//            //本地数据库也为空，从服务器获取
+//            if (user == null) {
+//                user = getUserFromServer(username);
+//                if(user != null) {
+//                    //写入本地数据库
+//                    insertToDB(user);
+//                } else {
+//                    return null;
+//                }
+//            }
+//
+//            int uid = user.getUid();
+//            //写入内存
+//            sUidMap.put(uid, user);
+//            sUsernameMap.put(user.getUsername(), user);
+////            sUsersList.add(user);
+//        }
+        User user = getUserFromServer(username);
         return user;
     }
 
@@ -262,5 +266,122 @@ public class UserController {
         return user;
     }
 
+    public List<User> getFriendList(int isOnline) {
+        Auth auth = new Auth(mContext);
+        String username = auth.getUsername();
+        String token = auth.getToken();
+
+        List<User> friendList = new ArrayList<>();
+
+        String urlStr = ServerConfig.getServer() + "MyLogin/GetFriendList";
+        HttpPost request = new HttpPost(urlStr);
+
+        if (token == null) {
+            System.out.println("本地token不存在");
+            return null;
+        }
+        //RSA加密token
+        String strPublicKey = auth.getPublicKey();
+        String cipherToken;
+        try {
+            cipherToken = RSAUtils.encrypt(token, strPublicKey);
+        } catch (Exception e) {
+            System.out.println("RSA加密Token失败");
+            return null;
+        }
+
+        List<NameValuePair> params = new ArrayList<>();
+        params.add(new BasicNameValuePair("token", cipherToken));
+        params.add(new BasicNameValuePair("username", username));
+        params.add(new BasicNameValuePair("isOnline", String.valueOf(isOnline)));
+
+
+        try {
+            //设置请求参数项
+            request.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
+            HttpClient Client = ServerConfig.getHttpClient();
+            //执行请求返回相应
+            HttpResponse response = Client.execute(request);
+
+            //判断是否请求成功
+            if (response.getStatusLine().getStatusCode() == 200) {
+                //获得响应信息
+                String responseMsg = EntityUtils.toString(response.getEntity());
+//                JSONObject jsonObject = new JSONObject(responseMsg);
+//                if(jsonObject.getBoolean("success"))
+                try {
+                    friendList = User.fromJsonUserList(responseMsg);
+                    //写入内存
+//                    for (User user: friendList) {
+//                        sUidMap.put(user.getUid(), user);
+//                        sUsernameMap.put(user.getUsername(), user);
+//                        saveUser(user);
+//                    }
+                } catch (Exception e) {
+                    Log.e("GetFriendList", "JSON ERROR");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return friendList;
+    }
+
     public void closeDB() { mUDBMgr.closeDB();}
+
+    public Boolean addFriend(String username2) {
+
+        Auth auth = new Auth(mContext);
+        String username = auth.getUsername();
+        String token = auth.getToken();
+
+        String urlStr = ServerConfig.getServer() + "MyLogin/AddFriend";
+        HttpPost request = new HttpPost(urlStr);
+
+        if (token == null) {
+            System.out.println("本地token不存在");
+            return null;
+        }
+        //RSA加密token
+        String strPublicKey = auth.getPublicKey();
+        String cipherToken;
+        try {
+            cipherToken = RSAUtils.encrypt(token, strPublicKey);
+        } catch (Exception e) {
+            System.out.println("RSA加密Token失败");
+            return null;
+        }
+
+        List<NameValuePair> params = new ArrayList<>();
+        params.add(new BasicNameValuePair("token", cipherToken));
+        params.add(new BasicNameValuePair("username", username));
+        params.add(new BasicNameValuePair("username2", username2));
+
+
+        try {
+            //设置请求参数项
+            request.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
+            HttpClient Client = ServerConfig.getHttpClient();
+            //执行请求返回相应
+            HttpResponse response = Client.execute(request);
+
+            //判断是否请求成功
+            if (response.getStatusLine().getStatusCode() == 200) {
+                //获得响应信息
+                String responseMsg = EntityUtils.toString(response.getEntity());
+                try {
+                    JSONObject jsonObject = new JSONObject(responseMsg);
+                    if(jsonObject.getBoolean("success")) {
+                        //写入内存
+                        return true;
+                    }
+                } catch (Exception e) {
+                    Log.e("AddFriend", "JSON ERROR");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

@@ -274,12 +274,14 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
 //        holder.mImageVIew.setImageBitmap(mListItems[position].getImg());
             //从服务器加载图片
 //            imageLoader.displayImage(Dummy.getImgURLList()[position % 8], holder.mImageView, options);
-            UserController userController = new UserController(mContext);
-            User user = userController.getUser(article.getUsername());
-            if (user != null) {
-                imageLoader.displayImage(user.getAvatarUrl(), holder.mImageView, options);
-                holder.mImageView.setOnClickListener(new AvatarOnClickListener(mContext, user.getUsername()));
-            }
+//            UserController userController = new UserController(mContext);
+//            User user = userController.getUser(article.getUsername());
+//            if (user != null) {
+//                imageLoader.displayImage(user.getAvatarUrl(), holder.mImageView, options);
+//                holder.mImageView.setOnClickListener(new AvatarOnClickListener(mContext, user.getUsername()));
+//            }
+            imageLoader.displayImage(article.getAvatarUrl(), holder.mImageView, options);
+            holder.mImageView.setOnClickListener(new AvatarOnClickListener(mContext, article.getUsername()));
 
             holder.v.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -17,7 +17,11 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -123,6 +127,7 @@ public class ArticleRecyclerFragment extends Fragment {
         args.putInt(ARG_TYPE, type);
         getLoaderManager().initLoader(type, args, new ArticleAbstractsLoaderCallbacks());
 
+
 //        if (type == TYPE_NORMAL || type == TYPE_WITH_SLIDE_IMAGE) {
 //
 //            ArticleController articleController = new ArticleController(getActivity());
@@ -189,6 +194,10 @@ public class ArticleRecyclerFragment extends Fragment {
 
         //下拉刷新
         mSwipeLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_refresh);
+        mSwipeLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
         mSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -196,6 +205,7 @@ public class ArticleRecyclerFragment extends Fragment {
             }
         });
 
+        mSwipeLayout.setRefreshing(true);
 
         // specify an adapter (see also next example)
 
@@ -246,6 +256,7 @@ public class ArticleRecyclerFragment extends Fragment {
                 ((LinearLayoutManager) mLayoutManager).scrollToPositionWithOffset(lastPosition, lastOffset);
             }
             firstLoadData = false;
+            mSwipeLayout.setRefreshing(false);
         }
 
         @Override
@@ -262,9 +273,10 @@ public class ArticleRecyclerFragment extends Fragment {
         } else {
             mAdapter = new ArticleAdapter(getActivity(), mArticleEntities, type, position);
         }
-        mRecyclerView.setAdapter(mAdapter);
+        if (mAdapter != null) {
+            mRecyclerView.setAdapter(mAdapter);
+        }
 
-        mSwipeLayout.setRefreshing(false);
     }
 
 
@@ -282,64 +294,6 @@ public class ArticleRecyclerFragment extends Fragment {
         mUserController.closeDB();
     }
 
-    /**
-     * 转换图片成圆形
-     *
-     * @param bitmap 传入Bitmap对象
-     * @return
-     */
-    public Bitmap toRoundBitmap(Bitmap bitmap) {
-        int width = bitmap.getWidth();
-        int height = bitmap.getHeight();
-        float roundPx;
-        float left, top, right, bottom, dst_left, dst_top, dst_right, dst_bottom;
-        if (width <= height) {
-            roundPx = width / 2;
-            top = 0;
-            bottom = width;
-            left = 0;
-            right = width;
-            height = width;
-            dst_left = 0;
-            dst_top = 0;
-            dst_right = width;
-            dst_bottom = width;
-        } else {
-            roundPx = height / 2;
-            float clip = (width - height) / 2;
-            left = clip;
-            right = width - clip;
-            top = 0;
-            bottom = height;
-            width = height;
-            dst_left = 0;
-            dst_top = 0;
-            dst_right = height;
-            dst_bottom = height;
-        }
-
-        Bitmap output = Bitmap.createBitmap(width,
-                height,
-//                Bitmap.Config.ARGB_8888);
-                Bitmap.Config.RGB_565);
-        Canvas canvas = new Canvas(output);
-
-        final int color = 0xff424242;
-        final Paint paint = new Paint();
-        final Rect src = new Rect((int) left, (int) top, (int) right, (int) bottom);
-        final Rect dst = new Rect((int) dst_left, (int) dst_top, (int) dst_right, (int) dst_bottom);
-        final RectF rectF = new RectF(dst);
-
-        paint.setAntiAlias(true);
-
-        canvas.drawARGB(0, 0, 0, 0);
-        paint.setColor(color);
-        canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
-
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-        canvas.drawBitmap(bitmap, src, dst, paint);
-        return output;
-    }
 
 
     //        final int NUM_ITEM = 30;

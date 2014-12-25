@@ -199,9 +199,13 @@ public class ProfileActivity extends BaseActivity {
         mTVEdu.setText(mUser.getEduString());
         mTVHobby.setText(mUser.getHobby());
 
-        if (mUser != null && mUserController.getSelfUser() != null && mUser.getUid() == mUserController.getSelfUser().getUid()) {
+        Auth auth = new Auth(this);
+        String selfUsername = auth.getUsername();
+
+        if (selfUsername.equals(mUser.getUsername())) {
             mVGStartChat.setVisibility(View.GONE);
         } else {
+            mVGStartChat.setVisibility(View.VISIBLE);
             mVGStartChat.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

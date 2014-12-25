@@ -16,6 +16,7 @@ public class Article {
     private String content;
 //    private int uid;
     private String username;
+    private String avatarUrl;
     private String date;
     private boolean collected;
 //    private int commentNum;
@@ -69,6 +70,14 @@ public class Article {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
     }
 
     public String getDate() {
