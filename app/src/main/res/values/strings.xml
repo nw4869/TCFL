@@ -36,5 +36,9 @@
     <string name="title_activity_show_image">ShowImageActivity</string>
     <string name="delete_article">删除</string>
     <string name="action_refresh">refresh</string>
+    <string name="title_activity_translate">TranslateActivity</string>
+    <string name="button_translate">翻译</string>
+    <string name="button_exchange_lang"><![CDATA[<-->]]></string>
+    <string name="action_translate">翻译</string>
 
 </resources>
