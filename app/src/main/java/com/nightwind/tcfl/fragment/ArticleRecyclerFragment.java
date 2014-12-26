@@ -1,6 +1,8 @@
 package com.nightwind.tcfl.fragment;
 
 import android.annotation.TargetApi;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.graphics.Bitmap;
@@ -24,7 +26,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.gc.materialdesign.views.ButtonFloat;
+import com.gc.materialdesign.views.ProgressBarCircularIndetermininate;
+import com.nightwind.tcfl.activity.AddArticleActivity;
+import com.nightwind.tcfl.activity.MainActivity;
 import com.nightwind.tcfl.adapter.ArticleAdapter;
 import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.bean.Article;
@@ -32,6 +39,9 @@ import com.nightwind.tcfl.controller.UserController;
 import com.nightwind.tcfl.server.ArticleAbstractsLoader;
 
 import java.util.ArrayList;
+
+import it.gmariotti.recyclerview.itemanimator.SlideInOutBottomItemAnimator;
+import it.gmariotti.recyclerview.itemanimator.SlideInOutLeftItemAnimator;
 
 
 public class ArticleRecyclerFragment extends Fragment {
@@ -68,6 +78,10 @@ public class ArticleRecyclerFragment extends Fragment {
     private int lastPosition = 0;
     private int lastOffset = 0;
     private SwipeRefreshLayout mSwipeLayout;
+    private ProgressBarCircularIndetermininate mProgress;
+    private ArrayList<Article> mLoadResult;
+    private AsyncTask<Void, Integer, Void> mShowItemAnimTask;
+    private ButtonFloat mButtonFloatAdd;
 
     /**
      * Use this factory method to create a new instance of
@@ -108,6 +122,7 @@ public class ArticleRecyclerFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+//        System.out.println("onCreate call");
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             position = getArguments().getInt(ARG_CLASSIFY, 0);
@@ -149,14 +164,31 @@ public class ArticleRecyclerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+//        System.out.println("onCreateView call");
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_my_recycler, container, false);
         mUserController = new UserController(getActivity());
 
-        // use this setting to improve performance if you know that changes
+        //进度条
+        mProgress = (ProgressBarCircularIndetermininate) v.findViewById(R.id.progressBarCircularIndetermininate);
+
+        //ButtonFloat
+        mButtonFloatAdd = (ButtonFloat) v.findViewById(R.id.buttonFloatAdd);
+        mButtonFloatAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addArticle();
+            }
+        });
+
+                // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         mRecyclerView = (RecyclerView) v.findViewById(R.id.my_recycler_view);
         mRecyclerView.setHasFixedSize(true);
+        // use a linear layout manager
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setItemAnimator(new SlideInOutBottomItemAnimator(mRecyclerView));
         mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
 
             @Override
@@ -188,16 +220,13 @@ public class ArticleRecyclerFragment extends Fragment {
 
         });
 
-        // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(mLayoutManager);
 
         //下拉刷新
         mSwipeLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_refresh);
-        mSwipeLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
+//        mSwipeLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
+//                android.R.color.holo_green_light,
+//                android.R.color.holo_orange_light,
+//                android.R.color.holo_red_light);
         mSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -207,34 +236,27 @@ public class ArticleRecyclerFragment extends Fragment {
 
         mSwipeLayout.setRefreshing(true);
 
-        // specify an adapter (see also next example)
 
-//        final int NUM_ITEM = 30;
-//        Article[] listItems = new Article[NUM_ITEM];
-//        for (int i = 0; i < NUM_ITEM; i++) {
-//
-//            Article listItem = new Article();
-//
-//            listItem.setTitle("Title " + (i + 1));
-//            listItem.setNewsAbstract("Abstract " + (i + 1));
-//            listItem.setUsername("UserName " + (i + 1));
-//            listItem.setDate((i+1) + "min ago");
-//            listItem.setCommentNum((i + 1));
-//
-//            Bitmap bitmap;
-//            if (i < 8) {
-//                bitmap = toRoundBitmap(BitmapFactory.decodeResource(getResources(), drawables[i % 8]));
-//            } else {
-////                bitmap = bitmaps[i%8];
-//                bitmap = listItems[i % 8].getImg();
-//            }
-//            listItem.setImg(bitmap);
-//            listItems[i] = listItem;
-//        }
+//        mArticleEntities.clear();
+//        mArticleEntities.add(null);
+        if (type == TYPE_COLLECTION || type == TYPE_MY_ARTICLE) {
+            mAdapter = new ArticleAdapter(getActivity(), mArticleEntities, type);
+            mButtonFloatAdd.setVisibility(View.GONE);
+        } else {
+            mAdapter = new ArticleAdapter(getActivity(), mArticleEntities, type, position);
+        }
+        mRecyclerView.setAdapter(mAdapter);
 
-        updateUI();
+//        updateUI();
 
         return v;
+    }
+
+    private void addArticle() {
+        Intent intent = new Intent(getActivity(), AddArticleActivity.class);
+        intent.putExtra("classify", position);
+//                    MainActivity.this.startActivity(intent);
+        getActivity().startActivityForResult(intent, MainActivity.REQUEST_ADD_ARTICLE_BASE + position);
     }
 
 
@@ -248,15 +270,20 @@ public class ArticleRecyclerFragment extends Fragment {
 
         @Override
         public void onLoadFinished(Loader<ArrayList<Article>> loader, ArrayList<Article> data) {
-            mArticleEntities = data;
-            if (mArticleEntities != null) {
+            mLoadResult = data;
+            if (data != null) {
                 updateUI();
                 //mLayoutManager.scrollToPosition(lastPosition);
                 //这样更精确
                 ((LinearLayoutManager) mLayoutManager).scrollToPositionWithOffset(lastPosition, lastOffset);
+//                mAdapter.notifyItemRangeInserted(0, mAdapter.getItemCount());
+
+            } else {
+                Toast.makeText(getActivity(), "刷新失败", Toast.LENGTH_SHORT).show();
             }
             firstLoadData = false;
             mSwipeLayout.setRefreshing(false);
+            mProgress.setVisibility(View.GONE);
         }
 
         @Override
@@ -268,16 +295,53 @@ public class ArticleRecyclerFragment extends Fragment {
     private void updateUI() {
 //        mAdapter = new ArticleAdapter(getActivity(), myDataset, bitmaps);
 //        mAdapter = new ArticleAdapter(getActivity(), listItems);
-        if (type == TYPE_COLLECTION || type == TYPE_MY_ARTICLE) {
-            mAdapter = new ArticleAdapter(getActivity(), mArticleEntities, type);
+//        if (mArticleEntities.size() == 0) {
+//            mArticleEntities.add(null);
+//        }
+        if (mAdapter == null) {
         } else {
-            mAdapter = new ArticleAdapter(getActivity(), mArticleEntities, type, position);
-        }
-        if (mAdapter != null) {
-            mRecyclerView.setAdapter(mAdapter);
+//            mShowItemAnimTask = new ShowItemAnimTask().execute();
+            mArticleEntities.clear();
+            mAdapter.notifyDataSetChanged();
+//            for (int i = 0; i < mLoadResult.size(); i++) {
+//                mArticleEntities.add(mLoadResult.get(i));
+//            }
+            mArticleEntities.addAll(mLoadResult);
+            mAdapter.notifyItemRangeInserted(0, mLoadResult.size());
         }
 
     }
+
+//    class ShowItemAnimTask extends AsyncTask<Void, Integer, Void> {
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//
+//            mArticleEntities.clear();
+//            publishProgress(0);
+//            for (int i = 0; i < mLoadResult.size(); i++) {
+//                mArticleEntities.add(mLoadResult.get(i));
+////                System.out.println("loadResult=" + mLoadResult.toString());
+//                publishProgress(i);
+//                try {
+//                    Thread.sleep(200);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onProgressUpdate(Integer... values) {
+//            super.onProgressUpdate(values);
+//            if (values[0] == 0) {
+//                mAdapter.notifyDataSetChanged();
+//            } else {
+//                mAdapter.notifyItemInserted(values[0]);
+//            }
+//        }
+//    }
 
 
     @Override
@@ -288,28 +352,9 @@ public class ArticleRecyclerFragment extends Fragment {
         super.onResume();
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        mUserController.closeDB();
-    }
-
-
-
-    //        final int NUM_ITEM = 30;
-//        //加载bitmap
-//        for (int i = 0; i < NUM_ITEM; i++) {
-//            Bitmap bitmap;
-//            if (i < 8) {
-//                bitmap = toRoundBitmap(BitmapFactory.decodeResource(getResources(), drawables[i % 8]));
-//            } else {
-////                bitmap = listItems[i % 8].getImg();
-//                bitmap = mArticleEntities.get(i%8).getImg();
-//            }
-////            listItem.setImg(bitmap);
-//            mArticleEntities.get(i).setImg(bitmap);
-//        }
     public void refreshList() {
+        //取消进行中的插入Item的task
+//        mShowItemAnimTask.cancel(true);
         Bundle args = new Bundle();
         args.putInt(ARG_CLASSIFY, position);
         args.putInt(ARG_BEGIN_PAGE, beginPage);
@@ -317,6 +362,6 @@ public class ArticleRecyclerFragment extends Fragment {
         args.putInt(ARG_TYPE, type);
         getLoaderManager().restartLoader(type, args, new ArticleAbstractsLoaderCallbacks());
 
-        mAdapter.notifyDataSetChanged();
+//        mAdapter.notifyDataSetChanged();
     }
 }

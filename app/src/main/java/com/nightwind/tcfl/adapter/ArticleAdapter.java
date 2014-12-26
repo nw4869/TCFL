@@ -259,6 +259,8 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
 
             holder.id = position;
             Article article = mListItems.get(position);
+//            System.out.println("position=" + position);       //debug
+//            System.out.println("mListItems=" + mListItems.toString());
             holder.mTextView1.setText(article.getTitle());
             holder.mTextView2.setText(article.getNewsAbstract());
             String date = article.getDate();

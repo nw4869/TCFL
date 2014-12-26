@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="main"><source path="D:\AndroidStudioProjects\TCFL\RecyclerViewItemAnimators-library\src\main\res"/><source path="D:\AndroidStudioProjects\TCFL\RecyclerViewItemAnimators-library\build\generated\res\rs\release"/><source path="D:\AndroidStudioProjects\TCFL\RecyclerViewItemAnimators-library\build\generated\res\generated\release"/></dataSet><dataSet config="release"><source path="D:\AndroidStudioProjects\TCFL\RecyclerViewItemAnimators-library\src\release\res"/></dataSet><mergedItems/></merger>

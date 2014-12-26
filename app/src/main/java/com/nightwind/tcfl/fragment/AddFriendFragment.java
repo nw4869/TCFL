@@ -157,12 +157,6 @@ public class AddFriendFragment extends Fragment {
                 if (selfUser.getUid() == friend.getUid()) {
                     Toast.makeText(getActivity(), "添加好友失败，您不能添加自己为好友", Toast.LENGTH_SHORT).show();
                 }
-//                else if (selfUser.addFriend(friend.getUid())) {
-//                    Toast.makeText(getActivity(), "添加好友成功", Toast.LENGTH_SHORT).show();
-//                    mListener.onFragmentInteraction(true);
-//                } else {
-//                    Toast.makeText(getActivity(), "添加好友失败，您已添加该好友", Toast.LENGTH_SHORT).show();
-//                }
                  else {
                     new AddFriendTask().execute(friend.getUsername());
                 }
@@ -261,7 +255,7 @@ public class AddFriendFragment extends Fragment {
 //    // TODO: Rename method, update argument and hook method into UI event
 //    public void onButtonPressed(Uri uri) {
 //        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
+//            mListener.onFragmentInteractionAddFriend(uri);
 //        }
 //    }
 

@@ -1,6 +1,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" tools:context="com.nightwind.tcfl.fragment.ArticleRecyclerFragment">
+    android:layout_height="match_parent" tools:context="com.nightwind.tcfl.fragment.ArticleRecyclerFragment"
+    xmlns:materialdesign="http://schemas.android.com/apk/res-auto">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh"
@@ -14,5 +15,23 @@
             android:layout_height="match_parent"/>
         
         </android.support.v4.widget.SwipeRefreshLayout>
+
+
+    <com.gc.materialdesign.views.ProgressBarCircularIndetermininate
+        android:layout_gravity="center"
+        android:id="@+id/progressBarCircularIndetermininate"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:background="@color/colorPrimary"/>
+
+    <com.gc.materialdesign.views.ButtonFloat
+        android:layout_margin="16dp"
+        android:id="@+id/buttonFloatAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|end|bottom"
+        android:background="@color/colorPrimary"
+        materialdesign:animate="true"
+        materialdesign:iconFloat="@drawable/ic_action_new" />
 
 </FrameLayout>

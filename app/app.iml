@@ -92,6 +92,8 @@
     <orderEntry type="library" exported="" name="appcompat-v7-21.0.2" level="project" />
     <orderEntry type="library" exported="" name="universal-image-loader-1.9.3" level="project" />
     <orderEntry type="library" exported="" name="cardview-v7-21.0.2" level="project" />
+    <orderEntry type="module" module-name="MaterialDesign" exported="" />
+    <orderEntry type="module" module-name="RecyclerViewItemAnimators-library" exported="" />
   </component>
 </module>
 

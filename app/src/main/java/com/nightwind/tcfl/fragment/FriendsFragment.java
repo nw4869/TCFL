@@ -10,9 +10,13 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.gc.materialdesign.views.ButtonFloat;
+import com.gc.materialdesign.views.ProgressBarCircularIndetermininate;
 import com.nightwind.tcfl.adapter.FriendsAdapter;
 import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.bean.User;
@@ -52,8 +56,9 @@ public class FriendsFragment extends Fragment{
     private RecyclerView.LayoutManager mLayoutManager;
 
     private OnFragmentInteractionListener mListener;
-    private UserController mUserController;
     private SwipeRefreshLayout mSwipeLayout;
+    private ButtonFloat mButtonFloatAdd;
+    private ProgressBarCircularIndetermininate mProgressBar;
 
 
     /**
@@ -83,7 +88,6 @@ public class FriendsFragment extends Fragment{
             mOnline = getArguments().getBoolean(ARG_ONLINE);
         }
 
-        mUserController = new UserController(getActivity());
         initData();
     }
 
@@ -119,16 +123,18 @@ public class FriendsFragment extends Fragment{
 
         @Override
         public void onLoadFinished(Loader<List<User>> loader, List<User> data) {
-            mFriendsList = data;
-            if (mFriendsList != null)  {
+            if (data != null)  {
                 //mLayoutManager.scrollToPosition(lastPosition);
                 //这样更精确
 //                ((LinearLayoutManager) mLayoutManager).scrollToPositionWithOffset(lastPosition, lastOffset);
+                mFriendsList.clear();
+                mFriendsList.addAll(data);
             }
 //            firstLoadData = false;
 //            mSwipeLayout.setRefreshing(false);
             updateUI();
             mSwipeLayout.setRefreshing(false);
+            mProgressBar.setVisibility(View.GONE);
         }
 
         @Override
@@ -138,9 +144,9 @@ public class FriendsFragment extends Fragment{
     }
 
     private void updateUI() {
-
-        mAdapter = new FriendsAdapter(getActivity(), mFriendsList);
-        mRecyclerView.setAdapter(mAdapter);
+//        mAdapter = new FriendsAdapter(getActivity(), mFriendsList);
+//        mRecyclerView.setAdapter(mAdapter);
+        mAdapter.notifyDataSetChanged();
     }
 
 
@@ -148,6 +154,17 @@ public class FriendsFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_friends, container, false);
+
+        mProgressBar = (ProgressBarCircularIndetermininate) rootView.findViewById(R.id.progressBarCircularIndetermininate);
+
+        //ButtonFloat
+        mButtonFloatAdd = (ButtonFloat) rootView.findViewById(R.id.buttonFloatAdd);
+        mButtonFloatAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toAddFriend();
+            }
+        });
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.friends_recycler_view);
         mRecyclerView.setHasFixedSize(true);
@@ -157,10 +174,10 @@ public class FriendsFragment extends Fragment{
 
         //下拉刷新
         mSwipeLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh);
-        mSwipeLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
+//        mSwipeLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
+//                android.R.color.holo_green_light,
+//                android.R.color.holo_orange_light,
+//                android.R.color.holo_red_light);
         mSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -171,22 +188,23 @@ public class FriendsFragment extends Fragment{
         if (mFriendsList == null) {
             mSwipeLayout.setRefreshing(true);
         }
+        mFriendsList = new ArrayList<>();
+        mAdapter = new FriendsAdapter(getActivity(), mFriendsList);
+        mRecyclerView.setAdapter(mAdapter);
+
 //        updateUI();
 
         return rootView;
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mUserController.closeDB();
+    private void toAddFriend() {
+        mListener.onFragmentInteractionAddFriend();
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-//    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
+//    @Override
+//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+////        super.onCreateOptionsMenu(menu, inflater);
+//        inflater.inflate(R.menu.menu_friends, menu);
 //    }
 
     @Override
@@ -219,8 +237,10 @@ public class FriendsFragment extends Fragment{
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         public void onFragmentInteraction(String msg);
+
+        public void onFragmentInteractionAddFriend();
+
     }
 
     public void refreshList() {

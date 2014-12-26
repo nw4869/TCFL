@@ -129,15 +129,7 @@ public class FriendsActivity extends BaseActivity implements FriendsFragment.OnF
 //        }
         else if (id == R.id.action_add_friend) {
             //打开添加好友菜单
-            mAddFriendFragment = AddFriendFragment.newInstance();
-            getSupportFragmentManager().beginTransaction()
-                    .setCustomAnimations(R.anim.slide_right_in, R.anim.slide_left_out, R.anim.slide_left_in, R.anim.slide_right_out)
-                    .add(R.id.container, mAddFriendFragment)
-                    .addToBackStack("addFriend")
-                    .commit();
-            getSupportActionBar().setTitle("add Friend");
-            currentFragmentStackTop++;
-            mMenu.getItem(0).setVisible(false);  //隐藏添加好友
+            onFragmentInteractionAddFriend();
         }
 
         return super.onOptionsItemSelected(item);
@@ -164,6 +156,20 @@ public class FriendsActivity extends BaseActivity implements FriendsFragment.OnF
         if (mMenu != null) {
             mMenu.getItem(0).setVisible(false);
         }
+    }
+
+    @Override
+    public void onFragmentInteractionAddFriend() {
+
+        mAddFriendFragment = AddFriendFragment.newInstance();
+        getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(R.anim.slide_right_in, R.anim.slide_left_out, R.anim.slide_left_in, R.anim.slide_right_out)
+                .add(R.id.container, mAddFriendFragment)
+                .addToBackStack("addFriend")
+                .commit();
+        getSupportActionBar().setTitle("add Friend");
+        currentFragmentStackTop++;
+        mMenu.getItem(0).setVisible(false);  //隐藏添加好友
     }
 
     @Override
@@ -197,20 +203,6 @@ public class FriendsActivity extends BaseActivity implements FriendsFragment.OnF
         }
     }
 
-//    /**
-//     * 返回键
-//     * @param keyCode
-//     * @param event
-//     * @return
-//     */
-//    @Override
-//    public boolean onKeyDown(int keyCode, KeyEvent event) {
-//        if (keyCode == KeyEvent.KEYCODE_BACK) {
-//
-//        }
-//        return super.onKeyDown(keyCode, event);
-//    }
-
     /**
      * 添加好友时返回，TRUE表示添加成功
      * @param addedFriend
@@ -225,38 +217,6 @@ public class FriendsActivity extends BaseActivity implements FriendsFragment.OnF
     }
 
 
-
-
-//    @Override
-//    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-//
-//        float absdx = Math.abs(e2.getX() - e1.getX());
-//        float absdy = Math.abs(e2.getY() - e1.getY());
-//        System.out.println("x` = " + (e1.getX() - e2.getX()) + " y` = " + Math.abs(e1.getY() - e2.getY()));
-//
-//        if (e1.getX() - e2.getX() > verticalMinDistance && Math.abs(velocityX) > minVelocity) {
-//
-//        } else if (absdx > 1.5*absdy && e2.getX() - e1.getX() > verticalMinDistance && Math.abs(velocityX) > minVelocity) {
-//
-//            hideSoftInput();
-//            if (currentFragmentStackTop == 0) { //在列表界面时右划关闭activity
-//                finish();
-//                overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
-//                return true;
-//            } else {
-//                //返回上一个fragment
-//                getSupportActionBar().setTitle("Friends");
-//                mMenu.getItem(0).setVisible(true);  //显示添加好友
-//                getSupportFragmentManager().popBackStack();
-//                currentFragmentStackTop--;
-//            }
-//
-//        }
-//
-//        return false;
-//    }
-
-
     public void hideSoftInput() {
         if (mChatFragment != null) {
             mChatFragment.hideSoftInput();
@@ -266,19 +226,4 @@ public class FriendsActivity extends BaseActivity implements FriendsFragment.OnF
         }
     }
 
-    //    /**
-//     * A placeholder fragment containing a simple view.
-//     */
-//    public static class PlaceholderFragment extends Fragment {
-//
-//        public PlaceholderFragment() {
-//        }
-//
-//        @Override
-//        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                                 Bundle savedInstanceState) {
-//            View rootView = inflater.inflate(R.layout.fragment_friends, container, false);
-//            return rootView;
-//        }
-//    }
 }

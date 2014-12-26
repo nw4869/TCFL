@@ -14,31 +14,31 @@
         android:id="@+id/linearLayout"
         android:orientation="horizontal">
 
-        <Button
+        <com.gc.materialdesign.views.ButtonRectangle
             android:id="@+id/button_source"
             android:layout_weight="2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary"
+            android:background="@color/colorPrimary"
             android:layout_gravity="center_vertical"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:text="LANG_S" />
 
-        <Button
+        <com.gc.materialdesign.views.ButtonRectangle
             android:id="@+id/button_exchange"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary"
+            android:background="@color/colorPrimary"
             android:layout_gravity="center_vertical"
             android:text="@string/button_exchange_lang" />
 
-        <Button
+        <com.gc.materialdesign.views.ButtonRectangle
             android:id="@+id/button_destination"
             android:layout_weight="2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary"
+            android:background="@color/colorPrimary"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:text="LANG_D" />
@@ -75,10 +75,10 @@
         </LinearLayout>
 
 
-    <Button
+    <com.gc.materialdesign.views.ButtonRectangle
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
+        android:background="@color/colorPrimary"
         android:text="@string/button_translate"
         android:id="@+id/button_translate"
         android:layout_below="@+id/result"
@@ -86,5 +86,14 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"/>
 
+
+    <com.gc.materialdesign.views.ButtonRectangle
+        android:id="@+id/button"
+        android:layout_below="@id/button_translate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:text="翻译"
+        android:visibility="gone"/>
 
 </RelativeLayout>

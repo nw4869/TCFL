@@ -9,6 +9,8 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/MaterialDesign" />
+            <option value="$PROJECT_DIR$/RecyclerViewItemAnimators-library" />
             <option value="$PROJECT_DIR$/app" />
           </set>
         </option>

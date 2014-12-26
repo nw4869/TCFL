@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
+import com.gc.materialdesign.views.ButtonRectangle;
 import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.tool.BaseTools;
 
@@ -73,11 +74,11 @@ public class TranslateActivity extends BaseActivity {
 
         private EditText mEtSource;
         private EditText mEtDestination;
-        private Button mBtnTranslate;
-        private Button mBtnExchange;
+        private ButtonRectangle mBtnTranslate;
+        private ButtonRectangle mBtnExchange;
         private ProgressDialog mDialog;
-        private Button mBtnLangDst;
-        private Button mBtnLangSrc;
+        private ButtonRectangle mBtnLangDst;
+        private ButtonRectangle mBtnLangSrc;
         private PopupMenu mPopupMenuSrc;
         private PopupMenu mPopupMenuDst;
 
@@ -109,10 +110,10 @@ public class TranslateActivity extends BaseActivity {
 
             mEtSource = (EditText) rootView.findViewById(R.id.editTextSource);
             mEtDestination = (EditText) rootView.findViewById(R.id.editTextDestination);
-            mBtnLangSrc = (Button) rootView.findViewById(R.id.button_source);
-            mBtnExchange = (Button) rootView.findViewById(R.id.button_exchange);
-            mBtnLangDst = (Button) rootView.findViewById(R.id.button_destination);
-            mBtnTranslate = (Button) rootView.findViewById(R.id.button_translate);
+            mBtnLangSrc = (ButtonRectangle) rootView.findViewById(R.id.button_source);
+            mBtnExchange = (ButtonRectangle) rootView.findViewById(R.id.button_exchange);
+            mBtnLangDst = (ButtonRectangle) rootView.findViewById(R.id.button_destination);
+            mBtnTranslate = (ButtonRectangle) rootView.findViewById(R.id.button_translate);
 
             mBtnLangSrc.setText(LANG_LIST[langSrcId]);
             mBtnLangDst.setText(LANG_LIST[langDstId]);
