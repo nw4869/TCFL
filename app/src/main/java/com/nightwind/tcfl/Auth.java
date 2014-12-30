@@ -1,15 +1,20 @@
 package com.nightwind.tcfl;
 
+import android.accounts.NetworkErrorException;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.nightwind.tcfl.bean.User;
 import com.nightwind.tcfl.controller.UserController;
 import com.nightwind.tcfl.server.ServerConfig;
+import com.nightwind.tcfl.tool.ExampleUtil;
 import com.nightwind.tcfl.tool.encryptionUtil.MD5Util;
 import com.nightwind.tcfl.tool.encryptionUtil.RSAUtils;
 
@@ -36,6 +41,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+
+import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.api.TagAliasCallback;
 
 /**
  * Created by wind on 2014/12/9.
@@ -51,6 +60,7 @@ public class Auth {
     private String mPassword;
 
     private String responseMsg = "";
+    private String mSalt;
 //    private static String SERVER = SERVER0;
 
 
@@ -92,6 +102,7 @@ public class Auth {
 
     static public final int MSG_REGISTER_SUCCESS = 5;
     static public final int MSG_REGISTER_FILED = 6;
+
 
 //    static public final int MSG_TOKEN_SUCCESS = 4;
 
@@ -255,7 +266,7 @@ public class Auth {
                 try {
 
                     //获取Salt
-                    String salt = getSalt(username);
+                    String salt = mSalt =  getSalt(username);
                     System.out.println("Salt=" + salt);
 
                     //MD5加密
@@ -319,7 +330,11 @@ public class Auth {
                         UserController uc = new UserController(mAppContext);
                         uc.saveUser(user);
 
+                        //设置别名
+//                        JPushInterface.setAlias(mAppContext, mSalt.replace("-", ""), mAliasCallback);
 
+
+                        //登录成功将在setAlias后传送
                         msg.what = MSG_LOGIN_SUCCESS;
                         Bundle bundle = new Bundle();
                         bundle.putString("info", responseMsg);
@@ -343,6 +358,52 @@ public class Auth {
     }
 
 
+    private final TagAliasCallback mAliasCallback = new TagAliasCallback() {
+
+        public static final String TAG = "JPUSH SetAlias";
+
+        @Override
+        public void gotResult(int code, String alias, Set<String> tags) {
+            String logs ;
+            switch (code) {
+                case 0:
+                    logs = "Set tag and alias success";
+                    Log.i(TAG, logs);
+
+                    Message msg = mHandler.obtainMessage();
+                    msg.what = MSG_LOGIN_SUCCESS;
+                    Bundle bundle = new Bundle();
+                    bundle.putString("info", responseMsg);
+                    msg.setData(bundle);
+                    mHandler.sendMessage(msg);
+
+                    break;
+
+                case 6002:
+                    logs = "Failed to set alias and tags due to timeout. Try again after 60s.";
+                    Log.i(TAG, logs);
+                    if (ExampleUtil.isConnected(mAppContext)) {
+//                        mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_SET_ALIAS, alias), 1000 * 60);
+                        //重新加载
+                        JPushInterface.setAlias(mAppContext, mSalt.replace("-", ""), mAliasCallback);
+
+                    } else {
+                        Log.i(TAG, "No network");
+                    }
+                    break;
+
+                default:
+                    logs = "Failed with errorCode = " + code;
+                    Log.e(TAG, logs);
+            }
+
+//            ExampleUtil.showToast(logs, mAppContext);
+        }
+
+    };
+
+
+
     /**
      * 请求登录服务器
      * @param username
@@ -350,6 +411,12 @@ public class Auth {
      * @return
      */
     private boolean loginServer(String username, String password) {
+
+        String regId = getRegisterId();
+        if (regId == null) {
+            regId = JPushInterface.getRegistrationID(mAppContext);
+            saveRegisterId(regId);
+        }
         boolean loginValidate = false;
         //使用apache HTTP客户端实现
         String urlStr = mServer + "MyLogin/Login";
@@ -359,6 +426,11 @@ public class Auth {
         //添加用户名和密码
         params.add(new BasicNameValuePair("username", username));
         params.add(new BasicNameValuePair("password", password));
+        if (regId != null) {
+            params.add(new BasicNameValuePair("regId", regId));
+        } else {
+            Log.w("Login", "regId is null");
+        }
         try {
             //设置请求参数项
             request.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
@@ -485,10 +557,22 @@ public class Auth {
             if (response.getStatusLine().getStatusCode() == 200) {
                 return EntityUtils.toString(response.getEntity());
             }
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException  e) {
+//            e.printStackTrace();
+//            Looper.prepare();
+//
+//            Handler handler = new Handler()
+//            {
+//                public void handleMessage(Message msg)
+//                {
+//                    if (msg.what == 0) {
+//                        Toast.makeText(mAppContext, R.string.net_failed,Toast.LENGTH_SHORT).show();
+//                        getLooper().quit();
+//                    }
+//                }
+//            };
+//            handler.sendEmptyMessage(0);
+//            Looper.loop();
         }
         return null;
     }
@@ -617,6 +701,20 @@ public class Auth {
             sp.edit().remove("token").apply();
         } else {
             sp.edit().putString("token", token).apply();
+        }
+    }
+
+    public String getRegisterId() {
+        SharedPreferences sp = mAppContext.getSharedPreferences("registerId", Activity.MODE_PRIVATE);
+        return sp.getString("registerId", null);
+    }
+
+    public void saveRegisterId(String regId) {
+        SharedPreferences sp = mAppContext.getSharedPreferences("registerId", Activity.MODE_PRIVATE);
+        if (regId == null || regId.equals("")) {
+            sp.edit().remove("registerId").apply();
+        } else {
+            sp.edit().putString("registerId", regId).apply();
         }
     }
 

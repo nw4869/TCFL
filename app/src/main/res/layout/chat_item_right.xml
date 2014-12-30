@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
             android:layout_toLeftOf="@id/iv_userhead"
-            android:background="@drawable/chatto_bg"
+            android:background="@drawable/msg_right"
             android:clickable="true"
             android:focusable="true"
             android:gravity="left|center"

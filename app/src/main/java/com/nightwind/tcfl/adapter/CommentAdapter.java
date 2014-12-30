@@ -5,9 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.text.method.ArrowKeyMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -130,6 +132,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             //test:ContentLayout
             String content = mArticle.getContent();
             TextView tvContent = new TextView(mContext);
+            tvContent.setTextIsSelectable(true);
+
             tvContent.setText(content);
             tvContent.setTextColor(Color.BLACK);
             tvContent.setTextSize(16);

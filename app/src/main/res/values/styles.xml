@@ -1,4 +1,5 @@
-<resources xmlns:android="http://schemas.android.com/apk/res/android">
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:TBApp="http://schemas.android.com/apk/res/res-auto">
 
     <style name="AppBaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
 
@@ -12,9 +13,15 @@
         <item name="android:windowBackground">@android:color/white</item>
         <!-- SearchView -->
         <item name="searchViewStyle">@style/MySearchViewStyle</item>
+
+        <!--<item name="titleTextAppearance">?android:attr/textAppearanceSmallInverse</item>-->
     </style>
 
-    <style name="AppTheme" parent="@style/AppBaseTheme"></style>
+    <style name="AppTheme" parent="@style/AppBaseTheme"/>
+
+    <!--<style name="ToolbarStyle" parent="@style/ThemeOverlay.AppCompat.ActionBar">-->
+        <!--<item name="TBApp:titleTextAppearance">?android:attr/textAppearanceSmallInverse</item>-->
+    <!--</style>-->
 
     <style name="MySearchViewStyle" parent="Widget.AppCompat.SearchView">
         <!--

@@ -4,4 +4,7 @@
     tools:context="com.nightwind.tcfl.activity.ProfileActivity">
     <!--<item android:id="@+id/action_settings" android:title="@string/action_settings"-->
         <!--android:orderInCategory="100" app:showAsAction="never" />-->
+    <item android:id="@+id/action_edit_profile" android:title="@string/action_edit_profile"
+        android:orderInCategory="1" app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_save_white_48dp"/>
 </menu>

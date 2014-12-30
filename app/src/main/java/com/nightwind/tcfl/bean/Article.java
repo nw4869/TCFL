@@ -18,7 +18,8 @@ public class Article {
     private String username;
     private String avatarUrl;
     private String date;
-    private boolean collected;
+    private int isCollected;
+    private String lastDate;
 //    private int commentNum;
 //    private Bitmap img;
     private int commentNum;
@@ -129,13 +130,23 @@ public class Article {
         this.commentEntities = commentEntities;
     }
 
-    public boolean isCollected() {
-        return collected;
+    public int getIsCollected() {
+        return isCollected;
     }
 
-    public void setCollected(boolean collected) {
-        this.collected = collected;
+    public void setIsCollected(int collected) {
+        this.isCollected = collected;
     }
+
+    public String getLastDate() {
+        return lastDate;
+    }
+
+    public void setLastDate(String lastDate) {
+        this.lastDate = lastDate;
+    }
+
+
     //////////////////////////////////////////////////////////////////////
 
     public boolean addComment(Comment comment) {

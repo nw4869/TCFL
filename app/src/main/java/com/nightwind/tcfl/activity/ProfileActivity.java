@@ -2,21 +2,22 @@ package com.nightwind.tcfl.activity;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v4.content.Loader;
 import android.support.v4.app.LoaderManager;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nightwind.tcfl.Auth;
 import com.nightwind.tcfl.R;
@@ -26,6 +27,8 @@ import com.nightwind.tcfl.server.UserLoader;
 import com.nightwind.tcfl.tool.Options;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+
+import java.util.HashMap;
 
 
 public class ProfileActivity extends BaseActivity {
@@ -43,20 +46,25 @@ public class ProfileActivity extends BaseActivity {
 
     private ImageView mIVAvatar;
     private TextView mTVUsername;
-    private TextView mTVSign;
+    private TextView mETSign;
     private TextView mTVLevel;
-    private TextView mTVAge;
-    private TextView mTVSex;
-    private TextView mTVWork;
-    private TextView mTVEdu;
-    private TextView mTVHobby;
+    private TextView mETAge;
+//    private TextView mTVSex;
+    private TextView mETWork;
+//    private TextView mTVEdu;
+    private TextView mETHobby;
 
     private ViewGroup mVGStartChat;
 
     //图片下载选项
     DisplayImageOptions options = Options.getListOptions();
     protected ImageLoader imageLoader = ImageLoader.getInstance();
-    private UserController mUserController;
+    private View mProcessBar;
+    private HashMap<String, Integer> mEduStrMap = new HashMap<>();
+    private Menu mMenu;
+    private String mUsername;
+    private Spinner mSexSpinner;
+    private Spinner mEduSpinner;
 
 
     @Override
@@ -68,23 +76,59 @@ public class ProfileActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mUserController = new UserController(this);
+        mUsername = new Auth(this).getUsername();
+        if (getIntent() != null) {
+            String tmpUsername = getIntent().getStringExtra("username");
+            if (tmpUsername != null) {
+                mUsername = tmpUsername;
+                Log.d("ProfileActivity getIntent", mUsername);
+            }
+        }
+
+        mProcessBar = findViewById(R.id.progressBarCircularIndetermininate);
+
+        mIVAvatar = (ImageView) findViewById(R.id.avatar);
+        mTVUsername = (TextView) findViewById(R.id.username);
+        mETSign = (EditText) findViewById(R.id.sign);
+        mTVLevel = (TextView) findViewById(R.id.tv_level);
+        mETAge = (EditText) findViewById(R.id.et_age);
+//        mTVSex = (TextView) findViewById(R.id.tv_sex);
+        mETWork = (EditText) findViewById(R.id.et_work);
+//        mTVEdu = (TextView) findViewById(R.id.tv_edu);
+        mETHobby = (EditText) findViewById(R.id.et_hobby);
+
+        //性别
+        mSexSpinner = (Spinner) findViewById(R.id.sex_spinner);
+        String[] mItems = new String[] {"", "男", "女"};
+        ArrayAdapter<String> _Adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, mItems);
+        mSexSpinner.setAdapter(_Adapter);
+
+        //学历
+        mEduSpinner = (Spinner) findViewById(R.id.edu_spinner);
+        String[] mItems1 = new String[] {"", "幼儿园小朋友", "小学生"};
+        ArrayAdapter<String> _Adapter1 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, mItems1);
+        mEduSpinner.setAdapter(_Adapter1);
+
+        mVGStartChat = (ViewGroup) findViewById(R.id.rl_start_chat);
+
+        if (!new Auth(this).getUsername().equals(mUsername)) {
+            mETSign.setHint("sign");
+            mTVLevel.setHint("");
+            mETAge.setHint("");
+//            mTVSex.setHint("");
+            mETWork.setHint("");
+            mETHobby.setHint("");
+//            mTVEdu.setHint("");
+        }
+
         init();
 
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     void init() {
-        String username = new Auth(this).getUsername();
-        if (getIntent() != null) {
-            String tmpUsername = getIntent().getStringExtra("username");
-            if (tmpUsername != null) {
-                username = tmpUsername;
-                Log.d("ProfileActivity getIntent", username);
-            }
-        }
         Bundle args = new Bundle();
-        args.putString(ARG_USERNAME, username);
+        args.putString(ARG_USERNAME, mUsername);
 //        LoaderManager lm = getLoaderManager();
         LoaderManager lm = getSupportLoaderManager();
         lm.initLoader(LOAD_USER, args, new UserLoaderCallbacks());
@@ -111,16 +155,17 @@ public class ProfileActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mUserController.closeDB();
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_profile, menu);
+        mMenu = menu;
+        boolean visible = false;
+        if (mUsername.equals(new Auth(this).getUsername())) {
+            visible = true;
+        }
+        menu.getItem(0).setVisible(visible);
         return true;
     }
 
@@ -132,7 +177,9 @@ public class ProfileActivity extends BaseActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_edit_profile) {
+            new EditProfileTask().execute();
+            mProcessBar.setVisibility(View.VISIBLE);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -151,7 +198,11 @@ public class ProfileActivity extends BaseActivity {
             mUser = user;
             if (mUser != null) {
                 updateUI();
+            } else {
+                Toast.makeText(getApplicationContext(), R.string.load_failed, Toast.LENGTH_SHORT).show();
             }
+
+            mProcessBar.setVisibility(View.GONE);
         }
 
         @Override
@@ -162,24 +213,16 @@ public class ProfileActivity extends BaseActivity {
 
     private void updateUI() {
 
-        //修改信息
-        mIVAvatar = (ImageView) findViewById(R.id.avatar);
-        mTVUsername = (TextView) findViewById(R.id.username);
-        mTVSign = (TextView) findViewById(R.id.sign);
-        mTVLevel = (TextView) findViewById(R.id.tv_level);
-        mTVAge = (TextView) findViewById(R.id.tv_age);
-        mTVSex = (TextView) findViewById(R.id.tv_sex);
-        mTVWork = (TextView) findViewById(R.id.tv_work);
-        mTVEdu = (TextView) findViewById(R.id.tv_edu);
-        mTVHobby = (TextView) findViewById(R.id.tv_hobby);
 
-        mVGStartChat = (ViewGroup) findViewById(R.id.rl_start_chat);
+        //修改信息
+
+
 
 //        mIVAvatar.setOnClickListener(new AvatarOnClickListener(this, mUser.getUsername()));
         imageLoader.displayImage(mUser.getAvatarUrl(), mIVAvatar, options);
 
         mTVUsername.setText(mUser.getUsername());
-        mTVSign.setText(mUser.getInfo());
+        mETSign.setText(mUser.getInfo());
         String level = null;
         if (mUser.getLevel() != -1) {
             level = String.valueOf(mUser.getLevel());
@@ -189,15 +232,25 @@ public class ProfileActivity extends BaseActivity {
         if (mUser.getAge() != -1) {
             age = String.valueOf(mUser.getAge());
         }
-        mTVAge.setText(age);
-        String sex = null;
+        mETAge.setText(age);
+
+        int sexSel = 0;
         if (mUser.getSex() != -1) {
-            sex = String.valueOf(mUser.getSex() == 0 ? "男" : "女");
+            sexSel = mUser.getSex();
         }
-        mTVSex.setText(sex);
-        mTVWork.setText(mUser.getWork());
-        mTVEdu.setText(mUser.getEduString());
-        mTVHobby.setText(mUser.getHobby());
+        mSexSpinner.setSelection(sexSel + 1, true);
+
+//        mTVSex.setText(sex);
+        mETWork.setText(mUser.getWork());
+
+        int eduSel = 0;
+        if (mUser.getEdu() != -1) {
+            eduSel = mUser.getEdu();
+        }
+        mEduSpinner.setSelection(eduSel + 1, true);
+
+
+        mETHobby.setText(mUser.getHobby());
 
         Auth auth = new Auth(this);
         String selfUsername = auth.getUsername();
@@ -217,8 +270,66 @@ public class ProfileActivity extends BaseActivity {
                     finish();
                 }
             });
+            if (mMenu != null) {
+                mMenu.getItem(0).setVisible(mUsername.equals(selfUsername));
+            }
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        mMenu.getItem(0).setVisible(mUser.getUsername().equals(new Auth(this).getUsername()));
+    }
 
+
+
+    private class EditProfileTask extends AsyncTask<Void, Void, Boolean> {
+        @Override
+        protected Boolean doInBackground(Void... params) {
+
+            UserController uc = new UserController(getApplicationContext());
+            User user = uc.getSelfUser();
+
+            String sign = String.valueOf(mETSign.getText());
+
+            int age = -1;
+            try {
+                age = Integer.valueOf(mETAge.getText().toString());
+            } catch (Exception ignored) {
+            }
+
+            int edu = (int) mEduSpinner.getSelectedItemId();
+            if (edu -1 >= 0) {
+                user.setEdu(edu-1 );
+            }
+
+            int sex = (int) mSexSpinner.getSelectedItemId();
+            if (sex-1 >= 0) {
+                user.setSex(sex-1 );
+            }
+
+            String work = String.valueOf(mETWork.getText());
+            String hobby = String.valueOf(mETHobby.getText());
+            if (age > 0) {
+                user.setAge(age);
+            }
+            user.setInfo(sign);
+            user.setWork(work);
+            user.setHobby(hobby);
+
+            return uc.updateUser(user);
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            if (aBoolean) {
+                Toast.makeText(getApplicationContext(), "修改成功", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getApplicationContext(), "修改失败，请重试", Toast.LENGTH_SHORT).show();
+            }
+            mProcessBar.setVisibility(View.GONE);
+            super.onPostExecute(aBoolean);
+        }
+    }
 }

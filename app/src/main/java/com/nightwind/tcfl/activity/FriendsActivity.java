@@ -1,26 +1,31 @@
 package com.nightwind.tcfl.activity;
 
-import android.support.v7.app.ActionBarActivity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
-import android.view.GestureDetector;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
 
 import com.nightwind.tcfl.Auth;
 import com.nightwind.tcfl.R;
-import com.nightwind.tcfl.bean.User;
-import com.nightwind.tcfl.controller.UserController;
 import com.nightwind.tcfl.fragment.AddFriendFragment;
 import com.nightwind.tcfl.fragment.ChatFragment;
 import com.nightwind.tcfl.fragment.FriendsFragment;
+import com.nightwind.tcfl.tool.ExampleUtil;
+
+import cn.jpush.android.api.JPushInterface;
 
 
 public class FriendsActivity extends BaseActivity implements FriendsFragment.OnFragmentInteractionListener, AddFriendFragment.OnFragmentInteractionListener{
 
+    private static final String ARG_IS_FROM_PROFILE = "isFromProfile";
+    private static final String ARG_IS_FROM_NOTIFICATION = "isFromNotification";
+    private static final String ARG_USERNAME = "username";
+    private static final String ARG_ONLINE = "online";
     FriendsFragment mFriendsListFragment;
     ChatFragment mChatFragment;
     AddFriendFragment mAddFriendFragment;
@@ -30,9 +35,7 @@ public class FriendsActivity extends BaseActivity implements FriendsFragment.OnF
     private int currentFragmentStackTop = 0;
     private boolean mOnline = false;
 
-    private boolean mIsFromProfile = false;
-
-    private UserController mUserController;
+    private String requestUsername;
 
     @Override
     int getLayoutResID() {
@@ -44,16 +47,6 @@ public class FriendsActivity extends BaseActivity implements FriendsFragment.OnF
         super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_friends);
 
-        String profileUsername = null;
-        if (getIntent() != null) {
-            mOnline = getIntent().getBooleanExtra("online", false);
-            mIsFromProfile = getIntent().getBooleanExtra("isFromProfile", false);
-            if (mIsFromProfile) {
-                profileUsername = getIntent().getStringExtra("username");
-            }
-        }
-        mUserController = new UserController(this);
-
         if (savedInstanceState == null) {
             mFriendsListFragment = FriendsFragment.newInstance(mOnline);
             getSupportFragmentManager().beginTransaction()
@@ -61,27 +54,48 @@ public class FriendsActivity extends BaseActivity implements FriendsFragment.OnF
                     .add(R.id.container, mFriendsListFragment)
                     .commit();
         }
-
-
-        if (mIsFromProfile) {
-            onFragmentInteraction(profileUsername);
-        }
-
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mUserController.closeDB();
+        registerMessageReceiver();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
+        JPushInterface.onResume(this);
         if (mMenu != null) {
             mMenu.getItem(0).setVisible(currentFragmentStackTop == 0);
         }
+
+        requestUsername = null;
+        final Intent intent = getIntent();
+        if (intent != null) {
+            mOnline = intent.getBooleanExtra(ARG_ONLINE, false);
+            boolean isFromProfile = intent.getBooleanExtra(ARG_IS_FROM_PROFILE, false);
+            boolean isFromNotification = intent.getBooleanExtra(ARG_IS_FROM_NOTIFICATION, false);
+            intent.removeExtra(ARG_IS_FROM_PROFILE);
+            intent.removeExtra(ARG_IS_FROM_NOTIFICATION);
+            requestUsername = intent.getStringExtra(ARG_USERNAME);
+            if (isFromProfile ) {
+                onFragmentInteraction(requestUsername);
+            } else if ( isFromNotification) {
+                onFragmentInteraction(requestUsername);
+            }
+        }
+    }
+
+//    private void updateChatFragment() {
+//        if (currentFragmentStackTop > 0) {
+//            currentFragmentStackTop--;
+//            getSupportFragmentManager().popBackStack();
+//        }
+//        onFragmentInteraction(requestUsername);
+//    }
+
+
+    //该Activity为singleTask模式，将新的intent覆盖旧的，以便获取正确的ProfileUsername
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        this.setIntent(intent);
     }
 
     @Override
@@ -90,6 +104,18 @@ public class FriendsActivity extends BaseActivity implements FriendsFragment.OnF
         if (mMenu != null) {
             mMenu.getItem(0).setVisible(currentFragmentStackTop == 0);
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        JPushInterface.onPause(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(mMessageReceiver);
+        super.onDestroy();
     }
 
     @Override
@@ -145,13 +171,24 @@ public class FriendsActivity extends BaseActivity implements FriendsFragment.OnF
 //        User user = mUserController.getUser(username);
 //        mChatFragment = ChatFragment.newInstance(mUserController.getSelfUser().getUid(), user.getUid());
         String selfUsername = new Auth(this).getUsername();
-        mChatFragment = ChatFragment.newInstance(selfUsername, username);
-        getSupportFragmentManager().beginTransaction()
-                .setCustomAnimations(R.anim.slide_right_in, R.anim.slide_left_out, R.anim.slide_left_in, R.anim.slide_right_out)
-                .add(R.id.container, mChatFragment)
-                .addToBackStack("friendsList")
-                .commit();
-        currentFragmentStackTop++;
+        if (currentFragmentStackTop > 0 && mChatFragment != null && mChatFragment.mUsername2 != null && mChatFragment.mUsername2.equals(username)) {
+            mChatFragment.refreshList();
+        } else {
+            mChatFragment = ChatFragment.newInstance(selfUsername, username);
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            if (currentFragmentStackTop > 0) {
+                //改变用户名，刷新界面
+                transaction.replace(R.id.container, mChatFragment)
+                        .addToBackStack("friendsList")
+                        .commit();
+            } else {
+                transaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_left_out, R.anim.slide_left_in, R.anim.slide_right_out)
+                        .add(R.id.container, mChatFragment)
+                        .addToBackStack("friendsList")
+                        .commit();
+                currentFragmentStackTop++;
+            }
+        }
         getSupportActionBar().setTitle(username);
         if (mMenu != null) {
             mMenu.getItem(0).setVisible(false);
@@ -203,6 +240,12 @@ public class FriendsActivity extends BaseActivity implements FriendsFragment.OnF
         }
     }
 
+    @Override
+    protected void lightPushDown() {
+        hideSoftInput();
+        super.lightPushDown();
+    }
+
     /**
      * 添加好友时返回，TRUE表示添加成功
      * @param addedFriend
@@ -223,6 +266,43 @@ public class FriendsActivity extends BaseActivity implements FriendsFragment.OnF
         }
         if (mAddFriendFragment != null) {
             mAddFriendFragment.hideSoftInput();
+        }
+    }
+
+
+    //    for receive customer msg from jpush server
+    private MessageReceiver mMessageReceiver;
+    public static final String MESSAGE_RECEIVED_ACTION = "com.nightwind.tcfl.MESSAGE_RECEIVED_ACTION";
+    public static final String KEY_TITLE = "title";
+    public static final String KEY_MESSAGE = "message";
+    public static final String KEY_EXTRAS = "extras";
+
+    public void registerMessageReceiver() {
+        mMessageReceiver = new MessageReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
+        filter.addAction(MESSAGE_RECEIVED_ACTION);
+        registerReceiver(mMessageReceiver, filter);
+    }
+
+    public class MessageReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (MESSAGE_RECEIVED_ACTION.equals(intent.getAction())) {
+                String title = intent.getStringExtra(KEY_TITLE);
+                String message = intent.getStringExtra(KEY_MESSAGE);
+                String extras = intent.getStringExtra(KEY_EXTRAS);
+                StringBuilder showMsg = new StringBuilder();
+                showMsg.append(KEY_MESSAGE + " : " + message + "\n");
+                if (!ExampleUtil.isEmpty(extras)) {
+                    showMsg.append(KEY_EXTRAS + " : " + extras + "\n");
+                }
+//                setCostomMsg(showMsg.toString());
+                if (ChatFragment.getChattingUsername().equals(title)) {
+                    mChatFragment.refreshList();
+                }
+            }
         }
     }
 

@@ -9,7 +9,10 @@
     <EditText
         android:id="@+id/et_title"
         android:hint="标题"
-        android:text="@string/exampleArticleTitle"
+        android:text="@string/exampleArticleTitle1"
+        android:singleLine="true"
+        android:maxLength="100"
+        android:background="@drawable/my_rect"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/toolbar"
@@ -26,17 +29,22 @@
     <EditText
         android:id="@+id/et_content"
         android:hint="正文"
-        android:text="@string/exampleArticleContent"
+        android:text="@string/exampleArticleContent1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textMultiLine"
-        android:ems="10"
+        android:gravity="top"
+        android:minLines="100"
+        android:maxLength="20000"
+        android:background="@drawable/my_rect"
         android:layout_below="@+id/et_title"
         android:layout_alignLeft="@+id/et_title"
         android:layout_alignStart="@+id/et_title"
         android:layout_marginTop="16dp"
         android:layout_alignRight="@+id/et_title"
-        android:layout_alignEnd="@+id/et_title" />
+        android:layout_alignEnd="@+id/et_title"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="16dp"/>
 
 
 </RelativeLayout>

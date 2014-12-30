@@ -29,7 +29,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
-                    android:src="@drawable/conan1" />
+                    android:src="@drawable/ic_account_circle_grey600_48dp" />
 
                 <TextView
                     android:id="@+id/title"
@@ -69,7 +69,7 @@
                     android:id="@+id/imageView1"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
-                    android:src="@drawable/conan2" />
+                    android:src="@drawable/ic_supervisor_account_grey600_48dp" />
 
                 <TextView
                     android:id="@+id/tv_menu1"
@@ -100,7 +100,7 @@
                     android:id="@+id/imageView2"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
-                    android:src="@drawable/conan3" />
+                    android:src="@drawable/ic_location_on_grey600_48dp" />
 
                 <TextView
                     android:id="@+id/tv_menu2"
@@ -130,7 +130,7 @@
                     android:id="@+id/imageView3"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
-                    android:src="@drawable/conan4" />
+                    android:src="@drawable/ic_insert_drive_file_grey600_48dp" />
 
                 <TextView
                     android:id="@+id/tv_menu3"
@@ -160,7 +160,7 @@
                     android:id="@+id/imageView4"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
-                    android:src="@drawable/conan5" />
+                    android:src="@drawable/ic_grade_grey600_48dp" />
 
                 <TextView
                     android:id="@+id/tv_menu4"
@@ -189,7 +189,7 @@
                     android:id="@+id/imageView5"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
-                    android:src="@drawable/conan6" />
+                    android:src="@drawable/ic_mood_grey600_48dp" />
 
                 <TextView
                     android:id="@+id/tv_menu5"
@@ -218,7 +218,7 @@
                     android:id="@+id/imageView6"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
-                    android:src="@drawable/conan7" />
+                    android:src="@drawable/ic_explore_grey600_48dp" />
 
                 <TextView
                     android:id="@+id/tv_menu6"
@@ -247,7 +247,7 @@
                     android:id="@+id/imageView7"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
-                    android:src="@drawable/kenan" />
+                    android:src="@drawable/ic_translate_grey600_48dp" />
 
                 <TextView
                     android:id="@+id/tv_menu7"
@@ -281,12 +281,20 @@
                 android:background="@drawable/background_tab"
                 android:padding="16dp">
 
+                <ImageView
+                    android:id="@+id/imageViewExit"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/ic_vpn_key_grey600_48dp" />
+
                 <TextView
                     android:id="@+id/exit"
                     style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/imageViewExit"
+                    android:layout_marginLeft="16dp"
                     android:text="退出当前账号" />
             </RelativeLayout>
 

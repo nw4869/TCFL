@@ -32,13 +32,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     public static int IMVT_COM_MSG = 0;
     //自己发出的信息
     public static int IMVT_TO_MSG = 1;
-    private final UserController mUserController;
     private final User mUser1;
     private final User mUser2;
 
     private List<ChatMsg> mData;
-//    private int uid1;
-//    private int uid2;
 
     private Context mContext;
 
@@ -49,55 +46,47 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     public ChatAdapter(Context mContext, List<ChatMsg> data, User user1, User user2) {
         this.mContext = mContext;
         this.mData = data;
-//        this.uid1 = uid1;
-//        this.uid2 = uid2;
         mUser1 = user1;
         mUser2 = user2;
-        mUserController = new UserController(mContext);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        View left;
-        View right;
+        ImageView avatar;
+        TextView content;
+        TextView time;
 
-        ImageView userheadLeft;
-        TextView chatcontentLeft;
-        TextView timeLeft;
-
-        ImageView userheadRight;
-        TextView chatcontentRight;
-        TextView timeRight;
-
-        public ViewHolder(View itemView) {
+        public ViewHolder(View itemView, int type) {
             super(itemView);
-            left = ((ViewGroup)itemView).getChildAt(0);
-            userheadLeft = (ImageView) left.findViewById(R.id.iv_userhead);
-            chatcontentLeft = (TextView) left.findViewById(R.id.tv_chatcontent);
-            timeLeft = (TextView) left.findViewById(R.id.tv_sendtime);
 
-            right = ((ViewGroup)itemView).getChildAt(1);
-            userheadRight = (ImageView) right.findViewById(R.id.iv_userhead);
-            chatcontentRight = (TextView) right.findViewById(R.id.tv_chatcontent);
-            timeRight = (TextView) right.findViewById(R.id.tv_sendtime);
+            avatar = (ImageView) itemView.findViewById(R.id.iv_userhead);
+            content = (TextView) itemView.findViewById(R.id.tv_chatcontent);
+            time = (TextView) itemView.findViewById(R.id.tv_sendtime);
         }
     }
 
+    @Override
+    public int getItemViewType(int position) {
+
+        return mData.get(position).getComMeg();
+    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View left = LayoutInflater.from(mContext).inflate(R.layout.chat_item_left, null);
-        View right = LayoutInflater.from(mContext).inflate(R.layout.chat_item_right, null);
-        ViewGroup v = new LinearLayout(mContext);
-        v.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        v.addView(left);
-        v.addView(right);
-        ViewHolder vh = new ViewHolder(v);
-        return vh;
+
+        View v;
+        if (viewType == ChatMsg.MSG_IS_COMING) {
+            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_item_left, parent, false);
+        } else {
+            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_item_right, parent, false);
+        }
+
+        return new ViewHolder(v, viewType);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+
         ChatMsg data = mData.get(position);
         boolean near = false;
         if (position > 0) {
@@ -111,47 +100,23 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 near = true;
             }
         }
-        if (data.getComMeg() == 0) {
-            //自己
-            holder.left.setVisibility(View.GONE);
-            holder.right.setVisibility(View.VISIBLE);
-            holder.chatcontentRight.setText(data.getContent());
-            if (near) {
-                holder.timeRight.setVisibility(View.GONE);
-            }
-            holder.timeRight.setText(data.getDate());
-            //从服务器加载图片
-//            imageLoader.displayImage(Dummy.getImgURLList()[0], holder.userheadRight, options);
-//            User user = mUserController.getUser(uid1);
-            User user = mUser1;
-            if (user != null) {
-                imageLoader.displayImage(user.getAvatarUrl(), holder.userheadRight, options);
-                holder.userheadRight.setOnClickListener(new AvatarOnClickListener(mContext, user.getUsername()));
-            }
-
-
-//            User user = Dummy.getUser(mCommentItems[position].getUsername());
-//            if (user != null) {
-//                imageLoader.displayImage(user.getAvatarUrl(), holder.imageView1, options);
-//            }
-//            imageLoader.displayImage(user.getAvatarUrl(), holder.imageView1, options);
-
+        holder.content.setText(data.getContent());
+        holder.content.setTextIsSelectable(true);
+        holder.content.setSelectAllOnFocus(true);
+        if (near) {
+            holder.time.setVisibility(View.GONE);
+        }
+        holder.time.setText(data.getDate());
+        User user;
+        if (holder.getItemViewType() == ChatMsg.MSG_IS_COMING) {
+            user = mUser2;
         } else {
-            holder.left.setVisibility(View.VISIBLE);
-            holder.right.setVisibility(View.GONE);
-            holder.chatcontentLeft.setText(data.getContent());
-            if (near) {
-                holder.timeLeft.setVisibility(View.GONE);
-            }
-            holder.timeLeft.setText(data.getDate());
-            //从服务器加载图片
-//            imageLoader.displayImage(Dummy.getImgURLList()[1], holder.userheadLeft, options);
-//            User user = mUserController.getUser(uid2);
-            User user = mUser2;
-            if (user != null) {
-                imageLoader.displayImage(user.getAvatarUrl(), holder.userheadLeft, options);
-                holder.userheadLeft.setOnClickListener(new AvatarOnClickListener(mContext, user.getUsername()));
-            }
+            user = mUser1;
+        }
+        //从服务器加载图片
+        if (user != null) {
+            imageLoader.displayImage(user.getAvatarUrl(), holder.avatar, options);
+            holder.avatar.setOnClickListener(new AvatarOnClickListener(mContext, user.getUsername()));
         }
     }
 

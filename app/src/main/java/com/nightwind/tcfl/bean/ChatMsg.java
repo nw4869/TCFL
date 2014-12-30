@@ -8,6 +8,10 @@ import java.util.List;
 
 public class ChatMsg {
     private static final String TAG = ChatMsg.class.getSimpleName();
+
+    public static final int MSG_IS_COMING = 1;
+    public static final int MSG_IS_SELF = 0;
+
     //名字
     private String name;
     //日期

@@ -29,7 +29,7 @@
         android:id="@+id/buttonFloatAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right|end|bottom"
+        android:layout_gravity="end|bottom"
         android:background="@color/colorPrimary"
         materialdesign:animate="true"
         materialdesign:iconFloat="@drawable/ic_action_new" />

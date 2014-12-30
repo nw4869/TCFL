@@ -7,7 +7,6 @@ import com.nightwind.tcfl.Auth;
 import com.nightwind.tcfl.bean.Article;
 import com.nightwind.tcfl.bean.Comment;
 import com.nightwind.tcfl.bean.User;
-import com.nightwind.tcfl.fragment.ArticleRecyclerFragment;
 import com.nightwind.tcfl.server.ServerConfig;
 import com.nightwind.tcfl.tool.BaseTools;
 import com.nightwind.tcfl.tool.encryptionUtil.RSAUtils;
@@ -111,22 +110,75 @@ public class ArticleController {
         return sCollectionList;
     }
     public boolean addCollection(Article article) {
-        if (sCollectionList.contains(article)) {
-            return false;
-        } else {
-            sCollectionList.add(article);
-            article.setCollected(true);
-            return true;
-        }
+//        if (sCollectionList.contains(article)) {
+//            return false;
+//        } else {
+//            sCollectionList.add(article);
+//            article.setCollected(true);
+//            return true;
+//        }
+        return collectionToServer(article.getId(), true);
     }
     public boolean removeCollection(Article article) {
-        if (!sCollectionList.contains(article)) {
+//        if (!sCollectionList.contains(article)) {
+//            return false;
+//        } else {
+//            sCollectionList.remove(article);
+//            article.setCollected(false);
+//            return true;
+//        }
+        return collectionToServer(article.getId(), false);
+    }
+
+    public boolean collectionToServer(int articleId, boolean isAdd) {
+
+        Auth auth = new Auth(mContext);
+        String token = auth.getToken();
+
+        String urlStr = ServerConfig.getServer() + "MyLogin/Collection";
+        HttpPost request = new HttpPost(urlStr);
+        List<NameValuePair> params = new ArrayList<>();
+        if (token == null) {
+            System.out.println("本地token不存在");
             return false;
-        } else {
-            sCollectionList.remove(article);
-            article.setCollected(false);
-            return true;
         }
+
+        //RSA加密token
+        String strPublicKey = auth.getPublicKey();
+        String cipherToken;
+        try {
+            cipherToken = RSAUtils.encrypt(token, strPublicKey);
+        } catch (Exception e) {
+            System.out.println("RSA加密Token失败");
+            return false;
+        }
+
+        String selfUsername = auth.getUsername();
+        params.add(new BasicNameValuePair("token", cipherToken));
+        params.add(new BasicNameValuePair("username", selfUsername));
+        params.add(new BasicNameValuePair("articleId", String.valueOf(articleId)));
+        params.add(new BasicNameValuePair("isAdd", String.valueOf(isAdd)));
+
+        try {
+            //设置请求参数项
+            request.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
+            HttpClient Client = ServerConfig.getHttpClient();
+            //执行请求返回相应
+            HttpResponse response = Client.execute(request);
+
+            //判断是否请求成功
+            if (response.getStatusLine().getStatusCode() == 200) {
+                //获得响应信息
+                String responseMsg = EntityUtils.toString(response.getEntity());
+                JSONObject jsonObject = new JSONObject(responseMsg);
+                if(jsonObject.getBoolean("success")) {
+                    return true;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     /**
@@ -331,7 +383,8 @@ public class ArticleController {
                                 //
                             }
                             if (type == GET_ARTICLE_TYPE_MY_COLLECTION) {
-                                article.setCollected(true);
+//                                article.setCollected(true);
+                                article.setIsCollected(1);
                             }
                         }
                     }
@@ -498,6 +551,30 @@ public class ArticleController {
 
         List<NameValuePair> params = new ArrayList<>();
         params.add(new BasicNameValuePair("articleId", String.valueOf(articleId)));
+
+        final Auth auth = new Auth(mContext);
+        String username = auth.getUsername();
+        String token = auth.getToken();
+
+        if (username != null) {
+
+            if (token == null) {
+                System.out.println("本地token不存在");
+                return null;
+            }
+            //RSA加密token
+            String strPublicKey = auth.getPublicKey();
+            String cipherToken;
+            try {
+                cipherToken = RSAUtils.encrypt(token, strPublicKey);
+            } catch (Exception e) {
+                System.out.println("RSA加密Token失败");
+                return null;
+            }
+
+            params.add(new BasicNameValuePair("username", username));
+            params.add(new BasicNameValuePair("token", cipherToken));
+        }
 
         try {
             //设置请求参数项

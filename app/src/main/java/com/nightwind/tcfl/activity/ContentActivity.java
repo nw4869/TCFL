@@ -1,6 +1,8 @@
 package com.nightwind.tcfl.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -18,6 +20,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
+import com.gc.materialdesign.views.ProgressBarCircularIndetermininate;
+import com.gc.materialdesign.widgets.Dialog;
 import com.nightwind.tcfl.Auth;
 import com.nightwind.tcfl.adapter.CommentAdapter;
 import com.nightwind.tcfl.R;
@@ -35,7 +39,7 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
     private static final java.lang.String ARG_ARTICLE_ID = "articleId";
     private static final int LOAD_ARTICLE = 0;
     private static final int LOAD_COMMENT = 1;
-    private Article mArticle;
+    private Article mArticle = new Article();
     private List<Comment> mCommentList;
 
     //Comment Items
@@ -58,6 +62,7 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
 
     private final int REQUEST_LOGIN = 0;
     private final int REQUEST_ADD_COMMENT = 1;
+    private ProgressBarCircularIndetermininate mProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +79,7 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
 
         mArticleId = getIntent().getIntExtra("articleId", 0);
 
+        mProgressBar = (ProgressBarCircularIndetermininate) findViewById(R.id.progressBarCircularIndetermininate);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.comment_recycler_view);
         mRecyclerView.setHasFixedSize(true);
@@ -83,8 +89,8 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
 
 //        mAdapter = new CommentAdapter(this, mArticle.getCommentEntities());
 //        mAdapter = new CommentAdapter(this, mArticle, mClassify, mRowId, mArticleId);
-//        mAdapter = new CommentAdapter(this, mArticle);
-//        mRecyclerView.setAdapter(mAdapter);
+        mAdapter = new CommentAdapter(this, mArticle);
+        mRecyclerView.setAdapter(mAdapter);
 
         mGestureDetector = new GestureDetector(this,  this);
 
@@ -114,10 +120,12 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
 
         @Override
         public void onLoadFinished(Loader<Article> loader, Article data) {
-            mArticle = data;
-            if (mArticle != null) {
+            if (data != null) {
+                mArticle = data;
                 replaceComment();
                 updateUI();
+            } else {
+                Toast.makeText(getApplicationContext(), R.string.load_failed, Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -136,10 +144,14 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
 
         @Override
         public void onLoadFinished(Loader<List<Comment>> loader, List<Comment> data) {
-            mCommentList = data;
-            if (mArticle != null) {
-                replaceComment();
-                updateUI();
+            if (data != null) {
+                mCommentList = data;
+                if (mArticle != null) {
+                    replaceComment();
+                    updateUI();
+                }
+            } else {
+                Toast.makeText(getApplicationContext(), R.string.load_failed, Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -150,6 +162,10 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
     }
 
     private void updateUI() {
+
+        if (mArticle.getCommentEntities().size() != 0) {
+            mProgressBar.setVisibility(View.GONE);
+        }
 
 //        ArticleController articleController = new ArticleController(this);
 //        mArticle = articleController.getArticle(mArticleId);
@@ -189,7 +205,7 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
         mShareActionProvider.setShareIntent(intent);
 
         //收藏按钮
-        if (mArticle.isCollected()) {
+        if (mArticle.getIsCollected() == 1) {
             mMenu.getItem(1).setVisible(false);
             mMenu.getItem(2).setVisible(true);
         } else {
@@ -234,18 +250,16 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
             } else {
                 if (id == R.id.action_to_collect) {
 //            mArticle.setCollected(true);
-                    ArticleController ac = new ArticleController(this);
-                    ac.addCollection(mArticle);
-                    mMenu.getItem(1).setVisible(false);
-                    mMenu.getItem(2).setVisible(true);
-                    Toast.makeText(this, "收藏成功", Toast.LENGTH_SHORT).show();
+//                    ArticleController ac = new ArticleController(this);
+//                    ac.addCollection(mArticle);
+//                    Toast.makeText(this, "收藏成功", Toast.LENGTH_SHORT).show();
+                    new CollectionTask(true).execute();
                 } else if (id == R.id.action_to_not_collect) {
 //            mArticle.setCollected(false);
-                    ArticleController ac = new ArticleController(this);
-                    ac.removeCollection(mArticle);
-                    mMenu.getItem(1).setVisible(true);
-                    mMenu.getItem(2).setVisible(false);
-                    Toast.makeText(this, "取消收藏", Toast.LENGTH_SHORT).show();
+//                    ArticleController ac = new ArticleController(this);
+//                    ac.removeCollection(mArticle);
+//                    Toast.makeText(this, "取消收藏", Toast.LENGTH_SHORT).show();
+                    new CollectionTask(false).execute();
                 }
             }
 
@@ -279,6 +293,63 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
         getSupportLoaderManager().restartLoader(LOAD_ARTICLE, args, new ArticleLoaderCallbacks());
         getSupportLoaderManager().restartLoader(LOAD_COMMENT, args, new CommentLoaderCallbacks());
     }
+
+    class CollectionTask extends AsyncTask<Boolean, Void, Boolean> {
+
+        private final boolean isAdd;
+
+        public CollectionTask(boolean isAdd) {
+            this.isAdd = isAdd;
+        }
+
+        ProgressDialog mDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mDialog = new ProgressDialog(ContentActivity.this);
+
+            String message = null;
+            if (isAdd) {
+                message = "正在收藏，请稍后...";
+            } else {
+                message = "正在取消收藏，请稍后...";
+            }
+
+            mDialog.setMessage(message);
+            mDialog.show();
+        }
+
+        @Override
+        protected Boolean doInBackground(Boolean... params) {
+            return new ArticleController(ContentActivity.this).collectionToServer(mArticleId,isAdd);
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+            mDialog.cancel();
+            String msg = isAdd ? "" : "取消";
+            if (aBoolean) {
+                msg += "收藏成功";
+                if (isAdd) {
+                    mMenu.getItem(1).setVisible(false);
+                    mMenu.getItem(2).setVisible(true);
+                } else {
+                    mMenu.getItem(1).setVisible(true);
+                    mMenu.getItem(2).setVisible(false);
+                }
+            } else {
+                msg += "收藏失败，请重试";
+            }
+            Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+
+
+
 
     ///////////////////////////////////////////////////////
     //右划关闭

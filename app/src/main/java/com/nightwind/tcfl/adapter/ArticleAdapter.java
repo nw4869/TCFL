@@ -263,7 +263,9 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
 //            System.out.println("mListItems=" + mListItems.toString());
             holder.mTextView1.setText(article.getTitle());
             holder.mTextView2.setText(article.getNewsAbstract());
-            String date = article.getDate();
+//            String date = article.getDate();
+            //改成最近更新的时间
+            String date = article.getLastDate();
             String newDate = date;
             if (BaseTools.isInCurrentYear(date)) {
                 newDate = BaseTools.getMonthAndDay(date) + " " +BaseTools.getTime(date);

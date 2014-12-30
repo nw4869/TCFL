@@ -14,6 +14,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gc.materialdesign.views.ButtonFloat;
 import com.gc.materialdesign.views.ProgressBarCircularIndetermininate;
@@ -59,6 +61,7 @@ public class FriendsFragment extends Fragment{
     private SwipeRefreshLayout mSwipeLayout;
     private ButtonFloat mButtonFloatAdd;
     private ProgressBarCircularIndetermininate mProgressBar;
+    private TextView mEmpty;
 
 
     /**
@@ -92,23 +95,6 @@ public class FriendsFragment extends Fragment{
     }
 
     private void initData() {
-//        ArrayList<Integer> friends = mUserController.getSelfUser().getFriendsUidList();
-//        mFriendsList.clear();
-//        for (Integer uid: friends) {
-//            User friend = mUserController.getUser(uid);
-//            //蕴含关系
-//            if (mOnline && !friend.isOnline()) {
-//                continue;
-//            }
-//            mFriendsList.add(friend);
-//        }
-//        //按用户名升序排列
-//        Collections.sort(mFriendsList, new Comparator<User>() {
-//            @Override
-//            public int compare(User lhs, User rhs) {
-//                return lhs.getUsername().compareTo(rhs.getUsername());
-//            }
-//        });
         Bundle bundle = new Bundle();
         bundle.putInt(ARG_ONLINE, mOnline ? 1 : 0);
         getLoaderManager().restartLoader(LOAD_FRIENDS, bundle, new FriendsLoaderCallbacks());
@@ -129,10 +115,17 @@ public class FriendsFragment extends Fragment{
 //                ((LinearLayoutManager) mLayoutManager).scrollToPositionWithOffset(lastPosition, lastOffset);
                 mFriendsList.clear();
                 mFriendsList.addAll(data);
+                if (data.size() == 0) {
+                    mEmpty.setVisibility(View.VISIBLE);
+                } else {
+                    mEmpty.setVisibility(View.GONE);
+                }
+                updateUI();
+            } else {
+                Toast.makeText(getActivity(), R.string.load_failed, Toast.LENGTH_SHORT).show();
             }
 //            firstLoadData = false;
 //            mSwipeLayout.setRefreshing(false);
-            updateUI();
             mSwipeLayout.setRefreshing(false);
             mProgressBar.setVisibility(View.GONE);
         }
@@ -157,6 +150,8 @@ public class FriendsFragment extends Fragment{
 
         mProgressBar = (ProgressBarCircularIndetermininate) rootView.findViewById(R.id.progressBarCircularIndetermininate);
 
+        mEmpty = (TextView) rootView.findViewById(R.id.tv_empty);
+
         //ButtonFloat
         mButtonFloatAdd = (ButtonFloat) rootView.findViewById(R.id.buttonFloatAdd);
         mButtonFloatAdd.setOnClickListener(new View.OnClickListener() {
@@ -174,10 +169,12 @@ public class FriendsFragment extends Fragment{
 
         //下拉刷新
         mSwipeLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh);
-//        mSwipeLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
-//                android.R.color.holo_green_light,
-//                android.R.color.holo_orange_light,
-//                android.R.color.holo_red_light);
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            mSwipeLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
+                    android.R.color.holo_green_light,
+                    android.R.color.holo_orange_light,
+                    android.R.color.holo_red_light);
+        }
         mSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

@@ -14,5 +14,6 @@
         <attr name="pstsShouldExpand" format="boolean" />
         <attr name="pstsTextAllCaps" format="boolean" />
     </declare-styleable>
+    <attr name="textAppearanceLarge" format="reference" />
 
 </resources>

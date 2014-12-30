@@ -1,7 +1,10 @@
 package com.nightwind.tcfl.fragment;
 
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,6 +14,7 @@ import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -24,6 +28,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.gc.materialdesign.views.ProgressBarCircularIndetermininate;
 import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.adapter.ChatAdapter;
 import com.nightwind.tcfl.bean.ChatMsg;
@@ -34,6 +39,7 @@ import com.nightwind.tcfl.server.ChatMsgLoader;
 import com.nightwind.tcfl.server.UserLoader;
 import com.nightwind.tcfl.server.UsersLoader;
 import com.nightwind.tcfl.tool.BaseTools;
+import com.nightwind.tcfl.tool.ExampleUtil;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -63,14 +69,29 @@ public class ChatFragment extends Fragment {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
+    private ProgressBarCircularIndetermininate mProgressBar;
     private Button mbtnSend;
     private EditText mEditTextContent;
     private UserController mUserController;
     private ChatMsgController mChatMsgController;
     private String mUsername1;
-    private String mUsername2;
+    public String mUsername2;
     private User mUser1;
     private User mUser2;
+
+    private static boolean isForeground;
+    private static String lastUsername;
+    public static String getChattingUsername() {
+        if (isForeground) {
+            return lastUsername;
+        } else {
+            return "";
+        }
+    }
+
+    public String getUsername2() {
+        return mUsername2;
+    }
 //    private SwipeRefreshLayout mSwipeLayout;
 
     /**
@@ -108,7 +129,7 @@ public class ChatFragment extends Fragment {
 //            mUid1 = getArguments().getInt(ARG_UID1);
 //            mUid2 = getArguments().getInt(ARG_UID2);
             mUsername1 = getArguments().getString(ARG_USERNAME1);
-            mUsername2 = getArguments().getString(ARG_USERNAME2);
+            mUsername2 = lastUsername = getArguments().getString(ARG_USERNAME2);
         }
         mUserController = new UserController(getActivity());
         mChatMsgController = new ChatMsgController(getActivity());
@@ -140,6 +161,8 @@ public class ChatFragment extends Fragment {
         mLayoutManager.generateLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         mRecyclerView.setLayoutManager(mLayoutManager);
 
+        mProgressBar = (ProgressBarCircularIndetermininate) rootView.findViewById(R.id.progressBarCircularIndetermininate);
+
 
 //        //下拉刷新
 //        mSwipeLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh);
@@ -161,9 +184,32 @@ public class ChatFragment extends Fragment {
         return rootView;
     }
 
-    private void refreshList() {
+    public void refreshList() {
 
-        getLoaderManager().restartLoader(LOAD_CHAT_MSG, getArguments(), new ChatMsgLoaderCallbacks());
+        mProgressBar.setVisibility(View.VISIBLE);
+        int err_times = 0;
+        while (err_times < 3) {
+            try {
+                getLoaderManager().restartLoader(LOAD_CHAT_MSG, getArguments(), new ChatMsgLoaderCallbacks());
+                final int INF = 100000000;
+                err_times = INF;
+                return ;
+            } catch (Exception e) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+//                e.printStackTrace();
+                err_times++;
+                Log.e("refreshChatLog", "getLoaderManager error time = " + err_times);
+            }
+        }
+        try {
+            Toast.makeText(getActivity(), R.string.load_failed, Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -186,10 +232,16 @@ public class ChatFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mUserController.closeDB();
-        mChatMsgController.closeDB();
+    public void onResume() {
+        super.onResume();
+        isForeground = true;
+        hideSoftInput();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        isForeground = false;
     }
 
     //    @Override
@@ -220,11 +272,16 @@ public class ChatFragment extends Fragment {
 
         @Override
         public void onLoadFinished(Loader<User[]> loader, User[] data) {
-            mUser1 = data[0];
-            mUser2 = data[1];
-            mMsgs = mChatMsgController.getMsg(mUser2.getUid());
+            if (data[0] != null && data[1] != null) {
+                mUser1 = data[0];
+                mUser2 = data[1];
+                mMsgs = mChatMsgController.getMsg(mUser2.getUid());
 //            updateUI();
-            getLoaderManager().restartLoader(LOAD_CHAT_MSG, getArguments(), new ChatMsgLoaderCallbacks());
+                getLoaderManager().restartLoader(LOAD_CHAT_MSG, getArguments(), new ChatMsgLoaderCallbacks());
+            } else {
+                Toast.makeText(getActivity(), R.string.load_failed, Toast.LENGTH_SHORT).show();
+                mProgressBar.setVisibility(View.GONE);
+            }
         }
 
         @Override
@@ -242,10 +299,16 @@ public class ChatFragment extends Fragment {
 
         @Override
         public void onLoadFinished(Loader<List<ChatMsg>> loader, List<ChatMsg> data) {
-            mChatMsgController.setMsg(mUser2.getUid(), data);
-            mMsgs = data;
-            updateUI();
+            if (data != null) {
+                mChatMsgController.setMsg(mUser2.getUid(), data);
+                mMsgs = data;
+                updateUI();
+                mProgressBar.setVisibility(View.GONE);
 //            mSwipeLayout.setRefreshing(false);
+            } else {
+                Toast.makeText(getActivity(), R.string.load_failed, Toast.LENGTH_SHORT).show();
+                mProgressBar.setVisibility(View.GONE);
+            }
         }
 
         @Override
@@ -338,4 +401,6 @@ public class ChatFragment extends Fragment {
                     hideSoftInputFromWindow(mEditTextContent.getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
         }
     }
+
+
 }

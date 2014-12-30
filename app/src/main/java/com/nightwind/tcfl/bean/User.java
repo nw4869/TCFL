@@ -13,7 +13,7 @@ public class User {
     private String username, password, salt, email, work, info, school, tel;
     private String hobby;
     private String avatarUrl;
-    private ArrayList<Integer> friendsUidList = new ArrayList<>();
+//    private ArrayList<Integer> friendsUidList = new ArrayList<>();
     private int online;
 
     static public int eduNum = 6;
@@ -181,13 +181,13 @@ public class User {
         this.avatarUrl = avatarUrl;
     }
 
-    public ArrayList<Integer> getFriendsUidList() {
-        return friendsUidList;
-    }
-
-    public void setFriendsUidList(ArrayList<Integer> friendsUidList) {
-        this.friendsUidList = friendsUidList;
-    }
+//    public ArrayList<Integer> getFriendsUidList() {
+//        return friendsUidList;
+//    }
+//
+//    public void setFriendsUidList(ArrayList<Integer> friendsUidList) {
+//        this.friendsUidList = friendsUidList;
+//    }
 
     public int getOnline() {
         return online;
@@ -216,7 +216,7 @@ public class User {
         this.tel = tel;
         this.hobby = hobby;
         this.avatarUrl = avatarUrl;
-        this.friendsUidList = friendsUidList;
+//        this.friendsUidList = friendsUidList;
         this.online = online;
     }
 
@@ -225,29 +225,29 @@ public class User {
      * @param uid
      * @return
      */
-    public boolean addFriend(int uid) {
-        if (friendsUidList.contains(uid)) {
-            return false;
-        } else {
-            //todo 检查用户是否存在
-            friendsUidList.add(uid);
-            return true;
-        }
-    }
+//    public boolean addFriend(int uid) {
+//        if (friendsUidList.contains(uid)) {
+//            return false;
+//        } else {
+//            //todo 检查用户是否存在
+//            friendsUidList.add(uid);
+//            return true;
+//        }
+//    }
 
     /**
      * 删除好友
-     * @param uid
+     * @param
      * @return
      */
-    public boolean delFriend(int uid) {
-        if (!friendsUidList.contains(uid)) {
-            return false;
-        } else {
-            friendsUidList.remove((Integer)uid);
-            return true;
-        }
-    }
+//    public boolean delFriend(int uid) {
+//        if (!friendsUidList.contains(uid)) {
+//            return false;
+//        } else {
+//            friendsUidList.remove((Integer)uid);
+//            return true;
+//        }
+//    }
 
     public static User fromJson(String json) {
         Gson gson = new Gson();

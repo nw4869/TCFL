@@ -12,12 +12,12 @@
     <!--<item android:id="@+id/action_settings" android:title="@string/action_settings"-->
         <!--android:orderInCategory="100" app:showAsAction="never" />-->
     <item android:id="@+id/action_add_comment" android:title="@string/action_add_comment"
-        android:icon="@drawable/comment2"
+        android:icon="@drawable/ic_create_white_48dp"
         android:orderInCategory="1" app:showAsAction="ifRoom" />
     <item android:id="@+id/action_to_collect" android:title="@string/action_collect"
-        android:icon="@drawable/collect_not"
+        android:icon="@drawable/ic_star_outline_white_48dp"
         android:orderInCategory="2" app:showAsAction="ifRoom" />
     <item android:id="@+id/action_to_not_collect" android:title="@string/action_to_not_collect"
-        android:icon="@drawable/collected"
+        android:icon="@drawable/ic_star_white_48dp"
         android:orderInCategory="3" app:showAsAction="ifRoom" />
 </menu>

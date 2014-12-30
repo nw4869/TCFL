@@ -6,6 +6,7 @@ import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.view.ViewHelper;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -16,6 +17,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.Bitmap.Config;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.animation.BounceInterpolator;
 import android.widget.ImageView;
@@ -146,7 +148,8 @@ public class ButtonFloat extends Button{
 		return drawableIcon;
 	}
 
-	public void setDrawableIcon(Drawable drawableIcon) {
+	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    public void setDrawableIcon(Drawable drawableIcon) {
 		this.drawableIcon = drawableIcon;
 		try {
 			icon.setBackground(drawableIcon);

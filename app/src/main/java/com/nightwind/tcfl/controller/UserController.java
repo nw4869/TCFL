@@ -54,49 +54,49 @@ public class UserController {
         mContext = context;
         mUDBMgr = new UserDBManager(mContext);
         if (sUidMap == null) {
-            randGenUsers(50);
+//            randGenUsers(50);
         }
     }
 
-    public void randGenUsers(int n) {
-        Random random = new Random();
-        for (int i = 1; i <= n; i++) {
-            int uid = i;
-            User user = new User();
-            user.setUid(uid);
-            if (uid == 1) {
-                user.setUsername("nw");
-            } else {
-                user.setUsername("user" + user.getUid());
-            }
-            user.setLevel(random.nextInt(100) + 1);
-            user.setAge(random.nextInt(60) + 1);
-            user.setInfo("Hello World");
-            user.setSex(random.nextInt(2));
-            user.setEdu(random.nextInt(User.eduNum));
-            user.setWork("IT");
-            user.setHobby("Programming");
-
-            //头像
-            user.setAvatarUrl(ServerConfig.getServer() +"img/conan" + uid + ".jpg");
-
-            //添加好友
-            int m = random.nextInt(n / 2) + 2;
-            for (int j = 0; j < m; j++) {
-                int friendUid = random.nextInt(n) + 1;
-                if (friendUid == uid || !user.addFriend(friendUid)) {
-                    j--;
-                    continue;
-                }
-            }
-            //在线状态
-//            user.setOnline(uid % 2 == 0);
-
-//            sUsersList.add(user);
-            sUidMap.put(uid, user);
-            sUsernameMap.put(user.getUsername(), user);
-        }
-    }
+//    public void randGenUsers(int n) {
+//        Random random = new Random();
+//        for (int i = 1; i <= n; i++) {
+//            int uid = i;
+//            User user = new User();
+//            user.setUid(uid);
+//            if (uid == 1) {
+//                user.setUsername("nw");
+//            } else {
+//                user.setUsername("user" + user.getUid());
+//            }
+//            user.setLevel(random.nextInt(100) + 1);
+//            user.setAge(random.nextInt(60) + 1);
+//            user.setInfo("Hello World");
+//            user.setSex(random.nextInt(2));
+//            user.setEdu(random.nextInt(User.eduNum));
+//            user.setWork("IT");
+//            user.setHobby("Programming");
+//
+//            //头像
+//            user.setAvatarUrl(ServerConfig.getServer() +"img/conan" + uid + ".jpg");
+//
+//            //添加好友
+//            int m = random.nextInt(n / 2) + 2;
+//            for (int j = 0; j < m; j++) {
+//                int friendUid = random.nextInt(n) + 1;
+//                if (friendUid == uid || !user.addFriend(friendUid)) {
+//                    j--;
+//                    continue;
+//                }
+//            }
+//            //在线状态
+////            user.setOnline(uid % 2 == 0);
+//
+////            sUsersList.add(user);
+//            sUidMap.put(uid, user);
+//            sUsernameMap.put(user.getUsername(), user);
+//        }
+//    }
 
     //debug
     public ArrayList<User> getAllDBUser() {
@@ -147,9 +147,9 @@ public class UserController {
 //        if (sUsernameMap.put(user.getUsername(), user) == null) {
 //            ok += 1 << 2;
 //        }
-        if (!insertToDB(user)) {
-            ok += 1 << 3;
-        }
+//        if (!insertToDB(user)) {
+//            ok += 1 << 3;
+//        }
         return ok;
     }
 
@@ -266,12 +266,17 @@ public class UserController {
         return user;
     }
 
+    /**
+     *
+     * @param isOnline
+     * @return 失败返回null
+     */
     public List<User> getFriendList(int isOnline) {
         Auth auth = new Auth(mContext);
         String username = auth.getUsername();
         String token = auth.getToken();
 
-        List<User> friendList = new ArrayList<>();
+        List<User> friendList = null;
 
         String urlStr = ServerConfig.getServer() + "MyLogin/GetFriendList";
         HttpPost request = new HttpPost(urlStr);
@@ -377,6 +382,179 @@ public class UserController {
                     }
                 } catch (Exception e) {
                     Log.e("AddFriend", "JSON ERROR");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean delFriend(String username2) {
+
+        Auth auth = new Auth(mContext);
+        String username = auth.getUsername();
+        String token = auth.getToken();
+
+        String urlStr = ServerConfig.getServer() + "MyLogin/RemoveFriend";
+        HttpPost request = new HttpPost(urlStr);
+
+        if (token == null) {
+            System.out.println("本地token不存在");
+            return false;
+        }
+        //RSA加密token
+        String strPublicKey = auth.getPublicKey();
+        String cipherToken;
+        try {
+            cipherToken = RSAUtils.encrypt(token, strPublicKey);
+        } catch (Exception e) {
+            System.out.println("RSA加密Token失败");
+            return false;
+        }
+
+        List<NameValuePair> params = new ArrayList<>();
+        params.add(new BasicNameValuePair("token", cipherToken));
+        params.add(new BasicNameValuePair("username", username));
+        params.add(new BasicNameValuePair("username2", username2));
+
+        try {
+            //设置请求参数项
+            request.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
+            HttpClient Client = ServerConfig.getHttpClient();
+            //执行请求返回相应
+            HttpResponse response = Client.execute(request);
+
+            //判断是否请求成功
+            if (response.getStatusLine().getStatusCode() == 200) {
+                //获得响应信息
+                String responseMsg = EntityUtils.toString(response.getEntity());
+                try {
+                    JSONObject jsonObject = new JSONObject(responseMsg);
+                    if(jsonObject.getBoolean("success")) {
+                        //写入内存
+                        return true;
+                    }
+                } catch (Exception e) {
+                    Log.e("RemoveFriend", "JSON ERROR");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean setOnline(int online) {
+
+        Auth auth = new Auth(mContext);
+        String username = auth.getUsername();
+        String token = auth.getToken();
+        String regId = auth.getRegisterId();
+
+        String urlStr = ServerConfig.getServer() + "MyLogin/UserOnline";
+        HttpPost request = new HttpPost(urlStr);
+
+        if (token == null) {
+            System.out.println("本地token不存在");
+            return false;
+        }
+        //RSA加密token
+        String strPublicKey = auth.getPublicKey();
+        String cipherToken;
+        try {
+            cipherToken = RSAUtils.encrypt(token, strPublicKey);
+        } catch (Exception e) {
+            System.out.println("RSA加密Token失败");
+            return false;
+        }
+
+        List<NameValuePair> params = new ArrayList<>();
+        params.add(new BasicNameValuePair("token", cipherToken));
+        params.add(new BasicNameValuePair("username", username));
+        params.add(new BasicNameValuePair("online", String.valueOf(online)));
+        if (regId != null) {
+            params.add(new BasicNameValuePair("regId", regId));
+        }
+
+        try {
+            //设置请求参数项
+            request.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
+            HttpClient Client = ServerConfig.getHttpClient();
+            //执行请求返回相应
+            HttpResponse response = Client.execute(request);
+
+            //判断是否请求成功
+            if (response.getStatusLine().getStatusCode() == 200) {
+                //获得响应信息
+                String responseMsg = EntityUtils.toString(response.getEntity());
+                try {
+                    JSONObject jsonObject = new JSONObject(responseMsg);
+                    if(jsonObject.getBoolean("success")) {
+                        //写入内存
+                        return true;
+                    }
+                } catch (Exception e) {
+                    Log.e("setUserOnline", "JSON ERROR");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean updateUser(User user) {
+
+        Auth auth = new Auth(mContext);
+        String username = auth.getUsername();
+        String token = auth.getToken();
+
+        String urlStr = ServerConfig.getServer() + "MyLogin/UpdateUser";
+        HttpPost request = new HttpPost(urlStr);
+
+        if (token == null) {
+            System.out.println("本地token不存在");
+            return false;
+        }
+        //RSA加密token
+        String strPublicKey = auth.getPublicKey();
+        String cipherToken;
+        try {
+            cipherToken = RSAUtils.encrypt(token, strPublicKey);
+        } catch (Exception e) {
+            System.out.println("RSA加密Token失败");
+            return false;
+        }
+
+        Gson gson = new Gson();
+        String jsonExtra = gson.toJson(user);
+        System.out.println("Update User jsonExtra = " + jsonExtra);
+
+        List<NameValuePair> params = new ArrayList<>();
+        params.add(new BasicNameValuePair("token", cipherToken));
+        params.add(new BasicNameValuePair("username", username));
+        params.add(new BasicNameValuePair("jsonExtra", jsonExtra));
+
+        try {
+            //设置请求参数项
+            request.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
+            HttpClient Client = ServerConfig.getHttpClient();
+            //执行请求返回相应
+            HttpResponse response = Client.execute(request);
+
+            //判断是否请求成功
+            if (response.getStatusLine().getStatusCode() == 200) {
+                //获得响应信息
+                String responseMsg = EntityUtils.toString(response.getEntity());
+                try {
+                    JSONObject jsonObject = new JSONObject(responseMsg);
+                    if(jsonObject.getBoolean("success")) {
+                        //写入内存
+                        return true;
+                    }
+                } catch (Exception e) {
+                    Log.e("setUserOnline", "JSON ERROR");
                 }
             }
         } catch (Exception e) {

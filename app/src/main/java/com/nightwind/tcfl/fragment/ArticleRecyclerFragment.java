@@ -55,6 +55,7 @@ public class ArticleRecyclerFragment extends Fragment {
     public static final int TYPE_WITH_SLIDE_IMAGE = 1;
     public static final int TYPE_COLLECTION = 2;
     public static final int TYPE_MY_ARTICLE = 3;
+    private static final int MENU_DELETE = 0;
 
 
     private int position;
@@ -219,6 +220,8 @@ public class ArticleRecyclerFragment extends Fragment {
             }
 
         });
+        registerForContextMenu(mRecyclerView);
+        mRecyclerView.setOnCreateContextMenuListener(this);
 
 
         //下拉刷新
@@ -252,6 +255,13 @@ public class ArticleRecyclerFragment extends Fragment {
         return v;
     }
 
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        menu.add(this.position, MENU_DELETE, Menu.NONE, R.string.delete_article).setIcon(android.R.drawable.ic_menu_delete);
+
+    }
+
     private void addArticle() {
         Intent intent = new Intent(getActivity(), AddArticleActivity.class);
         intent.putExtra("classify", position);
@@ -271,7 +281,7 @@ public class ArticleRecyclerFragment extends Fragment {
         @Override
         public void onLoadFinished(Loader<ArrayList<Article>> loader, ArrayList<Article> data) {
             mLoadResult = data;
-            if (data != null) {
+            if (data != null && data.size() > 0) {
                 updateUI();
                 //mLayoutManager.scrollToPosition(lastPosition);
                 //这样更精确
@@ -279,7 +289,7 @@ public class ArticleRecyclerFragment extends Fragment {
 //                mAdapter.notifyItemRangeInserted(0, mAdapter.getItemCount());
 
             } else {
-                Toast.makeText(getActivity(), "刷新失败", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "加载失败，请重试", Toast.LENGTH_SHORT).show();
             }
             firstLoadData = false;
             mSwipeLayout.setRefreshing(false);

@@ -51,4 +51,5 @@ dependencies {
     compile files('libs/gson-2.3.1.jar')
     compile project(':RecyclerViewItemAnimators-library')
     compile project(':MaterialDesign')
+    compile files('libs/jpush-sdk-release1.7.1.jar')
 }

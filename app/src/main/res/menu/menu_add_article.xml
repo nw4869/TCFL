@@ -5,6 +5,6 @@
     <!--<item android:id="@+id/action_settings" android:title="@string/action_settings"-->
         <!--android:orderInCategory="100" app:showAsAction="never" />-->
     <item android:id="@+id/action_push_article" android:title="@string/action_push_article"
-        android:icon="@drawable/send"
+        android:icon="@drawable/ic_send_white_48dp"
         android:orderInCategory="1" app:showAsAction="ifRoom" />
 </menu>

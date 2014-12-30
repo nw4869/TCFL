@@ -29,6 +29,8 @@ import com.nightwind.tcfl.widget.PagerSlidingTabStrip;
 
 import java.util.HashMap;
 
+import cn.jpush.android.api.JPushInterface;
+
 public class MainActivity extends ActionBarActivity implements PersonCenterFragment.OnFragmentInteractionListener{
 	private DrawerLayout mDrawerLayout;
 	private ActionBarDrawerToggle mDrawerToggle;
@@ -159,12 +161,24 @@ public class MainActivity extends ActionBarActivity implements PersonCenterFragm
 		mPagerSlidingTabStrip.setIndicatorHeight((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
 				5, getResources().getDisplayMetrics()));
 		// 选中的文字颜色
-		mPagerSlidingTabStrip.setSelectedTextColor(Color.WHITE);
+		mPagerSlidingTabStrip.setSelectedTextColor(Color.BLACK);
 		// 正常文字颜色
-		mPagerSlidingTabStrip.setTextColor(Color.BLACK);
+		mPagerSlidingTabStrip.setTextColor(Color.WHITE);
 	}
 
-//	/**
+    @Override
+    protected void onResume() {
+        super.onResume();
+        JPushInterface.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        JPushInterface.onPause(this);
+    }
+
+    //	/**
 //	 * 界面颜色的更改
 //	 */
 //	@SuppressLint("NewApi")

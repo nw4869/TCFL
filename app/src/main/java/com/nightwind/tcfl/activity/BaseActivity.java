@@ -1,5 +1,6 @@
 package com.nightwind.tcfl.activity;
 
+import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -17,6 +18,7 @@ public abstract class BaseActivity extends ActionBarActivity implements View.OnT
     protected GestureDetector mGestureDetector;
     protected final int verticalMinDistance = 50;
     protected final int minVelocity = 0;
+    private float horizonMinDistance = 10;
 
     /**
      * 必须包含一个toolbar
@@ -32,6 +34,7 @@ public abstract class BaseActivity extends ActionBarActivity implements View.OnT
 
         //初始化工具栏
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.setTitleTextColor(Color.WHITE);
         // toolbar.setLogo(R.drawable.ic_launcher);
 //        mToolbar.setTitle("Profile");// 标题的文字需在setSupportActionBar之前，不然会无效
         // toolbar.setSubtitle("副标题");
@@ -111,9 +114,16 @@ public abstract class BaseActivity extends ActionBarActivity implements View.OnT
         } else if (absdx > 1.5*absdy && e2.getX() - e1.getX() > verticalMinDistance && Math.abs(velocityX) > minVelocity) {
             slideClose();
             return true;
+        } else if (absdy > 1.5*absdx && e2.getY() - e1.getY() > horizonMinDistance && Math.abs(velocityY) > minVelocity) {
+            //下拉
+            lightPushDown();
         }
 
         return false;
+    }
+
+    protected void lightPushDown() {
+
     }
 
 

@@ -7,6 +7,10 @@
     <include layout="@layout/toolbar"
         android:id="@+id/toolbar"/>
 
+    <EditText
+        android:layout_width="0dp"
+        android:layout_height="0dp" />
+
     <RelativeLayout
         android:id="@+id/item0"
         android:layout_below="@id/toolbar"
@@ -22,6 +26,7 @@
             android:layout_alignParentStart="true" />
         <TextView
             android:id="@+id/username"
+            android:hint="username"
             style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -29,18 +34,33 @@
             android:layout_marginStart="16dp"
             android:layout_toRightOf="@+id/avatar"
             android:layout_toEndOf="@+id/avatar" />
-        <TextView
+        <!--<TextView-->
+            <!--android:id="@+id/sign"-->
+            <!--style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"-->
+            <!--android:hint="type your sign"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:ellipsize="end"-->
+            <!--android:maxLines="1"-->
+            <!--android:singleLine="false"-->
+            <!--android:layout_below="@id/username"-->
+            <!--android:layout_alignLeft="@+id/username"-->
+            <!--android:layout_alignStart="@+id/username" />-->
+
+        <EditText
             android:id="@+id/sign"
-            style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
-            android:hint="your sign"
-            android:layout_width="wrap_content"
+            android:hint="type your sign"
+            android:textSize="@dimen/abc_text_size_body_2_material"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:singleLine="false"
+            android:gravity="top"
+            android:singleLine="true"
+            android:maxLength="100"
             android:layout_below="@id/username"
             android:layout_alignLeft="@+id/username"
-            android:layout_alignStart="@+id/username" />
+            android:layout_alignStart="@+id/username"
+            style="?android:attr/textViewStyle"
+            android:background="@null"/>
 
     </RelativeLayout>
     <View
@@ -71,10 +91,11 @@
             android:gravity="center_horizontal"/>
         <TextView
             android:id="@+id/tv_level"
+            android:hint="your level"
             style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
+            android:gravity="top"
             android:layout_marginLeft="80dp" />
     </RelativeLayout>
     <!--分隔符-->
@@ -103,12 +124,19 @@
             android:layout_height="wrap_content"
             android:text="年龄"
             android:gravity="center_horizontal" />
-        <TextView
-            android:id="@+id/tv_age"
-            style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
-            android:layout_width="wrap_content"
+
+        <EditText
+            android:id="@+id/et_age"
+            android:hint="type your age"
+            android:textSize="@dimen/abc_text_size_body_2_material"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
+            android:gravity="top"
+            android:inputType="number"
+            android:singleLine="true"
+            android:maxLength="3"
+            style="?android:attr/textViewStyle"
+            android:background="@null"
             android:layout_marginLeft="80dp" />
     </RelativeLayout>
     <!--分隔符-->
@@ -137,13 +165,23 @@
             android:layout_height="wrap_content"
             android:text="性别"
             android:gravity="center_horizontal" />
-        <TextView
-            android:id="@+id/tv_sex"
-            style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
-            android:layout_width="wrap_content"
+        <!--<TextView-->
+            <!--android:id="@+id/tv_sex"-->
+            <!--android:hint="select your sex"-->
+            <!--style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:gravity="top"-->
+            <!--android:layout_marginLeft="80dp" />-->
+
+        <Spinner
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:layout_marginLeft="80dp" />
+            android:id="@+id/sex_spinner"
+            android:gravity="top"
+            android:layout_marginLeft="72dp"
+            android:layout_alignParentLeft="true" />
+
     </RelativeLayout>
     <!--分隔符-->
     <View
@@ -171,13 +209,19 @@
             android:layout_height="wrap_content"
             android:text="职业"
             android:gravity="center_horizontal" />
-        <TextView
-            android:id="@+id/tv_work"
-            style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
-            android:layout_width="wrap_content"
+        <EditText
+            android:id="@+id/et_work"
+            android:hint="type your work"
+            android:textSize="@dimen/abc_text_size_body_2_material"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
+            android:gravity="top"
+            android:singleLine="true"
+            android:maxLength="20"
+            style="?android:attr/textViewStyle"
+            android:background="@null"
             android:layout_marginLeft="80dp" />
+
     </RelativeLayout>
     <!--分隔符-->
     <View
@@ -206,13 +250,22 @@
             android:layout_height="wrap_content"
             android:text="学历"
             android:gravity="center_horizontal" />
-        <TextView
-            android:id="@+id/tv_edu"
-            style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
-            android:layout_width="wrap_content"
+        <!--<TextView-->
+            <!--android:id="@+id/tv_edu"-->
+            <!--android:hint="select your edu"-->
+            <!--style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:gravity="top"-->
+            <!--android:layout_marginLeft="80dp" />-->
+
+        <Spinner
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:layout_marginLeft="80dp" />
+            android:id="@+id/edu_spinner"
+            android:gravity="top"
+            android:layout_marginLeft="72dp"
+            android:layout_alignParentLeft="true" />
     </RelativeLayout>
     <!--分隔符-->
     <View
@@ -240,12 +293,17 @@
             android:layout_height="wrap_content"
             android:text="爱好"
             android:gravity="center_horizontal" />
-        <TextView
-            android:id="@+id/tv_hobby"
-            style="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
-            android:layout_width="wrap_content"
+        <EditText
+            android:id="@+id/et_hobby"
+            android:hint="type your hobby"
+            android:textSize="@dimen/abc_text_size_body_2_material"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
+            android:gravity="top"
+            android:singleLine="true"
+            android:maxLength="20"
+            style="?android:attr/textViewStyle"
+            android:background="@null"
             android:layout_marginLeft="80dp" />
     </RelativeLayout>
     <!--分隔符-->
@@ -287,6 +345,20 @@
             android:layout_centerVertical="true" />
 
     </RelativeLayout>
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.gc.materialdesign.views.ProgressBarCircularIndetermininate
+            android:layout_gravity="center"
+            android:id="@+id/progressBarCircularIndetermininate"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@color/colorPrimary"/>
+
+    </FrameLayout>
 
 
 </RelativeLayout>
