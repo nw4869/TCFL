@@ -1,0 +1,53 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.nightwind.tcfl.activity.UploadImageActivity">
+
+
+    <include layout="@layout/toolbar"
+        android:id="@+id/toolbar"/>
+
+    <com.gc.materialdesign.views.ProgressBarDetermininate
+        android:id="@+id/progressBar"
+        android:layout_below="@id/toolbar"
+        android:background="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_below="@id/progressBar"
+        android:layout_width="360dp"
+        android:layout_height="360dp"
+        android:src="#FFFFF0"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imageView"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <com.gc.materialdesign.views.ButtonRectangle
+            android:id="@+id/selectImage"
+            android:text="@string/selectImage"
+            android:background="@color/colorPrimary"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            />
+
+        <com.gc.materialdesign.views.ButtonRectangle
+            android:id="@+id/uploadImage"
+            android:layout_marginLeft="16dp"
+            android:text="@string/uploadImage"
+            android:background="@color/colorPrimary"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            />
+
+
+    </LinearLayout>
+</RelativeLayout>

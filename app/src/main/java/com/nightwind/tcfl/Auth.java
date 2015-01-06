@@ -39,6 +39,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -664,6 +665,64 @@ public class Auth {
         msg.what = MSG_LOGOUT_SUCCESS;
         mHandler.sendMessage(msg);
     }
+
+//    public String getUploadToken(String date/*, String resource*/) throws IOException {
+//        String url = "http://192.168.43.243:8081/MyLogin/GetUploadImgToken";
+//
+//        HttpPost request = new HttpPost(url);
+//        List<NameValuePair> params = new ArrayList<>();
+//        params.add(new BasicNameValuePair("username", getUsername()));
+//        params.add(new BasicNameValuePair("token", getToken()));
+//        params.add(new BasicNameValuePair("date", date));
+////        params.add(new BasicNameValuePair("resource", resource));
+//        request.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
+//
+//        HttpResponse httpResponse = new DefaultHttpClient().execute(request);
+//        String token = "";
+//        if (httpResponse.getStatusLine().getStatusCode() == 200) {
+//            token = EntityUtils.toString(httpResponse.getEntity());
+//        }
+//        System.out.println("token = " + token);
+//        return token;
+//    }
+
+
+    /**
+     * 向服务器申请上传令牌
+     * @param type
+     * @return json
+     * @throws IOException
+     */
+    public String getUploadToken(int type) throws IOException {
+
+        String token = getToken();
+        //RSA加密token
+        String strPublicKey = getPublicKey();
+        String cipherToken;
+        try {
+            cipherToken = RSAUtils.encrypt(token, strPublicKey);
+        } catch (Exception e) {
+            System.out.println("RSA加密Token失败");
+            return "";
+        }
+
+//        String url = "http://192.168.1.123:8081/MyLogin/GetUploadImgToken1";
+        String url = ServerConfig.getServer() +  "MyLogin/GetUploadImgToken1";
+        url += "?username=" + URLEncoder.encode(getUsername(), "utf-8");
+        url += "&token=" + URLEncoder.encode(cipherToken, "utf-8");
+        url += "&type=" + URLEncoder.encode(String.valueOf(type), "utf-8");
+
+        HttpGet request = new HttpGet(url);
+
+        HttpResponse httpResponse = ServerConfig.getHttpClient().execute(request);
+        String hrJson = "";
+        if (httpResponse.getStatusLine().getStatusCode() == 200) {
+            hrJson = EntityUtils.toString(httpResponse.getEntity());
+            System.out.println("hrJson = " + hrJson);
+        }
+        return hrJson;
+    }
+
 
 
 //    private boolean isLogin() {

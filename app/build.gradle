@@ -52,4 +52,5 @@ dependencies {
     compile project(':RecyclerViewItemAnimators-library')
     compile project(':MaterialDesign')
     compile files('libs/jpush-sdk-release1.7.1.jar')
+    compile files('libs/oss-0.2.2.jar')
 }

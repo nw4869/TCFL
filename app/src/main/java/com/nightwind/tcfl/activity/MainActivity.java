@@ -2,6 +2,7 @@ package com.nightwind.tcfl.activity;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -16,16 +17,23 @@ import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.Window;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.nightwind.tcfl.Auth;
 import com.nightwind.tcfl.R;
+import com.nightwind.tcfl.bean.User;
 import com.nightwind.tcfl.controller.ArticleController;
 import com.nightwind.tcfl.controller.ChatMsgController;
 import com.nightwind.tcfl.controller.UserController;
 import com.nightwind.tcfl.fragment.ArticleRecyclerFragment;
 import com.nightwind.tcfl.fragment.PersonCenterFragment;
+import com.nightwind.tcfl.tool.Options;
 import com.nightwind.tcfl.widget.PagerSlidingTabStrip;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.HashMap;
 
@@ -39,14 +47,41 @@ public class MainActivity extends ActionBarActivity implements PersonCenterFragm
 	private ViewPager mViewPager;
 	private Toolbar mToolbar;
     private HashMap<Integer, Fragment> mFragments;
+    //图片下载选项
+    DisplayImageOptions options = Options.getListOptions();
+    protected ImageLoader imageLoader = ImageLoader.getInstance();
 
     public static final int REQUEST_ADD_ARTICLE_BASE = 10000;
     public static final int REQUEST_LOGIN = 0;
+    AsyncTask<String, Void, String> mRefreshAvatarTask = new AsyncTask<String, Void, String>() {
+        @Override
+        protected String doInBackground(String... params) {
+            final User selfUser = new UserController(getApplicationContext()).getSelfUser();
+            if (selfUser != null) {
+                return selfUser.getAvatarUrl();
+            } else {
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String avatarUrl) {
+            super.onPostExecute(avatarUrl);
+            //初始化Drawer头像
+            ImageView avatar = (ImageView) mDrawerLayout.findViewById(R.id.avatar);
+            String selfUserName = new Auth(getApplicationContext()).getUsername();
+            if (selfUserName != null) {
+                imageLoader.displayImage(avatarUrl, avatar, options);
+            }
+
+        }
+    };
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+//        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
 //        Auth auth = new Auth(this);
 //        //gen rand data
@@ -71,10 +106,12 @@ public class MainActivity extends ActionBarActivity implements PersonCenterFragm
 
 	private void initViews() {
 		mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.setVisibility(View.VISIBLE);
 		// toolbar.setLogo(R.drawable.ic_launcher);
 		mToolbar.setTitle(R.string.app_name);// 标题的文字需在setSupportActionBar之前，不然会无效
 		// toolbar.setSubtitle("副标题");
 		setSupportActionBar(mToolbar);
+
 		/* 这些通过ActionBar来设置也是一样的，注意要在setSupportActionBar(toolbar);之后，不然就报错了 */
 		// getSupportActionBar().setTitle("标题");
 		// getSupportActionBar().setSubtitle("副标题");
@@ -112,8 +149,9 @@ public class MainActivity extends ActionBarActivity implements PersonCenterFragm
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		/* findView */
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer);
-		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.drawer_open,
-				R.string.drawer_close);
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.drawer_open, R.string.drawer_close);
+//        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open,
+//                R.string.drawer_close);
 		mDrawerToggle.syncState();
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
 
@@ -137,6 +175,7 @@ public class MainActivity extends ActionBarActivity implements PersonCenterFragm
 			public void onPageScrollStateChanged(int arg0) {
 			}
 		});
+
 
 		initTabsValue();
 	}
@@ -170,6 +209,7 @@ public class MainActivity extends ActionBarActivity implements PersonCenterFragm
     protected void onResume() {
         super.onResume();
         JPushInterface.onResume(this);
+        mRefreshAvatarTask.execute();
     }
 
     @Override
@@ -177,6 +217,8 @@ public class MainActivity extends ActionBarActivity implements PersonCenterFragm
         super.onPause();
         JPushInterface.onPause(this);
     }
+
+
 
     //	/**
 //	 * 界面颜色的更改

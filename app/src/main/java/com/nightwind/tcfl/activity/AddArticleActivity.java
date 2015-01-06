@@ -43,6 +43,7 @@ public class AddArticleActivity extends ActionBarActivity {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivityForResult(intent, MainActivity.REQUEST_LOGIN);
             overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+            Toast.makeText(getApplicationContext(), R.string.login_request, Toast.LENGTH_SHORT).show();
             return ;
         }
 
@@ -62,7 +63,7 @@ public class AddArticleActivity extends ActionBarActivity {
         // toolbar.setLogo(R.drawable.ic_launcher);
         mToolbar.setTitle("发布帖子");// 标题的文字需在setSupportActionBar之前，不然会无效
         // toolbar.setSubtitle("副标题");
-        setSupportActionBar(mToolbar);
+//        setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
@@ -142,6 +143,11 @@ public class AddArticleActivity extends ActionBarActivity {
 
             String title = String.valueOf(mETTitle.getText());
             String content = String.valueOf(mETContent.getText());
+
+            if (content.trim().length() == 0) {
+                Toast.makeText(getApplicationContext(), R.string.input_can_not_none, Toast.LENGTH_SHORT).show();
+                return false;
+            }
 
             article.setTitle(title);
             article.setClassify(mClassify);

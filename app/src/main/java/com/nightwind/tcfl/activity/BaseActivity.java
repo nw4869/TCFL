@@ -33,12 +33,12 @@ public abstract class BaseActivity extends ActionBarActivity implements View.OnT
         setContentView(getLayoutResID());
 
         //初始化工具栏
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mToolbar.setTitleTextColor(Color.WHITE);
+//        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+//        mToolbar.setTitleTextColor(Color.WHITE);
         // toolbar.setLogo(R.drawable.ic_launcher);
 //        mToolbar.setTitle("Profile");// 标题的文字需在setSupportActionBar之前，不然会无效
         // toolbar.setSubtitle("副标题");
-        setSupportActionBar(mToolbar);
+//        setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //滑动关闭监听器

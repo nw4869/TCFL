@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.nightwind.tcfl.Auth;
 import com.nightwind.tcfl.bean.Article;
 import com.nightwind.tcfl.bean.User;
+import com.nightwind.tcfl.oss.OSSController;
 import com.nightwind.tcfl.server.ServerConfig;
 import com.nightwind.tcfl.tool.encryptionUtil.RSAUtils;
 import com.nightwind.tcfl.tool.localDB.UserDBManager;
@@ -555,6 +556,60 @@ public class UserController {
                     }
                 } catch (Exception e) {
                     Log.e("setUserOnline", "JSON ERROR");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean updateAvatar(String url) {
+        Auth auth = new Auth(mContext);
+        String username = auth.getUsername();
+        String token = auth.getToken();
+
+        String urlStr = ServerConfig.getServer() + "MyLogin/FinishUpload";
+        HttpPost request = new HttpPost(urlStr);
+
+        if (token == null) {
+            System.out.println("本地token不存在");
+            return false;
+        }
+        //RSA加密token
+        String strPublicKey = auth.getPublicKey();
+        String cipherToken;
+        try {
+            cipherToken = RSAUtils.encrypt(token, strPublicKey);
+        } catch (Exception e) {
+            System.out.println("RSA加密Token失败");
+            return false;
+        }
+
+        List<NameValuePair> params = new ArrayList<>();
+        params.add(new BasicNameValuePair("token", cipherToken));
+        params.add(new BasicNameValuePair("username", username));
+        params.add(new BasicNameValuePair("url", url));
+        params.add(new BasicNameValuePair("type", String.valueOf(OSSController.TYPE_UPLOAD_AVATAR)));
+
+        try {
+            //设置请求参数项
+            request.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
+            HttpClient Client = ServerConfig.getHttpClient();
+            //执行请求返回相应
+            HttpResponse response = Client.execute(request);
+
+            //判断是否请求成功
+            if (response.getStatusLine().getStatusCode() == 200) {
+                //获得响应信息
+                String responseMsg = EntityUtils.toString(response.getEntity());
+                try {
+                    JSONObject jsonObject = new JSONObject(responseMsg);
+                    if(jsonObject.getBoolean("success")) {
+                        return true;
+                    }
+                } catch (Exception e) {
+                    Log.e("update avatar", "JSON ERROR");
                 }
             }
         } catch (Exception e) {

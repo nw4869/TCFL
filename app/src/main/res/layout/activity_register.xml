@@ -17,6 +17,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/username"
             android:maxLength="10"
+            android:singleLine="true"
             android:hint="用户名"
             android:text="nw"/>
 
@@ -26,6 +27,7 @@
             android:layout_marginTop="16dp"
             android:inputType="textPassword"
             android:maxLength="18"
+            android:singleLine="true"
             android:id="@+id/password"
             android:layout_below="@+id/username"
             android:layout_alignParentLeft="true"

@@ -49,5 +49,12 @@
     <string name="exampleArticleContent1">Hell World</string>
     <string name="exampleArticleTitle1">Hello Everyone</string>
     <string name="list_empty">列表为空</string>
+    <string name="title_activity_upload_image">查看头像</string>
+    <string name="selectImage">选择图片</string>
+    <string name="uploadImage">上传图片</string>
+    <string name="upload_failed">上传失败，请重试</string>
+    <string name="upload_success">上传成功</string>
+    <string name="input_can_not_none">输入不能为空</string>
+    <string name="login_request">请先登录</string>
 
 </resources>

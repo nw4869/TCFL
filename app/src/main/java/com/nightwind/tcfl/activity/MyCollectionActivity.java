@@ -13,7 +13,7 @@ import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.bean.User;
 import com.nightwind.tcfl.fragment.ArticleRecyclerFragment;
 
-public class MyCollectionActivity extends ActionBarActivity implements View.OnTouchListener, GestureDetector.OnGestureListener {
+public class MyCollectionActivity extends BaseActivity {
 
     private Toolbar mToolbar;
 
@@ -24,9 +24,13 @@ public class MyCollectionActivity extends ActionBarActivity implements View.OnTo
     private final int minVelocity         = 0;
 
     @Override
+    int getLayoutResID() {
+        return R.layout.activity_my_collection;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_collection);
 
 //        mSelfUser = Dummy.getSelfUser();
 
@@ -42,11 +46,9 @@ public class MyCollectionActivity extends ActionBarActivity implements View.OnTo
         // toolbar.setLogo(R.drawable.ic_launcher);
         mToolbar.setTitle("我的收藏");// 标题的文字需在setSupportActionBar之前，不然会无效
         // toolbar.setSubtitle("副标题");
-        setSupportActionBar(mToolbar);
+//        setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //滑动关闭监听器
-        mGestureDetector = new GestureDetector(this, this);
     }
 
 
@@ -76,60 +78,4 @@ public class MyCollectionActivity extends ActionBarActivity implements View.OnTo
     }
 
 
-
-    //右划关闭
-
-    @Override
-    public boolean onDown(MotionEvent e) {
-        return false;
-    }
-
-    @Override
-    public void onShowPress(MotionEvent e) {
-
-    }
-
-    @Override
-    public boolean onSingleTapUp(MotionEvent e) {
-        return false;
-    }
-
-    @Override
-    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        return false;
-    }
-
-    @Override
-    public void onLongPress(MotionEvent e) {
-
-    }
-
-    //向右滑动关闭activity
-    @Override
-    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        float absdx = Math.abs(e2.getX() - e1.getX());
-        float absdy = Math.abs(e2.getY() - e1.getY());
-        if (e1.getX() - e2.getX() > verticalMinDistance && Math.abs(velocityX) > minVelocity) {
-
-        } else if (absdx > 1.5*absdy && e2.getX() - e1.getX() > verticalMinDistance && Math.abs(velocityX) > minVelocity) {
-
-            finish();
-            overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
-            return true;
-        }
-
-        return false;
-    }
-
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-//        return false;
-        return mGestureDetector.onTouchEvent(event);
-    }
-
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        mGestureDetector.onTouchEvent(ev);
-        return super.dispatchTouchEvent(ev);
-    }
 }

@@ -47,6 +47,7 @@ public class AddCommentActivity extends ActionBarActivity {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivityForResult(intent, MainActivity.REQUEST_LOGIN);
             overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+            Toast.makeText(getApplicationContext(), R.string.login_request, Toast.LENGTH_SHORT).show();
             return ;
         }
 
@@ -127,6 +128,10 @@ public class AddCommentActivity extends ActionBarActivity {
         comment.setArticleId(mArticleId);
         comment.setParentId(mParentComment);
         String content = String.valueOf(mETContent.getText());
+        if (content.trim().length() == 0) {
+            Toast.makeText(getApplicationContext(), R.string.input_can_not_none, Toast.LENGTH_SHORT).show();
+            return;
+        }
         comment.setContent(content);
 //        comment.setUsername(mSelfUser.getUsername());
 //        comment.setDateTime(BaseTools.getCurrentDateTime());

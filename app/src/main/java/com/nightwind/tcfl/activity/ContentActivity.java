@@ -34,7 +34,7 @@ import com.nightwind.tcfl.server.CommentLoader;
 import java.util.List;
 
 
-public class ContentActivity extends ActionBarActivity implements View.OnTouchListener, GestureDetector.OnGestureListener {
+public class ContentActivity extends BaseActivity {
 
     private static final java.lang.String ARG_ARTICLE_ID = "articleId";
     private static final int LOAD_ARTICLE = 0;
@@ -65,17 +65,14 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
     private ProgressBarCircularIndetermininate mProgressBar;
 
     @Override
+    int getLayoutResID() {
+        return R.layout.activity_content;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d("ContentActivity", "OnCreate()");
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_content);
-
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        // toolbar.setLogo(R.drawable.ic_launcher);
-//        mToolbar.setTitle("Content");// 标题的文字需在setSupportActionBar之前，不然会无效
-        // toolbar.setSubtitle("副标题");
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mArticleId = getIntent().getIntExtra("articleId", 0);
 
@@ -348,73 +345,4 @@ public class ContentActivity extends ActionBarActivity implements View.OnTouchLi
 
 
 
-
-
-
-    ///////////////////////////////////////////////////////
-    //右划关闭
-
-    @Override
-    public boolean onDown(MotionEvent e) {
-        return false;
-    }
-
-    @Override
-    public void onShowPress(MotionEvent e) {
-
-    }
-
-    @Override
-    public boolean onSingleTapUp(MotionEvent e) {
-        return false;
-    }
-
-    @Override
-    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        return false;
-    }
-
-    @Override
-    public void onLongPress(MotionEvent e) {
-
-    }
-
-    //向右滑动关闭activity
-    @Override
-    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        float absdx = Math.abs(e2.getX() - e1.getX());
-        float absdy = Math.abs(e2.getY() - e1.getY());
-//        System.out.println("x` = " + (e1.getX() - e2.getX()) + " y` = " + Math.abs(e1.getY() - e2.getY()));
-
-        if (e1.getX() - e2.getX() > verticalMinDistance && Math.abs(velocityX) > minVelocity) {
-
-            // 切换Activity
-            // Intent intent = new Intent(ViewSnsActivity.this, UpdateStatusActivity.class);
-            // startActivity(intent);
-//            Toast.makeText(this, "向左手势", Toast.LENGTH_SHORT).show();
-        } else if (absdx > 1.5*absdy && e2.getX() - e1.getX() > verticalMinDistance && Math.abs(velocityX) > minVelocity) {
-
-            // 切换Activity
-            // Intent intent = new Intent(ViewSnsActivity.this, UpdateStatusActivity.class);
-            // startActivity(intent);
-//            Toast.makeText(this, "向右手势", Toast.LENGTH_SHORT).show();
-            finish();
-            overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
-            return true;
-        }
-
-        return false;
-    }
-
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-//        return false;
-        return mGestureDetector.onTouchEvent(event);
-    }
-
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        mGestureDetector.onTouchEvent(ev);
-        return super.dispatchTouchEvent(ev);
-    }
 }

@@ -3,6 +3,7 @@ package com.nightwind.tcfl.fragment;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -22,6 +23,7 @@ import android.widget.Toast;
 
 import com.nightwind.tcfl.Auth;
 import com.nightwind.tcfl.R;
+import com.nightwind.tcfl.activity.ProfileActivity;
 import com.nightwind.tcfl.bean.User;
 import com.nightwind.tcfl.controller.UserController;
 import com.nightwind.tcfl.server.UserLoader;
@@ -242,6 +244,14 @@ public class AddFriendFragment extends Fragment {
         } else {
             mTvNotFound.setVisibility(View.GONE);
             mUserItem.setVisibility(View.VISIBLE);
+            mUserItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), ProfileActivity.class);
+                    intent.putExtra(ProfileActivity.ARG_USERNAME, mQueryUser.getUsername());
+                    startActivity(intent);
+                }
+            });
             mTvUsername.setText(user.getUsername());
             mTvSign.setText(user.getInfo());
             //服务器下载头像

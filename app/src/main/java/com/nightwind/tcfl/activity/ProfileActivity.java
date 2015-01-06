@@ -1,12 +1,18 @@
 package com.nightwind.tcfl.activity;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.Loader;
 import android.support.v4.app.LoaderManager;
 import android.os.Bundle;
+import android.support.v4.view.ViewCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -35,6 +41,9 @@ public class ProfileActivity extends BaseActivity {
     public static final String ARG_UID = "uid";
     public static final String ARG_USERNAME = "username";
     private static final int LOAD_USER = 0;
+    private static final int REQUEST_ASK_GALLERY = 10;
+    private static final int REQUEST_CROP = 11;
+    public static final String EXTRA_IMAGE = "extra_image";
 
 //    private Toolbar mToolbar;
 //    private GestureDetector mGestureDetector;
@@ -66,6 +75,8 @@ public class ProfileActivity extends BaseActivity {
     private Spinner mSexSpinner;
     private Spinner mEduSpinner;
 
+    private static final String IMAGE_FILE_LOCATION = "file://" + Environment.getExternalStorageDirectory() + "/tcfl/temp.png";//temp file
+    Uri imageUri = Uri.parse(IMAGE_FILE_LOCATION);//The Uri to store the big bitmap
 
     @Override
     int getLayoutResID() {
@@ -88,6 +99,8 @@ public class ProfileActivity extends BaseActivity {
         mProcessBar = findViewById(R.id.progressBarCircularIndetermininate);
 
         mIVAvatar = (ImageView) findViewById(R.id.avatar);
+//        ViewCompat.setTransitionName(mIVAvatar, EXTRA_IMAGE);
+
         mTVUsername = (TextView) findViewById(R.id.username);
         mETSign = (EditText) findViewById(R.id.sign);
         mTVLevel = (TextView) findViewById(R.id.tv_level);
@@ -96,6 +109,7 @@ public class ProfileActivity extends BaseActivity {
         mETWork = (EditText) findViewById(R.id.et_work);
 //        mTVEdu = (TextView) findViewById(R.id.tv_edu);
         mETHobby = (EditText) findViewById(R.id.et_hobby);
+
 
         //性别
         mSexSpinner = (Spinner) findViewById(R.id.sex_spinner);
@@ -111,7 +125,8 @@ public class ProfileActivity extends BaseActivity {
 
         mVGStartChat = (ViewGroup) findViewById(R.id.rl_start_chat);
 
-        if (!new Auth(this).getUsername().equals(mUsername)) {
+        final String selfUsername = new Auth(this).getUsername();
+        if (selfUsername == null || !selfUsername.equals(mUsername)) {
             mETSign.setHint("sign");
             mTVLevel.setHint("");
             mETAge.setHint("");
@@ -124,7 +139,6 @@ public class ProfileActivity extends BaseActivity {
         init();
 
     }
-
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     void init() {
         Bundle args = new Bundle();
@@ -151,9 +165,11 @@ public class ProfileActivity extends BaseActivity {
             } else {
                 finish();
             }
+
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
 
 
     @Override
@@ -216,6 +232,21 @@ public class ProfileActivity extends BaseActivity {
 
         //修改信息
 
+        mIVAvatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                changeAvatar();
+                Intent intent = new Intent(ProfileActivity.this, UploadImageActivity.class);
+                intent.putExtra(UploadImageActivity.ARG_IMG_URL, mUser.getAvatarUrl());
+                intent.putExtra(UploadImageActivity.ARG_USERNAME, mUser.getUsername());
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+//                (ProfileActivity.this).overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+//                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(ProfileActivity.this, v, UploadImageActivity.EXTRA_IMAGE);
+//                ActivityCompat.startActivity( ProfileActivity.this, intent,
+//                        options.toBundle());
+            }
+        });
 
 
 //        mIVAvatar.setOnClickListener(new AvatarOnClickListener(this, mUser.getUsername()));

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -179,7 +180,7 @@ public class FriendsActivity extends BaseActivity implements FriendsFragment.OnF
             if (currentFragmentStackTop > 0) {
                 //改变用户名，刷新界面
                 transaction.replace(R.id.container, mChatFragment)
-                        .addToBackStack("friendsList")
+                        .addToBackStack(null)
                         .commit();
             } else {
                 transaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_left_out, R.anim.slide_left_in, R.anim.slide_right_out)
@@ -224,7 +225,8 @@ public class FriendsActivity extends BaseActivity implements FriendsFragment.OnF
             //返回上一个fragment
             getSupportActionBar().setTitle("Friends");
             mMenu.getItem(0).setVisible(true);  //显示添加好友
-            getSupportFragmentManager().popBackStack();
+//            getSupportFragmentManager().popBackStack();
+            getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             currentFragmentStackTop--;
         }
     }
