@@ -187,6 +187,7 @@ public class OSSController {
             saveCallback.onFailure(objectName);
             throw new AuthenticatorException();
         }
+        System.out.println("hr=" + EntityUtils.toString(hr.getEntity()));
 
         saveCallback.onSuccess(url);
         System.out.println("getUrl=" + url);

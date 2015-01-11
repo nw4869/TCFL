@@ -136,16 +136,17 @@ public class ProfileActivity extends BaseActivity {
 //            mTVEdu.setHint("");
         }
 
-        init();
+//        init();
 
     }
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+
+
     void init() {
         Bundle args = new Bundle();
         args.putString(ARG_USERNAME, mUsername);
 //        LoaderManager lm = getLoaderManager();
         LoaderManager lm = getSupportLoaderManager();
-        lm.initLoader(LOAD_USER, args, new UserLoaderCallbacks());
+        lm.restartLoader(LOAD_USER, args, new UserLoaderCallbacks());
 
 
     }
@@ -311,6 +312,11 @@ public class ProfileActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
 //        mMenu.getItem(0).setVisible(mUser.getUsername().equals(new Auth(this).getUsername()));
+//        if (getSupportLoaderManager().)
+//        Bundle args = new Bundle();
+//        args.putString(ARG_USERNAME, mUsername);
+//        getSupportLoaderManager().restartLoader(LOAD_USER, args, new UserLoaderCallbacks());
+        init();
     }
 
 

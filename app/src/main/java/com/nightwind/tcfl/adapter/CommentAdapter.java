@@ -25,9 +25,13 @@ import com.nightwind.tcfl.controller.UserController;
 import com.nightwind.tcfl.tool.Options;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingProgressListener;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by wind on 2014/11/28.
@@ -35,7 +39,6 @@ import java.util.List;
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHolder> {
 
     private static Context mContext;
-    private final UserController mUserController;
 
     private Article mArticle;
     private List<Comment> mCommentEntities;
@@ -45,6 +48,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
     //图片下载选项
     DisplayImageOptions options = Options.getListOptions();
+    DisplayImageOptions ImageOptions = Options.getArticleImageOptions();
     protected ImageLoader imageLoader = ImageLoader.getInstance();
 
     public CommentAdapter(Context context, Article article/*, int classify, int rowId, int articleId*/) {
@@ -55,7 +59,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 //        mRowId = rowId;
 //        mArticleId = articleId;
         mArticleId = mArticle.getId();
-        mUserController = new UserController(mContext);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
@@ -103,8 +106,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.comment_item_view, parent, false);
-        ViewHolder vh = new ViewHolder(v);
-        return vh;
+        return new ViewHolder(v);
     }
 
     @Override
@@ -130,18 +132,46 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
                 holder.imageView0.setOnClickListener(new AvatarOnClickListener(mContext, mArticle.getUsername()));
 
             //test:ContentLayout
-            String content = mArticle.getContent();
-            TextView tvContent = new TextView(mContext);
-            tvContent.setTextIsSelectable(true);
-
-            tvContent.setText(content);
-            tvContent.setTextColor(Color.BLACK);
-            tvContent.setTextSize(16);
             holder.contentLayout.removeAllViews();
-            holder.contentLayout.addView(tvContent);
 
-//            //添加分享文字到ShareProvider
-//            ((ContentActivity)mContext).setShareString(content);
+            String content = mArticle.getContent();
+            if (content != null) {
+                final String strPattern = "<img src=\".{1,100}?\"/>";
+                String[] texts = content.split(strPattern);
+                Pattern pattern = Pattern.compile(strPattern);
+                Matcher matcher = pattern.matcher(content);
+
+                for (String text : texts) {
+                    TextView tvContent = new TextView(mContext);
+                    tvContent.setTextIsSelectable(true);
+                    tvContent.setText(text);
+                    tvContent.setTextColor(Color.BLACK);
+                    tvContent.setTextSize(16);
+                    holder.contentLayout.addView(tvContent);
+
+                    if (matcher.find()) {
+                        ImageView iv = new ImageView(mContext);
+                        String imageTag = matcher.group();
+                        String url = imageTag.substring(10, imageTag.length() - 3);
+                        imageLoader.displayImage(url, iv, ImageOptions, new SimpleImageLoadingListener(), new ImageLoadingProgressListener() {
+                            @Override
+                            public void onProgressUpdate(String imageUri, View view, int current, int total) {
+
+                            }
+                        });
+                        holder.contentLayout.addView(iv);
+                    }
+                }
+
+                while (matcher.find()) {
+                    ImageView iv = new ImageView(mContext);
+                    String imageTag = matcher.group();
+                    String url = imageTag.substring(10, imageTag.length() - 3);
+                    imageLoader.displayImage(url, iv, ImageOptions);
+                    holder.contentLayout.addView(iv);
+                }
+            }
+
 
         } else {
             holder.authItem.setVisibility(View.GONE);

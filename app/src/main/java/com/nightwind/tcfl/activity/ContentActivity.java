@@ -87,7 +87,7 @@ public class ContentActivity extends BaseActivity {
 //        mAdapter = new CommentAdapter(this, mArticle.getCommentEntities());
 //        mAdapter = new CommentAdapter(this, mArticle, mClassify, mRowId, mArticleId);
         mAdapter = new CommentAdapter(this, mArticle);
-        mRecyclerView.setAdapter(mAdapter);
+//        mRecyclerView.setAdapter(mAdapter);
 
         mGestureDetector = new GestureDetector(this,  this);
 

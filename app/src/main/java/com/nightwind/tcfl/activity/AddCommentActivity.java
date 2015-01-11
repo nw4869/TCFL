@@ -69,7 +69,7 @@ public class AddCommentActivity extends ActionBarActivity {
         // toolbar.setLogo(R.drawable.ic_launcher);
         mToolbar.setTitle("回复帖子");// 标题的文字需在setSupportActionBar之前，不然会无效
         // toolbar.setSubtitle("副标题");
-        setSupportActionBar(mToolbar);
+//        setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         setResult(RESULT_ADD_FAILED);

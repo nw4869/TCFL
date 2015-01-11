@@ -242,7 +242,6 @@ public class FriendsFragment extends Fragment{
 
     public void refreshList() {
         initData();
-        mAdapter.notifyDataSetChanged();
     }
 
 }

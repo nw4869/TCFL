@@ -53,7 +53,8 @@ public class MainActivity extends ActionBarActivity implements PersonCenterFragm
 
     public static final int REQUEST_ADD_ARTICLE_BASE = 10000;
     public static final int REQUEST_LOGIN = 0;
-    AsyncTask<String, Void, String> mRefreshAvatarTask = new AsyncTask<String, Void, String>() {
+    AsyncTask<String, Void, String> mRefreshAvatarTask = new RefreshAvatarTask();
+    class RefreshAvatarTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
             final User selfUser = new UserController(getApplicationContext()).getSelfUser();
@@ -75,7 +76,7 @@ public class MainActivity extends ActionBarActivity implements PersonCenterFragm
             }
 
         }
-    };
+    }
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -209,7 +210,10 @@ public class MainActivity extends ActionBarActivity implements PersonCenterFragm
     protected void onResume() {
         super.onResume();
         JPushInterface.onResume(this);
-        mRefreshAvatarTask.execute();
+        if (!mRefreshAvatarTask.getStatus().equals(AsyncTask.Status.RUNNING)) {
+            mRefreshAvatarTask = new RefreshAvatarTask();
+            mRefreshAvatarTask.execute();
+        }
     }
 
     @Override

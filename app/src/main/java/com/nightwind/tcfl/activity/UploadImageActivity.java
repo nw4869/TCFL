@@ -28,6 +28,9 @@ import com.nightwind.tcfl.oss.SaveCallback;
 import com.nightwind.tcfl.tool.Options;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
+import com.nostra13.universalimageloader.utils.DiskCacheUtils;
+import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -83,7 +86,17 @@ public class UploadImageActivity extends BaseActivity implements View.OnClickLis
             //显示头像，如果有的话
             mLastImgURL = getIntent().getStringExtra(ARG_IMG_URL);
             if (mLastImgURL != null) {
-                imageLoader.displayImage(mLastImgURL, mImageView, options);
+                imageLoader.displayImage(mLastImgURL, mImageView, options, new SimpleImageLoadingListener() {
+                    @Override
+                    public void onLoadingStarted(String imageUri, View view) {
+                        super.onLoadingStarted(imageUri, view);
+                    }
+
+                    @Override
+                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                        super.onLoadingComplete(imageUri, view, loadedImage);
+                    }
+                });
             }
             mUsername = getIntent().getStringExtra(ARG_USERNAME);
             String selfName = new Auth(this).getUsername();
@@ -150,7 +163,7 @@ public class UploadImageActivity extends BaseActivity implements View.OnClickLis
                         }
                         try {
                             mOssController = new OSSController(getApplicationContext(), type);
-                            String result = mOssController.syncUploadFile(filePath, new SaveCallback() {
+                            String result = mOssController.syncUploadFile(filePath  , new SaveCallback() {
                                 @Override
                                 public void onSuccess(String paramString) {
                                     publishProgress(100);
@@ -187,15 +200,17 @@ public class UploadImageActivity extends BaseActivity implements View.OnClickLis
                     }
 
                     @Override
-                    protected void onPostExecute(String s) {
-                        super.onPostExecute(s);
-                        if (s == null) {
+                    protected void onPostExecute(String url) {
+                        super.onPostExecute(url);
+                        if (url == null) {
                             Toast.makeText(getApplicationContext(), R.string.upload_failed, Toast.LENGTH_SHORT).show();
                             mDialog.cancel();
                         } else {
                             Toast.makeText(getApplicationContext(), R.string.upload_success, Toast.LENGTH_SHORT).show();
                             mDialog.cancel();
-                            imageLoader.clearDiskCache();
+                            MemoryCacheUtils.removeFromCache(url,
+                                    imageLoader.getMemoryCache());
+                            DiskCacheUtils.removeFromCache(url, imageLoader.getDiskCache());
                         }
                         //删除临时文件
                         File file = new File(filePath);

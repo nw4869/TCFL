@@ -1,21 +1,23 @@
 package com.nightwind.tcfl.activity;
 
-import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.nightwind.tcfl.R;
-import com.nightwind.tcfl.controller.ArticleController;
 import com.nightwind.tcfl.tool.Options;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class ShowImageActivity extends ActionBarActivity {
 
-    public static final String ARG_IMAGE_URL = "imageUrl";
+    public static final String ARG_IMAGE_URI = "imageUri";
 
     //图片下载选项
     DisplayImageOptions options = Options.getSlideImageOptions();
@@ -26,9 +28,17 @@ public class ShowImageActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_image);
         ImageView iv = (ImageView) findViewById(R.id.imageView);
-
+        iv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().hide();
+//        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.tran));
         if(getIntent() != null) {
-            String imageUrl = getIntent().getStringExtra(ARG_IMAGE_URL);
+            String imageUrl = getIntent().getStringExtra(ARG_IMAGE_URI);
             imageLoader.displayImage(imageUrl, iv, options);
         }
 

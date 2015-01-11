@@ -21,9 +21,7 @@ import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.activity.ContentActivity;
 import com.nightwind.tcfl.activity.ShowImageActivity;
 import com.nightwind.tcfl.bean.Article;
-import com.nightwind.tcfl.bean.User;
 import com.nightwind.tcfl.controller.ArticleController;
-import com.nightwind.tcfl.controller.UserController;
 import com.nightwind.tcfl.fragment.ArticleRecyclerFragment;
 import com.nightwind.tcfl.tool.BaseTools;
 import com.nightwind.tcfl.tool.Options;
@@ -154,7 +152,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
 	@Override
 	public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 		// create a new view
-		System.out.println("onCreateViewHolder");
+//		System.out.println("onCreateViewHolder");
 		View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.my_item_view, parent, false);
 		// set the view's size, margins, paddings and layout parameters
 		ViewHolder vh = new ViewHolder(v);
@@ -166,7 +164,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
 	public void onBindViewHolder(ViewHolder holder, final int position) {
 		// - get element from your dataset at this position
 		// - replace the contents of the view with that element
-		System.out.println("onBindViewHolder");
+//		System.out.println("onBindViewHolder");
 
         //循环滑动图片
         if (position == 0) {
@@ -215,7 +213,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(mContext, ShowImageActivity.class);
-                        intent.putExtra(ShowImageActivity.ARG_IMAGE_URL, imageUrl);
+                        intent.putExtra(ShowImageActivity.ARG_IMAGE_URI, imageUrl);
                         mContext.startActivity(intent);
                     }
                 });
