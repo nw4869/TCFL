@@ -13,100 +13,402 @@ ADDED from AndroidManifest.xml:2:1
 	android:versionCode
 		INJECTED from AndroidManifest.xml:0:0
 		INJECTED from AndroidManifest.xml:0:0
-uses-permission#android.permission.INTERNET
+permission#com.nightwind.tcfl.permission.JPUSH_MESSAGE
 ADDED from AndroidManifest.xml:6:5
+	android:protectionLevel
+		ADDED from AndroidManifest.xml:8:9
 	android:name
-		ADDED from AndroidManifest.xml:6:22
-uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
-ADDED from AndroidManifest.xml:8:5
-	android:name
-		ADDED from AndroidManifest.xml:8:22
-uses-permission#android.permission.READ_PHONE_STATE
-ADDED from AndroidManifest.xml:9:5
-	android:name
-		ADDED from AndroidManifest.xml:9:22
-application
+		ADDED from AndroidManifest.xml:7:9
+uses-permission#com.nightwind.tcfl.permission.JPUSH_MESSAGE
 ADDED from AndroidManifest.xml:11:5
-MERGED from com.android.support:appcompat-v7:21.0.2:16:5
-MERGED from com.android.support:support-v4:21.0.2:16:5
+	android:name
+		ADDED from AndroidManifest.xml:11:22
+uses-permission#android.permission.RECEIVE_USER_PRESENT
+ADDED from AndroidManifest.xml:12:5
+	android:name
+		ADDED from AndroidManifest.xml:12:22
+uses-permission#android.permission.INTERNET
+ADDED from AndroidManifest.xml:13:5
+	android:name
+		ADDED from AndroidManifest.xml:13:22
+uses-permission#android.permission.WAKE_LOCK
+ADDED from AndroidManifest.xml:14:5
+	android:name
+		ADDED from AndroidManifest.xml:14:22
+uses-permission#android.permission.READ_PHONE_STATE
+ADDED from AndroidManifest.xml:15:5
+	android:name
+		ADDED from AndroidManifest.xml:15:22
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from AndroidManifest.xml:16:5
+	android:name
+		ADDED from AndroidManifest.xml:16:22
+uses-permission#android.permission.READ_EXTERNAL_STORAGE
+ADDED from AndroidManifest.xml:17:5
+	android:name
+		ADDED from AndroidManifest.xml:17:22
+uses-permission#android.permission.WRITE_SETTINGS
+ADDED from AndroidManifest.xml:18:5
+	android:name
+		ADDED from AndroidManifest.xml:18:22
+uses-permission#android.permission.VIBRATE
+ADDED from AndroidManifest.xml:19:5
+	android:name
+		ADDED from AndroidManifest.xml:19:22
+uses-permission#android.permission.MOUNT_UNMOUNT_FILESYSTEMS
+ADDED from AndroidManifest.xml:20:5
+	android:name
+		ADDED from AndroidManifest.xml:20:22
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from AndroidManifest.xml:21:5
+	android:name
+		ADDED from AndroidManifest.xml:21:22
+uses-permission#android.permission.SYSTEM_ALERT_WINDOW
+ADDED from AndroidManifest.xml:22:5
+	android:name
+		ADDED from AndroidManifest.xml:22:22
+uses-permission#android.permission.ACCESS_COARSE_LOCATION
+ADDED from AndroidManifest.xml:25:5
+	android:name
+		ADDED from AndroidManifest.xml:25:22
+uses-permission#android.permission.ACCESS_WIFI_STATE
+ADDED from AndroidManifest.xml:26:5
+	android:name
+		ADDED from AndroidManifest.xml:26:22
+uses-permission#android.permission.CHANGE_WIFI_STATE
+ADDED from AndroidManifest.xml:27:5
+	android:name
+		ADDED from AndroidManifest.xml:27:22
+uses-permission#android.permission.ACCESS_FINE_LOCATION
+ADDED from AndroidManifest.xml:28:5
+	android:name
+		ADDED from AndroidManifest.xml:28:22
+uses-permission#android.permission.ACCESS_LOCATION_EXTRA_COMMANDS
+ADDED from AndroidManifest.xml:29:5
+	android:name
+		ADDED from AndroidManifest.xml:29:22
+uses-permission#android.permission.CHANGE_NETWORK_STATE
+ADDED from AndroidManifest.xml:30:5
+	android:name
+		ADDED from AndroidManifest.xml:30:22
+application
+ADDED from AndroidManifest.xml:41:5
+MERGED from com.android.support:appcompat-v7:21.0.3:16:5
+MERGED from com.android.support:support-v4:21.0.3:16:5
 MERGED from com.android.support:palette-v7:21.0.2:16:5
-MERGED from com.android.support:support-v4:21.0.2:16:5
+MERGED from com.android.support:support-v4:21.0.3:16:5
 MERGED from com.android.support:cardview-v7:21.0.2:16:5
-MERGED from com.android.support:support-v4:21.0.2:16:5
+MERGED from com.android.support:support-v4:21.0.3:16:5
 MERGED from com.android.support:recyclerview-v7:21.0.2:17:5
-MERGED from com.android.support:support-v4:21.0.2:16:5
+MERGED from com.android.support:support-v4:21.0.3:16:5
+MERGED from TCFL:RecyclerViewItemAnimators-library:unspecified:11:5
+MERGED from com.android.support:support-v4:21.0.3:16:5
+MERGED from com.android.support:recyclerview-v7:21.0.2:17:5
+MERGED from com.android.support:support-v4:21.0.3:16:5
+MERGED from TCFL:MaterialDesign:unspecified:11:5
 	android:label
-		ADDED from AndroidManifest.xml:15:9
+		ADDED from AndroidManifest.xml:45:9
 	android:allowBackup
-		ADDED from AndroidManifest.xml:13:9
+		ADDED from AndroidManifest.xml:43:9
 	android:icon
-		ADDED from AndroidManifest.xml:14:9
+		ADDED from AndroidManifest.xml:44:9
 	android:theme
-		ADDED from AndroidManifest.xml:16:9
+		ADDED from AndroidManifest.xml:46:9
 	android:name
-		ADDED from AndroidManifest.xml:12:9
+		ADDED from AndroidManifest.xml:42:9
 activity#com.nightwind.tcfl.activity.MainActivity
-ADDED from AndroidManifest.xml:17:9
+ADDED from AndroidManifest.xml:47:9
 	android:label
-		ADDED from AndroidManifest.xml:19:13
+		ADDED from AndroidManifest.xml:49:13
+	android:theme
+		ADDED from AndroidManifest.xml:50:13
 	android:name
-		ADDED from AndroidManifest.xml:18:13
-intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
-ADDED from AndroidManifest.xml:20:13
-action#android.intent.action.MAIN
-ADDED from AndroidManifest.xml:21:17
-	android:name
-		ADDED from AndroidManifest.xml:21:25
-category#android.intent.category.LAUNCHER
-ADDED from AndroidManifest.xml:23:17
-	android:name
-		ADDED from AndroidManifest.xml:23:27
-activity#com.nightwind.tcfl.activity.ContentActivity
-ADDED from AndroidManifest.xml:26:9
-	android:label
-		ADDED from AndroidManifest.xml:28:13
-	android:name
-		ADDED from AndroidManifest.xml:27:13
-activity#com.nightwind.tcfl.activity.ProfileActivity
-ADDED from AndroidManifest.xml:30:9
-	android:label
-		ADDED from AndroidManifest.xml:32:13
-	android:name
-		ADDED from AndroidManifest.xml:31:13
-activity#com.nightwind.tcfl.activity.FriendsActivity
-ADDED from AndroidManifest.xml:34:9
-	android:label
-		ADDED from AndroidManifest.xml:36:13
-	android:name
-		ADDED from AndroidManifest.xml:35:13
-activity#com.nightwind.tcfl.activity.AddArticleActivity
-ADDED from AndroidManifest.xml:38:9
-	android:label
-		ADDED from AndroidManifest.xml:40:13
-	android:name
-		ADDED from AndroidManifest.xml:39:13
-activity#com.nightwind.tcfl.activity.AddCommentActivity
-ADDED from AndroidManifest.xml:42:9
-	android:label
-		ADDED from AndroidManifest.xml:44:13
-	android:name
-		ADDED from AndroidManifest.xml:43:13
-activity#com.nightwind.tcfl.activity.MyCollectionActivity
-ADDED from AndroidManifest.xml:46:9
-	android:label
 		ADDED from AndroidManifest.xml:48:13
+intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
+ADDED from AndroidManifest.xml:51:13
+action#android.intent.action.MAIN
+ADDED from AndroidManifest.xml:52:17
 	android:name
-		ADDED from AndroidManifest.xml:47:13
+		ADDED from AndroidManifest.xml:52:25
+category#android.intent.category.LAUNCHER
+ADDED from AndroidManifest.xml:54:17
+	android:name
+		ADDED from AndroidManifest.xml:54:27
+activity#com.nightwind.tcfl.activity.ContentActivity
+ADDED from AndroidManifest.xml:57:9
+	android:label
+		ADDED from AndroidManifest.xml:59:13
+	android:name
+		ADDED from AndroidManifest.xml:58:13
+activity#com.nightwind.tcfl.activity.ProfileActivity
+ADDED from AndroidManifest.xml:61:9
+	android:label
+		ADDED from AndroidManifest.xml:63:13
+	android:name
+		ADDED from AndroidManifest.xml:62:13
+activity#com.nightwind.tcfl.activity.FriendsActivity
+ADDED from AndroidManifest.xml:65:9
+	android:label
+		ADDED from AndroidManifest.xml:67:13
+	android:name
+		ADDED from AndroidManifest.xml:66:13
+	android:launchMode
+		ADDED from AndroidManifest.xml:68:13
+activity#com.nightwind.tcfl.activity.AddArticleActivity
+ADDED from AndroidManifest.xml:70:9
+	android:windowSoftInputMode
+		ADDED from AndroidManifest.xml:73:13
+	android:label
+		ADDED from AndroidManifest.xml:72:13
+	android:name
+		ADDED from AndroidManifest.xml:71:13
+activity#com.nightwind.tcfl.activity.AddCommentActivity
+ADDED from AndroidManifest.xml:75:9
+	android:label
+		ADDED from AndroidManifest.xml:77:13
+	android:name
+		ADDED from AndroidManifest.xml:76:13
+activity#com.nightwind.tcfl.activity.MyCollectionActivity
+ADDED from AndroidManifest.xml:79:9
+	android:label
+		ADDED from AndroidManifest.xml:81:13
+	android:name
+		ADDED from AndroidManifest.xml:80:13
+activity#com.nightwind.tcfl.activity.MyArticleActivity
+ADDED from AndroidManifest.xml:83:9
+	android:label
+		ADDED from AndroidManifest.xml:85:13
+	android:name
+		ADDED from AndroidManifest.xml:84:13
+activity#com.nightwind.tcfl.activity.LoginActivity
+ADDED from AndroidManifest.xml:87:9
+	android:label
+		ADDED from AndroidManifest.xml:89:13
+	android:name
+		ADDED from AndroidManifest.xml:88:13
+activity#com.nightwind.tcfl.activity.RegisterActivity
+ADDED from AndroidManifest.xml:95:9
+	android:label
+		ADDED from AndroidManifest.xml:97:13
+	android:name
+		ADDED from AndroidManifest.xml:96:13
+activity#com.nightwind.tcfl.tool.localDB.LocalDBTestActivity
+ADDED from AndroidManifest.xml:99:9
+	android:label
+		ADDED from AndroidManifest.xml:101:13
+	android:name
+		ADDED from AndroidManifest.xml:100:13
+activity#com.nightwind.tcfl.activity.ReviewActivity
+ADDED from AndroidManifest.xml:103:9
+	android:label
+		ADDED from AndroidManifest.xml:105:13
+	android:name
+		ADDED from AndroidManifest.xml:104:13
+activity#com.nightwind.tcfl.activity.PikachuActivity
+ADDED from AndroidManifest.xml:107:9
+	android:label
+		ADDED from AndroidManifest.xml:109:13
+	android:name
+		ADDED from AndroidManifest.xml:108:13
+activity#com.nightwind.tcfl.activity.ContestActivity
+ADDED from AndroidManifest.xml:111:9
+	android:label
+		ADDED from AndroidManifest.xml:113:13
+	android:name
+		ADDED from AndroidManifest.xml:112:13
+activity#com.nightwind.tcfl.activity.ShowImageActivity
+ADDED from AndroidManifest.xml:115:9
+	android:label
+		ADDED from AndroidManifest.xml:117:13
+	android:name
+		ADDED from AndroidManifest.xml:116:13
+activity#com.nightwind.tcfl.activity.TranslateActivity
+ADDED from AndroidManifest.xml:119:9
+	android:label
+		ADDED from AndroidManifest.xml:121:13
+	android:name
+		ADDED from AndroidManifest.xml:120:13
+activity#cn.jpush.android.ui.PushActivity
+ADDED from AndroidManifest.xml:128:9
+	android:configChanges
+		ADDED from AndroidManifest.xml:130:13
+	android:theme
+		ADDED from AndroidManifest.xml:131:13
+	android:name
+		ADDED from AndroidManifest.xml:129:13
+intent-filter#android.intent.category.DEFAULT+cn.jpush.android.ui.PushActivity+com.nightwind.tcfl
+ADDED from AndroidManifest.xml:132:13
+action#cn.jpush.android.ui.PushActivity
+ADDED from AndroidManifest.xml:133:17
+	android:name
+		ADDED from AndroidManifest.xml:133:25
+category#android.intent.category.DEFAULT
+ADDED from AndroidManifest.xml:135:17
+	android:name
+		ADDED from AndroidManifest.xml:135:27
+category#com.nightwind.tcfl
+ADDED from AndroidManifest.xml:136:17
+	android:name
+		ADDED from AndroidManifest.xml:136:27
+service#cn.jpush.android.service.DownloadService
+ADDED from AndroidManifest.xml:140:9
+	android:exported
+		ADDED from AndroidManifest.xml:143:13
+	android:enabled
+		ADDED from AndroidManifest.xml:142:13
+	android:name
+		ADDED from AndroidManifest.xml:141:13
+service#cn.jpush.android.service.PushService
+ADDED from AndroidManifest.xml:147:9
+	android:exported
+		ADDED from AndroidManifest.xml:150:13
+	android:enabled
+		ADDED from AndroidManifest.xml:149:13
+	android:name
+		ADDED from AndroidManifest.xml:148:13
+intent-filter#cn.jpush.android.intent.PUSH_TIME+cn.jpush.android.intent.PushService+cn.jpush.android.intent.REGISTER+cn.jpush.android.intent.REPORT
+ADDED from AndroidManifest.xml:151:13
+action#cn.jpush.android.intent.REGISTER
+ADDED from AndroidManifest.xml:152:17
+	android:name
+		ADDED from AndroidManifest.xml:152:25
+action#cn.jpush.android.intent.REPORT
+ADDED from AndroidManifest.xml:153:17
+	android:name
+		ADDED from AndroidManifest.xml:153:25
+action#cn.jpush.android.intent.PushService
+ADDED from AndroidManifest.xml:154:17
+	android:name
+		ADDED from AndroidManifest.xml:154:25
+action#cn.jpush.android.intent.PUSH_TIME
+ADDED from AndroidManifest.xml:155:17
+	android:name
+		ADDED from AndroidManifest.xml:155:25
+receiver#cn.jpush.android.service.PushReceiver
+ADDED from AndroidManifest.xml:160:9
+	android:enabled
+		ADDED from AndroidManifest.xml:162:13
+	android:name
+		ADDED from AndroidManifest.xml:161:13
+intent-filter#cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY+com.nightwind.tcfl
+ADDED from AndroidManifest.xml:163:13
+	android:priority
+		ADDED from AndroidManifest.xml:163:28
+action#cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY
+ADDED from AndroidManifest.xml:164:17
+	android:name
+		ADDED from AndroidManifest.xml:164:25
+intent-filter#android.intent.action.USER_PRESENT+android.net.conn.CONNECTIVITY_CHANGE
+ADDED from AndroidManifest.xml:167:13
+action#android.intent.action.USER_PRESENT
+ADDED from AndroidManifest.xml:168:17
+	android:name
+		ADDED from AndroidManifest.xml:168:25
+action#android.net.conn.CONNECTIVITY_CHANGE
+ADDED from AndroidManifest.xml:169:17
+	android:name
+		ADDED from AndroidManifest.xml:169:25
+intent-filter#android.intent.action.PACKAGE_ADDED+android.intent.action.PACKAGE_REMOVED
+ADDED from AndroidManifest.xml:172:13
+action#android.intent.action.PACKAGE_ADDED
+ADDED from AndroidManifest.xml:173:17
+	android:name
+		ADDED from AndroidManifest.xml:173:25
+action#android.intent.action.PACKAGE_REMOVED
+ADDED from AndroidManifest.xml:174:17
+	android:name
+		ADDED from AndroidManifest.xml:174:25
+data
+ADDED from AndroidManifest.xml:176:17
+	android:scheme
+		ADDED from AndroidManifest.xml:176:23
+receiver#cn.jpush.android.service.AlarmReceiver
+ADDED from AndroidManifest.xml:181:9
+	android:name
+		ADDED from AndroidManifest.xml:181:19
+receiver#com.nightwind.tcfl.MyReceiver
+ADDED from AndroidManifest.xml:184:9
+	android:enabled
+		ADDED from AndroidManifest.xml:186:13
+	android:name
+		ADDED from AndroidManifest.xml:185:13
+intent-filter#cn.jpush.android.intent.ACTION_RICHPUSH_CALLBACK+cn.jpush.android.intent.CONNECTION+cn.jpush.android.intent.MESSAGE_RECEIVED+cn.jpush.android.intent.NOTIFICATION_OPENED+cn.jpush.android.intent.NOTIFICATION_RECEIVED+cn.jpush.android.intent.REGISTRATION+cn.jpush.android.intent.UNREGISTRATION+com.nightwind.tcfl
+ADDED from AndroidManifest.xml:187:13
+action#cn.jpush.android.intent.REGISTRATION
+ADDED from AndroidManifest.xml:188:17
+	android:name
+		ADDED from AndroidManifest.xml:188:25
+action#cn.jpush.android.intent.UNREGISTRATION
+ADDED from AndroidManifest.xml:189:17
+	android:name
+		ADDED from AndroidManifest.xml:189:25
+action#cn.jpush.android.intent.MESSAGE_RECEIVED
+ADDED from AndroidManifest.xml:190:17
+	android:name
+		ADDED from AndroidManifest.xml:190:25
+action#cn.jpush.android.intent.NOTIFICATION_RECEIVED
+ADDED from AndroidManifest.xml:191:17
+	android:name
+		ADDED from AndroidManifest.xml:191:25
+action#cn.jpush.android.intent.NOTIFICATION_OPENED
+ADDED from AndroidManifest.xml:192:17
+	android:name
+		ADDED from AndroidManifest.xml:192:25
+action#cn.jpush.android.intent.ACTION_RICHPUSH_CALLBACK
+ADDED from AndroidManifest.xml:193:17
+	android:name
+		ADDED from AndroidManifest.xml:193:25
+action#cn.jpush.android.intent.CONNECTION
+ADDED from AndroidManifest.xml:194:17
+	android:name
+		ADDED from AndroidManifest.xml:194:25
+meta-data#JPUSH_CHANNEL
+ADDED from AndroidManifest.xml:200:9
+	android:name
+		ADDED from AndroidManifest.xml:201:13
+	android:value
+		ADDED from AndroidManifest.xml:202:13
+meta-data#JPUSH_APPKEY
+ADDED from AndroidManifest.xml:203:9
+	android:name
+		ADDED from AndroidManifest.xml:204:13
+	android:value
+		ADDED from AndroidManifest.xml:205:13
+activity#com.nightwind.tcfl.activity.TestActivity
+ADDED from AndroidManifest.xml:210:9
+	android:label
+		ADDED from AndroidManifest.xml:212:13
+	android:name
+		ADDED from AndroidManifest.xml:211:13
+service#com.nightwind.tcfl.MyService
+ADDED from AndroidManifest.xml:215:9
+	android:exported
+		ADDED from AndroidManifest.xml:218:13
+	android:enabled
+		ADDED from AndroidManifest.xml:217:13
+	android:name
+		ADDED from AndroidManifest.xml:216:13
+activity#com.nightwind.tcfl.activity.UploadImageActivity
+ADDED from AndroidManifest.xml:227:9
+	android:label
+		ADDED from AndroidManifest.xml:229:13
+	android:name
+		ADDED from AndroidManifest.xml:228:13
 uses-sdk
 INJECTED from AndroidManifest.xml:0:0 reason: use-sdk injection requested
-MERGED from com.android.support:appcompat-v7:21.0.2:15:5
-MERGED from com.android.support:support-v4:21.0.2:15:5
+MERGED from com.android.support:appcompat-v7:21.0.3:15:5
+MERGED from com.android.support:support-v4:21.0.3:15:5
 MERGED from com.android.support:palette-v7:21.0.2:15:5
-MERGED from com.android.support:support-v4:21.0.2:15:5
+MERGED from com.android.support:support-v4:21.0.3:15:5
 MERGED from com.android.support:cardview-v7:21.0.2:15:5
-MERGED from com.android.support:support-v4:21.0.2:15:5
+MERGED from com.android.support:support-v4:21.0.3:15:5
 MERGED from com.android.support:recyclerview-v7:21.0.2:15:5
-MERGED from com.android.support:support-v4:21.0.2:15:5
+MERGED from com.android.support:support-v4:21.0.3:15:5
+MERGED from TCFL:RecyclerViewItemAnimators-library:unspecified:7:5
+MERGED from com.android.support:support-v4:21.0.3:15:5
+MERGED from com.android.support:recyclerview-v7:21.0.2:15:5
+MERGED from com.android.support:support-v4:21.0.3:15:5
+MERGED from TCFL:MaterialDesign:unspecified:7:5
 	android:targetSdkVersion
 		INJECTED from AndroidManifest.xml:0:0
 		INJECTED from AndroidManifest.xml:0:0
@@ -115,6 +417,7 @@ MERGED from com.android.support:support-v4:21.0.2:15:5
 		INJECTED from AndroidManifest.xml:0:0
 activity#android.support.v7.widget.TestActivity
 ADDED from com.android.support:recyclerview-v7:21.0.2:18:9
+MERGED from com.android.support:recyclerview-v7:21.0.2:18:9
 	android:label
 		ADDED from com.android.support:recyclerview-v7:21.0.2:18:19
 	android:name

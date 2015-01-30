@@ -1,8 +1,5 @@
 package com.nightwind.tcfl.activity;
 
-import android.content.res.Resources;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -27,7 +24,7 @@ public class ShowImageActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_image);
-        ImageView iv = (ImageView) findViewById(R.id.imageView);
+        ImageView iv = (ImageView) findViewById(R.id.avatar);
         iv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -27,6 +27,11 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//            signingConfig signingConfigs.config // 签名配置
+        }
     }
 //    productFlavors {
 //        flavorAPI10 {
@@ -53,4 +58,7 @@ dependencies {
     compile project(':MaterialDesign')
     compile files('libs/jpush-sdk-release1.7.1.jar')
     compile files('libs/oss-0.2.2.jar')
+    compile files('libs/BaiduLBS_Android.jar')
+    compile files('libs/locSDK_3.1.jar')
+    compile files('libs/locSDK_5.01.jar')
 }

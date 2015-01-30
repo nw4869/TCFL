@@ -5,11 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.text.method.ArrowKeyMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -20,15 +18,12 @@ import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.activity.AddCommentActivity;
 import com.nightwind.tcfl.bean.Article;
 import com.nightwind.tcfl.bean.Comment;
-import com.nightwind.tcfl.bean.User;
-import com.nightwind.tcfl.controller.UserController;
 import com.nightwind.tcfl.tool.Options;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingProgressListener;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -98,7 +93,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             TvDateTime = (TextView) itemView.findViewById(R.id.datetime);
             TvReplySome = (TextView) itemView.findViewById(R.id.replySomeone);
             TvContent = (TextView) itemView.findViewById(R.id.comment);
-            imageView1 = (ImageView) itemView.findViewById(R.id.imageView);
+            imageView1 = (ImageView) itemView.findViewById(R.id.avatar);
             commentIcon = (ImageView) itemView.findViewById(R.id.commentIcon);
         }
     }

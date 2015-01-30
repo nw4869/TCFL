@@ -125,7 +125,7 @@ public class AddFriendFragment extends Fragment {
         mResult = (ViewGroup) v.findViewById(R.id.result);
         mTvNotFound = (TextView) v.findViewById(R.id.tvNotFound);
         mUserItem = (ViewGroup) v.findViewById(R.id.userItem);
-        mIVAvatar = (ImageView) v.findViewById(R.id.imageView);
+        mIVAvatar = (ImageView) v.findViewById(R.id.avatar);
         mTvUsername = (TextView) v.findViewById(R.id.username);
         mTvSign = (TextView) v.findViewById(R.id.sign);
         mIVAdd = (ImageView) v.findViewById(R.id.iv_add);

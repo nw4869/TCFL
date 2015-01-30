@@ -32,6 +32,11 @@
     <!-- JPush end -->
 
 
+    <!--baidu map-->
+    <!--允许应用读取低级别的系统日志文件 -->
+    <uses-permission android:name="android.permission.READ_LOGS"/>
+
+
     <!-- Include following permission if you load images from Internet -->
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- Include following permission if you want to cache images on SD card -->
@@ -47,7 +52,7 @@
         <activity
             android:name=".activity.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/NoActionBar">
+            android:theme="@style/NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -207,6 +212,13 @@
 
         <!-- JPush end -->
 
+        <!--baidu map-->
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="XrtdFvSMArn45U7HTRc8Cs0t" />
+        <service android:name="com.baidu.location.f" android:enabled="true" android:process=":remote">
+        </service>
+
         <activity
             android:name=".activity.TestActivity"
             android:label="@string/title_activity_test" >
@@ -227,6 +239,10 @@
         <activity
             android:name=".activity.UploadImageActivity"
             android:label="@string/title_activity_upload_image" >
+        </activity>
+        <activity
+            android:name=".activity.NeighborActivity"
+            android:label="@string/title_activity_neighbor" >
         </activity>
     </application>
 

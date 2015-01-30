@@ -3,6 +3,7 @@ package com.nightwind.tcfl.bean;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -257,10 +258,8 @@ public class User {
     public static List<User> fromJsonUserList(String json) {
         Gson gson = new Gson();
         User[] articles = gson.fromJson(json, User[].class);
-        ArrayList<User> userList = new ArrayList<>();
-        for(User user: articles) {
-            userList.add(user);
-        }
+        List<User> userList = new ArrayList<>();
+        Collections.addAll(userList, articles);
         return userList;
     }
 }

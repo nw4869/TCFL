@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
+//import com.baidu.mapapi.SDKInitializer;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -27,6 +28,8 @@ public class AppApplication extends Application {
         JPushInterface.init(this);     		// 初始化 JPush
 
 		initImageLoader(getApplicationContext());
+
+
 	}
 
 	@Override

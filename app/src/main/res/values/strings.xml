@@ -26,7 +26,7 @@
     <string name="title_activity_my_collection">我的收藏</string>
     <string name="title_activity_my_acticle">我的帖子</string>
     <string name="title_activity_login">登录</string>
-    <string name="title_activity_base"> </string>
+    <string name="title_activity_base"></string>
     <string name="action_register">注册</string>
     <string name="title_activity_register">注册</string>
     <string name="title_activity_local_dbtest">LocalDBTestActivity</string>
@@ -58,5 +58,6 @@
     <string name="login_request">请先登录</string>
     <string name="action_add_image">添加图片</string>
     <string name="article_add_failed">文章发布失败，请重试</string>
+    <string name="title_activity_neighbor">在线好友</string>
 
 </resources>

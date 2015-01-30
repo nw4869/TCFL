@@ -1,7 +1,6 @@
 package com.nightwind.tcfl.activity;
 
 import android.accounts.AuthenticatorException;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,8 +11,6 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.view.ViewCompat;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -70,7 +67,7 @@ public class UploadImageActivity extends BaseActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
 
 
-        mImageView = (ImageView) findViewById(R.id.imageView);
+        mImageView = (ImageView) findViewById(R.id.avatar);
         mBtnSelectImage = (Button) findViewById(R.id.selectImage);
         mBtnUpload = (Button) findViewById(R.id.uploadImage);
         mProgressBar = (ProgressBarDetermininate) findViewById(R.id.progressBar);

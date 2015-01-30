@@ -18,7 +18,6 @@ import com.nightwind.tcfl.tool.Options;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -57,7 +56,7 @@ public class FriendsAdapter  extends RecyclerView.Adapter<FriendsAdapter.ViewHol
                 }
             });
 
-            avatar = (ImageView) itemView.findViewById(R.id.imageView);
+            avatar = (ImageView) itemView.findViewById(R.id.avatar);
             username = (TextView) itemView.findViewById(R.id.username);
             sign = (TextView) itemView.findViewById(R.id.sign);
             online = (ImageView) itemView.findViewById(R.id.online);

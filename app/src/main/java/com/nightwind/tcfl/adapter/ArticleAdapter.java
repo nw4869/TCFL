@@ -107,7 +107,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
             mTextView2 = (TextView) v.findViewById(R.id.textView2);
             mTextView3 = (TextView) v.findViewById(R.id.textView3);
             mTextView4 = (TextView) v.findViewById(R.id.textView4);
-            mImageView = (ImageView) v.findViewById(R.id.imageView);
+            mImageView = (ImageView) v.findViewById(R.id.avatar);
 
 
             mSlideImageLayout = (FrameLayout) v.findViewById(R.id.slideImage);

@@ -20,6 +20,7 @@ import com.nightwind.tcfl.activity.LoginActivity;
 import com.nightwind.tcfl.activity.MainActivity;
 import com.nightwind.tcfl.activity.MyArticleActivity;
 import com.nightwind.tcfl.activity.MyCollectionActivity;
+import com.nightwind.tcfl.activity.NeighborActivity;
 import com.nightwind.tcfl.activity.PikachuActivity;
 import com.nightwind.tcfl.activity.ProfileActivity;
 import com.nightwind.tcfl.R;
@@ -213,7 +214,7 @@ public class PersonCenterFragment extends Fragment implements View.OnClickListen
                     Intent intent = new Intent(getActivity(), ProfileActivity.class);
                     startActivity(intent);
                     getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
-                } else if (id == 1 || id == 2) {
+                } else if (id == 1/* || id == 2*/) {
                     Intent intent = new Intent(getActivity(), FriendsActivity.class);
                     if (id == 1) {
                         //所有好友
@@ -222,6 +223,10 @@ public class PersonCenterFragment extends Fragment implements View.OnClickListen
                         //在线好友
                         intent.putExtra("online", true);
                     }
+                    startActivity(intent);
+                    getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+                } else if (id == 2) {
+                    Intent intent = new Intent(getActivity(), NeighborActivity.class);
                     startActivity(intent);
                     getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
                 } else if (id == 3) {
