@@ -302,6 +302,7 @@ public class Auth {
                     boolean success = false;
                     String token = null;
                     User user = null;
+                    int uid = -1;
                     try {
                         //解析服务器返回的json
                         JSONObject jo = new JSONObject(responseMsg);
@@ -309,6 +310,7 @@ public class Auth {
                         success = jo.getBoolean("success");
                         //获取token
                         token = jo.getString("token");
+                        uid = jo.getInt("uid");
                         user = User.fromJson(responseMsg);
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -328,6 +330,7 @@ public class Auth {
                         saveToken(token);
                         System.out.println("save token:" + token);
                         saveUsername(username);
+                        saveUid(uid);
                         UserController uc = new UserController(mAppContext);
                         uc.saveUser(user);
 
@@ -775,6 +778,24 @@ public class Auth {
         } else {
             sp.edit().putString("registerId", regId).apply();
         }
+    }
+
+    private SharedPreferences getTokenSp() {
+        return mAppContext.getSharedPreferences("token", Activity.MODE_PRIVATE);
+    }
+
+    public void saveUid(int uid) {
+        SharedPreferences sp = getTokenSp();
+        if (uid == -1) {
+            sp.edit().remove("uid").apply();
+        } else {
+            sp.edit().putInt("uid", uid).apply();
+        }
+    }
+
+    public int getUid() {
+        SharedPreferences sp = getTokenSp();
+        return sp.getInt("uid", -1);
     }
 
     /**

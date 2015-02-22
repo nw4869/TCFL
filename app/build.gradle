@@ -5,7 +5,8 @@ android {
         config {
             keyAlias 'nightwindKey'
             keyPassword '940507'
-            storeFile file('D:/File/Keystore/nightwindKeystore.jks')
+//            storeFile file('D:/File/Keystore/nightwindKeystore.jks')
+            storeFile file('/root/data/File/Keystore/nightwindKeystore.jks')
             storePassword '940507'
         }
     }
@@ -17,6 +18,7 @@ android {
         targetSdkVersion 21
         versionCode 1
         versionName "1.0"
+        signingConfig signingConfigs.config
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
@@ -24,13 +26,16 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
+//            proguardFile 'D:/AndroidStudioProjects/TCFL/app/proguard-rules.pro'
+            proguardFile '/root/data/AndroidStudioProjects/TCFL/app/proguard-rules.pro'
         }
         debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-//            signingConfig signingConfigs.config // 签名配置
+            signingConfig signingConfigs.config // 签名配置
         }
     }
 //    productFlavors {
@@ -42,6 +47,8 @@ android {
 //            versionName '1.0'
 //        }
 //    }
+    productFlavors {
+    }
 }
 
 dependencies {

@@ -42,7 +42,7 @@ import java.util.List;
 public class NeighborActivity extends BaseActivity {
 
     private static final int LOAD_NEIGHBOR = 0;
-    private static final String TAG = "com.nightwind.tcfl.activity.NeighborActivity";
+    private static final String TAG = "NeighborActivity";
     public LocationClient mLocationClient;
     public LatLng mLatLng;
     public MyLocationListener mMyLocationListener;

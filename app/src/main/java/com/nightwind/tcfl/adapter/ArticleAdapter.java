@@ -144,7 +144,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
             mListItems = articleList;
             mType = type;
         } else {
-            Log.e("ArticleAdapter Constructor", "TYPE IS NOT COLLECTION");
+            Log.e("ArticleAdapter Construc", "TYPE IS NOT COLLECTION");
         }
     }
 
@@ -257,6 +257,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
 
             holder.id = position;
             Article article = mListItems.get(position);
+//            Log.i("articleAdapter", "article = " + article);
 //            System.out.println("position=" + position);       //debug
 //            System.out.println("mListItems=" + mListItems.toString());
             holder.mTextView1.setText(article.getTitle());
@@ -264,6 +265,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
 //            String date = article.getDate();
             //改成最近更新的时间
             String date = article.getLastDate();
+//            Log.i("ArticleAdapter", "article date = " + date);
             String newDate = date;
             if (BaseTools.isInCurrentYear(date)) {
                 newDate = BaseTools.getMonthAndDay(date) + " " +BaseTools.getTime(date);
@@ -271,6 +273,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
                     newDate = BaseTools.getTime(date);
                 }
             }
+//            Log.i("ArticleAdapter", "article new date = " + newDate);
             holder.mTextView3.setText(article.getUsername() + "  " + newDate);
             holder.mTextView4.setText(article.getCommentNum() + " reply");
 //        holder.mImageVIew.setImageBitmap(mListItems[position].getImg());

@@ -24,6 +24,9 @@
 
     <item android:id="@+id/action_add_article" android:title="@string/action_add_article"
         android:icon="@drawable/ic_create_white_48dp"
+        android:orderInCategory="2" app:showAsAction="ifRoom" />
+
+    <item android:id="@+id/action_registration" android:title="@string/action_registration"
         android:orderInCategory="1" app:showAsAction="ifRoom" />
 
 </menu>

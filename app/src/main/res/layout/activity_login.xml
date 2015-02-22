@@ -18,6 +18,7 @@
             android:id="@+id/username"
             android:maxLength="10"
             android:hint="用户名"
+            android:singleLine="true"
             android:text="nw"/>
 
         <EditText

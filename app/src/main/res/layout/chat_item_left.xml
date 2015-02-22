@@ -41,13 +41,13 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@id/iv_userhead"
-            android:background="@drawable/msg_left"
+            android:background="@drawable/chat_left"
             android:clickable="true"
             android:focusable="true"
             android:gravity="left|center"
             android:lineSpacingExtra="2dp"
             android:minHeight="50dp"
-            android:textColor="#ff000000" />
+            android:textColor="#ffffff" />
 
     </RelativeLayout>
 </LinearLayout>

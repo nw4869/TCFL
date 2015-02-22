@@ -1,6 +1,15 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:TBApp="http://schemas.android.com/apk/res/res-auto">
 
+    <style name="Dialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+
+        <item name="isLightTheme">true</item>
+        <item name="selectableItemBackground">@android:color/white</item>
+
+    </style>
+
     <style name="NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
 
         <!-- toolbar（actionbar）颜色 -->
@@ -15,6 +24,11 @@
         <item name="searchViewStyle">@style/MySearchViewStyle</item>
 
         <!--<item name="titleTextAppearance">?android:attr/textAppearanceSmallInverse</item>-->
+    </style>
+    
+    <style name="Fullscreen" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
     </style>
 
     <style name="AppBaseTheme" parent="Theme.AppCompat.Light.DarkActionBar">

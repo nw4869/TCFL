@@ -32,10 +32,9 @@
     <!-- JPush end -->
 
 
-    <!--baidu map-->
-    <!--允许应用读取低级别的系统日志文件 -->
-    <uses-permission android:name="android.permission.READ_LOGS"/>
-
+    <!-- baidu map -->
+    <!-- 允许应用读取低级别的系统日志文件 -->
+    <uses-permission android:name="android.permission.READ_LOGS" />
 
     <!-- Include following permission if you load images from Internet -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -46,7 +45,7 @@
     <application
         android:name=".app.AppApplication"
         android:allowBackup="true"
-        android:icon="@drawable/kenan"
+        android:icon="@drawable/app_icon"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
@@ -212,11 +211,16 @@
 
         <!-- JPush end -->
 
-        <!--baidu map-->
+
+        <!-- baidu map -->
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="XrtdFvSMArn45U7HTRc8Cs0t" />
-        <service android:name="com.baidu.location.f" android:enabled="true" android:process=":remote">
+
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote" >
         </service>
 
         <activity
@@ -243,6 +247,16 @@
         <activity
             android:name=".activity.NeighborActivity"
             android:label="@string/title_activity_neighbor" >
+        </activity>
+        <activity
+            android:name=".activity.WelcomeActivity"
+            android:label="@string/title_activity_welcome"
+            android:theme="@style/Fullscreen" >
+        </activity>
+        <activity
+            android:name=".activity.RegistrationActivity"
+            android:label="@string/title_activity_registration"
+            android:theme="@style/Dialog">
         </activity>
     </application>
 

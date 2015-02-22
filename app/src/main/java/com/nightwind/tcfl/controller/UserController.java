@@ -1,16 +1,18 @@
 package com.nightwind.tcfl.controller;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.util.Log;
 
-import com.baidu.mapapi.model.LatLng;
 import com.google.gson.Gson;
 import com.nightwind.tcfl.Auth;
-import com.nightwind.tcfl.bean.Article;
 import com.nightwind.tcfl.bean.Neighbor;
 import com.nightwind.tcfl.bean.User;
+import com.nightwind.tcfl.exception.AuthenticationException;
+import com.nightwind.tcfl.exception.EncryptException;
 import com.nightwind.tcfl.oss.OSSController;
 import com.nightwind.tcfl.server.ServerConfig;
+import com.nightwind.tcfl.tool.encryptionUtil.Base64Utils;
 import com.nightwind.tcfl.tool.encryptionUtil.RSAUtils;
 import com.nightwind.tcfl.tool.localDB.UserDBManager;
 
@@ -18,16 +20,18 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Created by wind on 2014/12/10.
@@ -732,4 +736,68 @@ public class UserController {
         }
         return neighborList;
     }
+
+
+    public static final int REGISTRATION_GET = 0;
+    public static final int REGISTRATION_POST = 1;
+
+    public String registration(int type) throws AuthenticationException, EncryptException, IOException {
+
+        String result_json = "";
+
+        Auth auth = new Auth(mContext);
+        int uid = auth.getUid();
+        String token = auth.getToken();
+
+        if (token == null || token.equals("")|| uid == -1) {
+            throw new AuthenticationException();
+        }
+
+        String urlStr = ServerConfig.getServer() + "MyLogin/Registration";
+        HttpRequestBase request;
+        if (type == REGISTRATION_GET) {
+//            urlStr += "?uid=" + uid;
+//            urlStr += "&token=" + token;
+            request = new HttpGet(urlStr);
+        } else {
+//            List<NameValuePair> params = new ArrayList<>();
+//            params.add(new BasicNameValuePair("token", token));
+//            params.add(new BasicNameValuePair("uid", String.valueOf(uid)));
+//            requestPost.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
+            request = new HttpPost(urlStr);
+        }
+        request.setHeader("Authorization", uid + ":" + token);
+
+        try {
+            //设置请求参数项
+            HttpClient Client = ServerConfig.getHttpClient();
+            //执行请求返回相应
+            HttpResponse response = Client.execute(request);
+
+            //判断是否请求成功
+            final int statusCode = response.getStatusLine().getStatusCode();
+            if (statusCode == 200) {
+                //获得响应信息
+                String responseMsg = EntityUtils.toString(response.getEntity());
+//                try {
+//                    JSONObject jsonObject = new JSONObject(responseMsg);
+//                    int days = jsonObject.getInt("days");
+//                    if (jsonObject.getBoolean("isSigned")) {
+//                        days += 1000000;
+//                    }
+//                    return days;
+//                } catch (Exception e) {
+//                    Log.e("setUserOnline", "JSON ERROR");
+//                }
+                result_json = responseMsg;
+            } else if(statusCode == 403) {
+                throw new AuthenticationException();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IOException();
+        }
+        return result_json;
+    }
+
 }

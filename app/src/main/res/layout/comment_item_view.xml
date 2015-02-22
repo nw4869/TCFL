@@ -104,7 +104,7 @@
         android:paddingLeft="16dp"
         android:paddingRight="16dp">
         <ImageView
-            android:id="@+id/avatar"
+            android:id="@+id/avatar1"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/conan1"
@@ -118,9 +118,9 @@
             android:layout_height="wrap_content"
             android:text="Username"
             android:id="@+id/username"
-            android:layout_alignTop="@+id/avatar"
-            android:layout_toRightOf="@+id/avatar"
-            android:layout_toEndOf="@+id/avatar"
+            android:layout_alignTop="@+id/avatar1"
+            android:layout_toRightOf="@+id/avatar1"
+            android:layout_toEndOf="@+id/avatar1"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp" />
 
@@ -129,7 +129,7 @@
             android:layout_height="wrap_content"
             android:text="DateTime"
             android:id="@+id/datetime"
-            android:layout_alignBottom="@+id/avatar"
+            android:layout_alignBottom="@+id/avatar1"
             android:layout_alignLeft="@+id/username"
             android:layout_alignStart="@+id/username" />
 

@@ -93,7 +93,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             TvDateTime = (TextView) itemView.findViewById(R.id.datetime);
             TvReplySome = (TextView) itemView.findViewById(R.id.replySomeone);
             TvContent = (TextView) itemView.findViewById(R.id.comment);
-            imageView1 = (ImageView) itemView.findViewById(R.id.avatar);
+            imageView1 = (ImageView) itemView.findViewById(R.id.avatar1);
             commentIcon = (ImageView) itemView.findViewById(R.id.commentIcon);
         }
     }

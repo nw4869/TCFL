@@ -432,18 +432,28 @@ public class ArticleController {
             HttpResponse response = Client.execute(request);
 
             //判断是否请求成功
+            Log.d("ArticleController", "response code = " + response.getStatusLine().getStatusCode());
             if (response.getStatusLine().getStatusCode() == 200) {
                 //获得响应信息
                 String responseMsg = EntityUtils.toString(response.getEntity());
+//                Log.d("ArticleController", "responseMsg = " +responseMsg);
 //                JSONObject jsonObject = new JSONObject(responseMsg);
 //                if(jsonObject.getBoolean("success"))
                 try {
                     articleList = Article.fromJsonArticles(responseMsg);
+//                    Log.d("ArticleController", "articleList = " +articleList);
                     articleList.add(0, null);
                     for (Article article: articleList) {
                         if (article != null) {
                             article.getCommentEntities().add(0, null);
                         }
+//                        if (article == null) {
+//                            Log.d("ArticleController", "article = null");
+//                        } else {
+//                            Log.d("ArticleController", "article: title = " + article.getTitle()
+//                            + " content = " + article.getContent() + " user = " + article.getUsername()
+//                            + " date = " + article.getDate() + " lastDate = " + article.getLastDate());
+//                        }
                     }
                     //写入内存
                     sArticleListsMap.put(classify, articleList);

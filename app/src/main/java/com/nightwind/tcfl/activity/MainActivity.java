@@ -1,6 +1,7 @@
 package com.nightwind.tcfl.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -40,7 +42,8 @@ import java.util.HashMap;
 import cn.jpush.android.api.JPushInterface;
 
 public class MainActivity extends ActionBarActivity implements PersonCenterFragment.OnFragmentInteractionListener{
-	private DrawerLayout mDrawerLayout;
+    private static final int REQUEST_REGISTRATION = 1;
+    private DrawerLayout mDrawerLayout;
 	private ActionBarDrawerToggle mDrawerToggle;
 	private ShareActionProvider mShareActionProvider;
 	private PagerSlidingTabStrip mPagerSlidingTabStrip;
@@ -84,23 +87,25 @@ public class MainActivity extends ActionBarActivity implements PersonCenterFragm
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        Auth auth = new Auth(this);
-//        //gen rand data
-//        UserController userController = new UserController(this);
-////        userController.randGenUsers(8);
-//        final String username = auth.getUsername();
-//        if (username != null) {
-//            userController.setSelfUser(userController.getUser(username));
-//        }
-//        userController.closeDB();
-//
-//        ChatMsgController chatMsgController = new ChatMsgController(this);
-////        chatMsgController.randGenChat();
-//        chatMsgController.closeDB();
-//
-//        ArticleController articleController = new ArticleController(this);
-////        articleController.genRandArticle(50);
-//        articleController.closeDB();
+        final ImageView imageView = (ImageView) findViewById(R.id.imageView);
+        imageView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                AlphaAnimation alphaAnimation = new AlphaAnimation(1.0f, 0.0f);
+                alphaAnimation.setDuration(500);
+                imageView.startAnimation(alphaAnimation);
+                imageView.setVisibility(View.GONE);
+
+                SharedPreferences sp = getSharedPreferences("welcome", MODE_PRIVATE);
+                boolean welcome = sp.getBoolean("welcome", true);
+                if (welcome) {
+                    Intent intent = new Intent(MainActivity.this, WelcomeActivity.class);
+                    startActivity(intent);
+                }
+            }
+        }, 1000);
+
+
 
 		initViews();
 	}
@@ -139,6 +144,10 @@ public class MainActivity extends ActionBarActivity implements PersonCenterFragm
                     MainActivity.this.startActivityForResult(intent, REQUEST_ADD_ARTICLE_BASE + classify);
 //                    MainActivity.this.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
 //                    Toast.makeText(MainActivity.this, "action_add_article", Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.action_registration:
+                    Intent intent1 = new Intent(MainActivity.this, RegistrationActivity.class);
+                    MainActivity.this.startActivityForResult(intent1, REQUEST_REGISTRATION);
                     break;
 
 				default:

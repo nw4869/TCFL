@@ -59,5 +59,9 @@
     <string name="action_add_image">添加图片</string>
     <string name="article_add_failed">文章发布失败，请重试</string>
     <string name="title_activity_neighbor">在线好友</string>
+    <string name="title_activity_welcome">WelcomeActivity</string>
+    <string name="title_activity_registration">RegistrationActivity</string>
+    <string name="action_registration">签到</string>
+    <string name="registration">签   到</string>
 
 </resources>

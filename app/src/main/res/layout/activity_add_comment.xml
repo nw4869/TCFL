@@ -23,10 +23,8 @@
         android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
         android:layout_below="@+id/toolbar"
-        android:layout_alignLeft="@+id/toolbar"
-        android:layout_alignStart="@+id/toolbar"
-        android:layout_alignRight="@+id/toolbar"
-        android:layout_alignEnd="@+id/toolbar"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true" />
 
 </RelativeLayout>
