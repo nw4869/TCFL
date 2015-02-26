@@ -27,7 +27,7 @@
     <output url="file:///media/Data/AndroidStudioProjects/TCFL/app/build/intermediates/classes/debug" />
     <output-test url="file:///media/Data/AndroidStudioProjects/TCFL/app/build/intermediates/classes/test/debug" />
     <exclude-output />
-    <content url="file:///media/Data/AndroidStudioProjects/TCFL/app">
+    <content url="file:///media/Data/AndroidStudioProjects/TCFL/app/build">
       <sourceFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/build/generated/source/r/debug" isTestSource="false" generated="true" />
       <sourceFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/build/generated/source/aidl/debug" isTestSource="false" generated="true" />
       <sourceFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/build/generated/source/buildConfig/debug" isTestSource="false" generated="true" />
@@ -40,27 +40,6 @@
       <sourceFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/build/generated/source/rs/test/debug" isTestSource="true" generated="true" />
       <sourceFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/build/generated/res/rs/test/debug" type="java-test-resource" />
       <sourceFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/build/generated/res/generated/test/debug" type="java-test-resource" />
-      <sourceFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/debug/res" type="java-resource" />
-      <sourceFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/debug/resources" type="java-resource" />
-      <sourceFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/debug/assets" type="java-resource" />
-      <sourceFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/debug/aidl" isTestSource="false" />
-      <sourceFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/debug/java" isTestSource="false" />
-      <sourceFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/debug/jni" isTestSource="false" />
-      <sourceFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/debug/rs" isTestSource="false" />
-      <sourceFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/main/res" type="java-resource" />
-      <sourceFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/main/resources" type="java-resource" />
-      <sourceFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/main/assets" type="java-resource" />
-      <sourceFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/main/aidl" isTestSource="false" />
-      <sourceFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/main/java" isTestSource="false" />
-      <sourceFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/main/jni" isTestSource="false" />
-      <sourceFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/main/rs" isTestSource="false" />
-      <sourceFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/androidTest/res" type="java-test-resource" />
-      <sourceFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/androidTest/resources" type="java-test-resource" />
-      <sourceFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/androidTest/assets" type="java-test-resource" />
-      <sourceFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/androidTest/aidl" isTestSource="true" />
-      <sourceFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/androidTest/java" isTestSource="true" />
-      <sourceFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/androidTest/jni" isTestSource="true" />
-      <sourceFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/androidTest/rs" isTestSource="true" />
       <excludeFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/build/intermediates/assets" />
       <excludeFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/build/intermediates/bundles" />
       <excludeFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/build/intermediates/classes" />
@@ -83,6 +62,70 @@
       <excludeFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/build/outputs" />
       <excludeFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/build/tmp" />
     </content>
+    <content url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/androidTest/aidl">
+      <sourceFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/androidTest/aidl" isTestSource="true" />
+    </content>
+    <content url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/androidTest/assets">
+      <sourceFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/androidTest/assets" type="java-test-resource" />
+    </content>
+    <content url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/androidTest/java">
+      <sourceFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/androidTest/java" isTestSource="true" />
+    </content>
+    <content url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/androidTest/jni">
+      <sourceFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/androidTest/jni" isTestSource="true" />
+    </content>
+    <content url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/androidTest/res">
+      <sourceFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/androidTest/res" type="java-test-resource" />
+    </content>
+    <content url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/androidTest/resources">
+      <sourceFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/androidTest/resources" type="java-test-resource" />
+    </content>
+    <content url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/androidTest/rs">
+      <sourceFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/androidTest/rs" isTestSource="true" />
+    </content>
+    <content url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/debug/aidl">
+      <sourceFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/debug/aidl" isTestSource="false" />
+    </content>
+    <content url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/debug/assets">
+      <sourceFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/debug/assets" type="java-resource" />
+    </content>
+    <content url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/debug/java">
+      <sourceFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/debug/java" isTestSource="false" />
+    </content>
+    <content url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/debug/jni">
+      <sourceFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/debug/jni" isTestSource="false" />
+    </content>
+    <content url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/debug/res">
+      <sourceFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/debug/res" type="java-resource" />
+    </content>
+    <content url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/debug/resources">
+      <sourceFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/debug/resources" type="java-resource" />
+    </content>
+    <content url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/debug/rs">
+      <sourceFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/debug/rs" isTestSource="false" />
+    </content>
+    <content url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/main/aidl">
+      <sourceFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/main/aidl" isTestSource="false" />
+    </content>
+    <content url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/main/assets">
+      <sourceFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/main/assets" type="java-resource" />
+    </content>
+    <content url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/main/java">
+      <sourceFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/main/java" isTestSource="false" />
+    </content>
+    <content url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/main/jni">
+      <sourceFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/main/jni" isTestSource="false" />
+    </content>
+    <content url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/main/res">
+      <sourceFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/main/res" type="java-resource" />
+    </content>
+    <content url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/main/resources">
+      <sourceFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/main/resources" type="java-resource" />
+    </content>
+    <content url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/main/rs">
+      <sourceFolder url="file:///media/Data/AndroidStudioProjects/TCFL/app/src/main/rs" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$" />
     <orderEntry type="jdk" jdkName="Android API 21 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="gson-2.3.1" level="project" />

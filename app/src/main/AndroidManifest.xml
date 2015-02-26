@@ -274,6 +274,10 @@
             android:name=".activity.ContestResultActivity"
             android:label="@string/title_activity_contest_result" >
         </activity>
+        <activity
+            android:name=".activity.ActivitiesActivity"
+            android:label="@string/title_activity_activities" >
+        </activity>
     </application>
 
 </manifest>

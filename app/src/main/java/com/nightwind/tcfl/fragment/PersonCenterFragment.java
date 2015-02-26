@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nightwind.tcfl.Auth;
+import com.nightwind.tcfl.activity.ActivitiesActivity;
 import com.nightwind.tcfl.activity.FriendsActivity;
 import com.nightwind.tcfl.activity.LoginActivity;
 import com.nightwind.tcfl.activity.MainActivity;
@@ -248,7 +249,7 @@ public class PersonCenterFragment extends Fragment implements View.OnClickListen
                     getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
                 } else if (id == 6) {
                     //找活动
-                    Intent intent = new Intent(getActivity(), ReviewListActivity.class);
+                    Intent intent = new Intent(getActivity(), ActivitiesActivity.class);
                     startActivity(intent);
                     getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
                 } else if (id == 7) {

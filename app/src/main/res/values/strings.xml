@@ -68,5 +68,7 @@
     <string name="title_activity_forget_pwd">忘记密码</string>
     <string name="title_activity_review_list">复习</string>
     <string name="title_activity_contest_result">竞赛排名</string>
+    <string name="title_activity_activities">ActivitiesActivity</string>
+    <string name="action_add_activity">发布活动</string>
 
 </resources>

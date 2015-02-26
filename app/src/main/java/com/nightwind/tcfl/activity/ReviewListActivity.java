@@ -34,7 +34,7 @@ public class ReviewListActivity extends BaseActivity {
                     .commit();
         }
 
-        getSupportActionBar().setTitle("复习列表");
+        getSupportActionBar().setTitle("复习");
     }
 
 }

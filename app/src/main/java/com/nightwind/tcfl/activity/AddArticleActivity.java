@@ -250,9 +250,10 @@ public class AddArticleActivity extends ActionBarActivity {
                     super.onPostExecute(aBoolean);
                     if (aBoolean) {
                         new AddArticleTask().execute(article);
+                    } else {
+                        Toast.makeText(getApplicationContext(), R.string.article_add_failed, Toast.LENGTH_SHORT).show();
                     }
                     mDialog.cancel();
-                    Toast.makeText(getApplicationContext(), R.string.article_add_failed, Toast.LENGTH_SHORT).show();
                 }
 
                 @Override

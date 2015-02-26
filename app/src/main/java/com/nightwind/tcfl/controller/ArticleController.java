@@ -322,6 +322,7 @@ public class ArticleController {
     static public final int GET_ARTICLE_TYPE_MY_ARTICLE = 1;
     static public final int GET_ARTICLE_TYPE_MY_COLLECTION = 2;
     static public final int GET_ARTICLE_TYPE_REVIEW = 3;
+    public static final int GET_ARTICLE_ACTIVITIES = 4;
 
     /**
      *
@@ -548,8 +549,8 @@ public class ArticleController {
                 JSONObject jsonObject = new JSONObject(responseMsg);
                 if(jsonObject.getBoolean("success")) {
                     article = Article.fromJson(responseMsg);
-                    //保存到内存
-                    saveArticle(classify, article);
+                    //保存到内存 todo
+//                    saveArticle(classify, article);
                 }
             }
         } catch (Exception e) {

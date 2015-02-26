@@ -132,6 +132,10 @@
   -dontwarn android.**
   -keep class android.** { *; }
 
+  -dontwarn cn.smssdk.**
+  -keep class cn.smssdk.** { *; }
+
+
 #  -keepclassmembers public class com.nightwind.tcfl.bean.** {
 #   void set*(***);
 #   *** get*();

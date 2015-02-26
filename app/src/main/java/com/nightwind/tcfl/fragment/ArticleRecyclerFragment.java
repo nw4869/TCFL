@@ -57,6 +57,7 @@ public class ArticleRecyclerFragment extends Fragment {
     public static final int TYPE_MY_ARTICLE = 3;
     public static final int TYPE_REVIEW = 4;
     private static final int MENU_DELETE = 0;
+    public static final int TYPE_ACTIVITIES = 5;
 
 
     private int position;
@@ -243,7 +244,7 @@ public class ArticleRecyclerFragment extends Fragment {
 
 //        mArticleEntities.clear();
 //        mArticleEntities.add(null);
-        if (type == TYPE_COLLECTION || type == TYPE_MY_ARTICLE || type == TYPE_REVIEW) {
+        if (type == TYPE_COLLECTION || type == TYPE_MY_ARTICLE || type == TYPE_REVIEW || type == TYPE_ACTIVITIES) {
             mAdapter = new ArticleAdapter(getActivity(), mArticleEntities, type);
             mButtonFloatAdd.setVisibility(View.GONE);
         } else {
