@@ -247,6 +247,8 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
             //若长度为1（列表为空），则显示“列表为空”字样
             if (mListItems.size() == 1) {
                 holder.mTvNoData.setVisibility(View.VISIBLE);
+            } else {
+                holder.mTvNoData.setVisibility(View.GONE);
             }
 
         } else {

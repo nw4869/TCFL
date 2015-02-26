@@ -63,5 +63,8 @@
     <string name="title_activity_registration">RegistrationActivity</string>
     <string name="action_registration">签到</string>
     <string name="registration">签   到</string>
+    <string name="title_activity_register2">Register2Activity</string>
+    <string name="getVerificationCode">获取验证码</string>
+    <string name="title_activity_forget_pwd">ForgetPwdActivity</string>
 
 </resources>

@@ -35,14 +35,40 @@
             android:text="4869"/>
 
 
+        <TextView
+            android:layout_marginTop="16dp"
+            android:id="@+id/register"
+            android:layout_alignRight="@id/password"
+            android:onClick="onToRegister"
+            android:textColor="#ff0099cc"
+            android:layout_below="@id/password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="马上注册"/>
+
+        <TextView
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="16dp"
+            android:id="@+id/forgePwd"
+            android:layout_toLeftOf="@id/register"
+            android:onClick="onToForgePwd"
+            android:textColor="#ff0099cc"
+            android:layout_below="@id/password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="忘记密码?"/>
+
+
+
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="登录"
-            android:background="?attr/colorPrimary"
+            android:background="@drawable/background_primary_button"
+            android:textColor="@android:color/white"
             android:id="@+id/login"
-            android:layout_below="@+id/password"
+            android:layout_below="@+id/register"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:onClick="onClickLogin" />

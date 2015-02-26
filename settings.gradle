@@ -1,1 +1,1 @@
-include ':app', ':MaterialDesign', ':RecyclerViewItemAnimators-library'
+include ':app', ':MaterialDesign', ':RecyclerViewItemAnimators-library', ':sMSSDK'

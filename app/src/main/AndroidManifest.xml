@@ -256,7 +256,15 @@
         <activity
             android:name=".activity.RegistrationActivity"
             android:label="@string/title_activity_registration"
-            android:theme="@style/Dialog">
+            android:theme="@style/Dialog" >
+        </activity>
+        <activity
+            android:name=".activity.Register2Activity"
+            android:label="@string/title_activity_register2" >
+        </activity>
+        <activity
+            android:name=".activity.ForgetPwdActivity"
+            android:label="@string/title_activity_forget_pwd" >
         </activity>
     </application>
 

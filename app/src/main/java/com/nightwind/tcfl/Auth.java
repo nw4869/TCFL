@@ -39,6 +39,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,19 +57,19 @@ public class Auth {
     private String mServer;
     private Handler mHandler;
     static private HttpClient mClient;
+    private String mTel;
 
+    private int mSMSCode;
     private String mUsername;
     private String mPassword;
-
     private String responseMsg = "";
+
     private String mSalt;
-//    private static String SERVER = SERVER0;
-
-
     protected Auth() {
         mClient = ServerConfig.getHttpClient();
         mServer = ServerConfig.getServer();
     }
+
 
     public Auth(Context context) {
         this();
@@ -93,16 +94,114 @@ public class Auth {
         this.mServer = Server;
     }
 
-
     static public final int MSG_LOGIN_SUCCESS = 0;
+
+
     static public final int MSG_LOGIN_PWD_ERROR = 1;
     static public final int MSG_URL_ERROR = 2;
     static public final int MSG_LOGIN_TOKEN_ERROR = 3;
-
     static public final int MSG_LOGOUT_SUCCESS = 4;
 
     static public final int MSG_REGISTER_SUCCESS = 5;
+
     static public final int MSG_REGISTER_FILED = 6;
+    static public final int MSG_CHECK_USERNAME_AVAIL = 7;
+
+    static public final int MSG_CHECK_USERNAME_UN_AVAIL = 8;
+    static public final int MSG_NETWORK_ERROR = 9;
+
+    public static final int MSG_CHANGE_PWD_SUCCESS = 10;
+    public static final int MSG_CHANGE_PWD_FAILED_CODE_ERROR = 11;
+    public static final int MSG_CHANGE_PWD_FAILED_PHONE_ERROR = 12;
+
+    public static final int MSG_SERVER_BAN = 13;
+
+    //    private static String SERVER = SERVER0;
+
+    public void checkUserName(final String username, final Handler handler) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //todo
+                String url = mServer + "MyLogin/CheckUserName";
+                HttpPost request = new HttpPost(url);
+                List<NameValuePair> params = new ArrayList<>();
+                params.add(new BasicNameValuePair("username", username));
+
+                int msg = MSG_CHECK_USERNAME_UN_AVAIL;
+                boolean available = false;
+                try {
+                    request.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
+                    HttpResponse response = mClient.execute(request);
+                    responseMsg = EntityUtils.toString(response.getEntity(), "UTF-8");
+                    JSONObject jo = new JSONObject(responseMsg);
+                    available = jo.getBoolean("available");
+                    msg = available ? MSG_CHECK_USERNAME_AVAIL : MSG_CHECK_USERNAME_UN_AVAIL;
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                } catch (IOException | JSONException e) {
+                    msg = MSG_NETWORK_ERROR;
+                    e.printStackTrace();
+                }
+
+                handler.sendEmptyMessage(msg);
+            }
+        }).start();
+    }
+
+    public void changePwdByPhone(final String phone, final String code, final String password, final Handler handler) {
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                String url = mServer + "MyLogin/ChangePwd";
+                HttpPost request = new HttpPost(url);
+
+                Message msg = handler.obtainMessage(MSG_CHANGE_PWD_FAILED_CODE_ERROR);
+
+                //set params
+                List<NameValuePair> params = new ArrayList<>();
+                params.add(new BasicNameValuePair("phone", phone));
+                params.add(new BasicNameValuePair("code", code));
+                params.add(new BasicNameValuePair("password", password));
+                try {
+                    request.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
+
+                    //execute
+                    HttpResponse response = mClient.execute(request);
+
+                    //handle response
+                    int statusCode = response.getStatusLine().getStatusCode();
+                    if (statusCode == 200) {
+                        String responseMsg = EntityUtils.toString(response.getEntity(), "UTF-8");
+                        JSONObject jo = new JSONObject(responseMsg);
+                        int errorCode = jo.getInt("errorCode");
+                        if (errorCode == 0) {
+                            msg.what = MSG_CHANGE_PWD_SUCCESS;
+                        } else if (errorCode == 1) {
+                            msg.what = MSG_CHANGE_PWD_FAILED_CODE_ERROR;
+                        } else if (errorCode == 2) {
+                            msg.what = MSG_CHANGE_PWD_FAILED_PHONE_ERROR;
+                        } else if (errorCode == -1) {
+                            msg.what = MSG_SERVER_BAN;
+                            msg.arg1 = jo.getInt("errorTimes");
+                            msg.arg2 = jo.getInt("minute");
+                        }
+                    }
+
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                } catch (IOException | JSONException e) {
+                    msg.what = MSG_NETWORK_ERROR;
+                    e.printStackTrace();
+                }
+
+                //send message
+                handler.sendMessage(msg);
+            }
+        }).start();
+    }
 
 
 //    static public final int MSG_TOKEN_SUCCESS = 4;
@@ -115,6 +214,8 @@ public class Auth {
             //信息反馈
             Message msg = mHandler.obtainMessage();
 
+            String tel = mTel;
+            int smsCode = mSMSCode;
             String username = mUsername;
             String password = mPassword;
             System.out.println("username=" + username + ":password=" + password);
@@ -140,22 +241,27 @@ public class Auth {
                 }
 
                 //URL合法，但是这一步并不验证返回结果
-                boolean registerValidate = registerServer(username, cipherPwd);
+                boolean registerValidate = registerServer(tel, smsCode, username, cipherPwd);
 
                 System.out.println("----------------------------bool is :" + registerValidate + "----------response:" + responseMsg);
                 if (registerValidate) {
-
+                    JSONObject jo = null;
                     boolean success = false;
+                    int errorCode = -1;
                     String token = null;
                     User user = null;
                     try {
                         //解析服务器返回的json
-                        JSONObject jo = new JSONObject(responseMsg);
+                        jo = new JSONObject(responseMsg);
                         //获取状态
                         success = jo.getBoolean("success");
+                        //获取sms errorCode
+                        errorCode = jo.getInt("errorCode");
                         //获取token
-                        token = jo.getString("token");
-                        user = User.fromJson(responseMsg);
+                        if (success) {
+                            token = jo.getString("token");
+                            user = User.fromJson(responseMsg);
+                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -174,7 +280,21 @@ public class Auth {
                         msg.setData(bundle);
                         mHandler.sendMessage(msg);
                     } else {
-                        msg.what = MSG_REGISTER_FILED;
+                        if (errorCode == -2) {
+                            msg.what = MSG_CHECK_USERNAME_UN_AVAIL;
+                        } else if (errorCode >= 500) {
+                            msg.what = MSG_REGISTER_FILED;
+                        } else if (errorCode == -1) {
+                            msg.what = MSG_SERVER_BAN;
+                            try {
+                                if (jo != null) {
+                                    msg.arg1 = jo.getInt("errorTimes");
+                                    msg.arg2 = jo.getInt("minute");
+                                }
+                            } catch (Exception e) {
+                                msg.what = MSG_REGISTER_FILED;
+                            }
+                        }
                         mHandler.sendMessage(msg);
                     }
 
@@ -189,7 +309,7 @@ public class Auth {
         }
     }
 
-    private boolean registerServer(String username, String password) {
+    private boolean registerServer(String phone, int mSMSCode, String username, String password) {
         boolean registerValidate = false;
         //使用apache HTTP客户端实现
         String urlStr = mServer + "MyLogin/Register";
@@ -197,6 +317,10 @@ public class Auth {
         //如果传递参数多的话，可以对传递的参数进行封装
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         //添加用户名和密码
+        if (phone != null) {
+            params.add(new BasicNameValuePair("phone", phone));
+            params.add(new BasicNameValuePair("code", String.valueOf(mSMSCode)));
+        }
         params.add(new BasicNameValuePair("username", username));
         params.add(new BasicNameValuePair("password", password));
         try {
@@ -299,19 +423,22 @@ public class Auth {
                 boolean loginValidate = loginServer(username, cipherPwd);
                 System.out.println("----------------------------bool is :" + loginValidate + "----------response:" + responseMsg);
                 if (loginValidate) {
+                    JSONObject jo = null;
                     boolean success = false;
                     String token = null;
                     User user = null;
                     int uid = -1;
                     try {
                         //解析服务器返回的json
-                        JSONObject jo = new JSONObject(responseMsg);
+                        jo = new JSONObject(responseMsg);
                         //获取状态
                         success = jo.getBoolean("success");
-                        //获取token
-                        token = jo.getString("token");
-                        uid = jo.getInt("uid");
-                        user = User.fromJson(responseMsg);
+                        if (success) {
+                            //获取token
+                            token = jo.getString("token");
+                            uid = jo.getInt("uid");
+                            user = User.fromJson(responseMsg);
+                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -346,6 +473,16 @@ public class Auth {
                         mHandler.sendMessage(msg);
                     } else {
                         msg.what = MSG_LOGIN_PWD_ERROR;
+                        try {
+                            if (jo != null) {
+                                int errorCode = jo.getInt("errorCode");
+                                msg.arg1 = jo.getInt("errorTimes");
+                                msg.arg2 = jo.getInt("minute");
+                                msg.what = MSG_SERVER_BAN;
+                            }
+
+                        } catch (Exception ignored) {
+                        }
                         mHandler.sendMessage(msg);
                     }
 
@@ -613,6 +750,16 @@ public class Auth {
      * @param handler
      */
     public void register(String username, String password, Handler handler) {
+        mUsername = username;
+        mPassword = password;
+        mHandler = handler;
+        Thread registerThread = new Thread(new RegisterThread());
+        registerThread.start();
+    }
+
+    public void register(String tel, int smsCode, String username, String password, Handler handler) {
+        mTel = tel;
+        mSMSCode = smsCode;
         mUsername = username;
         mPassword = password;
         mHandler = handler;

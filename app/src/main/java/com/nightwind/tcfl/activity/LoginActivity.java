@@ -58,6 +58,12 @@ public class LoginActivity extends BaseActivity {
 //                    //todo
 //                    Toast.makeText(getApplicationContext(), "token验证成功", Toast.LENGTH_SHORT).show();
 //                    break;
+                case Auth.MSG_SERVER_BAN:
+                    mDialog.cancel();
+                    int errorTime = msg.arg1;
+                    int minute = msg.arg2;
+                    Toast.makeText(LoginActivity.this, "错误次数超过" + errorTime + ",请" + minute + "分钟后重试", Toast.LENGTH_SHORT).show();
+                    break;
             }
 
         }
@@ -171,10 +177,29 @@ public class LoginActivity extends BaseActivity {
         if (id == R.id.action_settings) {
             return true;
         } else if (id == R.id.action_register) {
-            Intent intent = new Intent(this, RegisterActivity.class);
-            startActivityForResult(intent, REQUEST_REGISTER);
+            toRegister();
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onToRegister(View v) {
+        toRegister();
+    }
+
+    private void toRegister() {
+        Intent intent = new Intent(this, RegisterActivity.class);
+        startActivityForResult(intent, REQUEST_REGISTER);
+        overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+    }
+
+    public void onToForgePwd(View v) {
+        toForgePwd();
+    }
+
+    private void toForgePwd() {
+        Intent intent = new Intent(this, ForgetPwdActivity.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
     }
 }
