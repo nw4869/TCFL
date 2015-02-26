@@ -266,6 +266,14 @@
             android:name=".activity.ForgetPwdActivity"
             android:label="@string/title_activity_forget_pwd" >
         </activity>
+        <activity
+            android:name=".activity.ReviewListActivity"
+            android:label="@string/title_activity_review_list" >
+        </activity>
+        <activity
+            android:name=".activity.ContestResultActivity"
+            android:label="@string/title_activity_contest_result" >
+        </activity>
     </application>
 
 </manifest>

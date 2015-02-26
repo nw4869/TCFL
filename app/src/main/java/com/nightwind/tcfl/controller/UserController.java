@@ -7,6 +7,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.nightwind.tcfl.Auth;
 import com.nightwind.tcfl.bean.Neighbor;
+import com.nightwind.tcfl.bean.RankUser;
 import com.nightwind.tcfl.bean.User;
 import com.nightwind.tcfl.exception.AuthenticationException;
 import com.nightwind.tcfl.exception.EncryptException;
@@ -779,16 +780,6 @@ public class UserController {
             if (statusCode == 200) {
                 //获得响应信息
                 String responseMsg = EntityUtils.toString(response.getEntity());
-//                try {
-//                    JSONObject jsonObject = new JSONObject(responseMsg);
-//                    int days = jsonObject.getInt("days");
-//                    if (jsonObject.getBoolean("isSigned")) {
-//                        days += 1000000;
-//                    }
-//                    return days;
-//                } catch (Exception e) {
-//                    Log.e("setUserOnline", "JSON ERROR");
-//                }
                 result_json = responseMsg;
             } else if(statusCode == 403) {
                 throw new AuthenticationException();
@@ -800,4 +791,26 @@ public class UserController {
         return result_json;
     }
 
+    public List<RankUser> getContestResult(int begin, int end) throws IOException {
+
+        String url = ServerConfig.getServer() + "MyLogin/ContestResult";
+        url += "?begin=" + begin;
+        url += "&end="+ end;
+
+        HttpGet request = new HttpGet(url);
+
+        HttpClient client = ServerConfig.getHttpClient();
+        HttpResponse response = client.execute(request);
+
+        List<RankUser> users = null;
+        final int statusCode = response.getStatusLine().getStatusCode();
+        if (statusCode == 200) {
+            String responseMsg = EntityUtils.toString(response.getEntity());
+            users = RankUser.fromJsonUserList(responseMsg);
+        } else {
+            throw new IOException();
+        }
+        return users;
+
+    }
 }

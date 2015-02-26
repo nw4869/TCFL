@@ -25,6 +25,7 @@ import com.nightwind.tcfl.activity.PikachuActivity;
 import com.nightwind.tcfl.activity.ProfileActivity;
 import com.nightwind.tcfl.R;
 import com.nightwind.tcfl.activity.RegistrationActivity;
+import com.nightwind.tcfl.activity.ReviewListActivity;
 import com.nightwind.tcfl.activity.TestActivity;
 import com.nightwind.tcfl.activity.TranslateActivity;
 import com.nightwind.tcfl.tool.localDB.LocalDBTestActivity;
@@ -247,7 +248,7 @@ public class PersonCenterFragment extends Fragment implements View.OnClickListen
                     getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
                 } else if (id == 6) {
                     //找活动
-                    Intent intent = new Intent(getActivity(), RegistrationActivity.class);
+                    Intent intent = new Intent(getActivity(), ReviewListActivity.class);
                     startActivity(intent);
                     getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
                 } else if (id == 7) {

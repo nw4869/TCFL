@@ -7,6 +7,7 @@ import com.nightwind.tcfl.Auth;
 import com.nightwind.tcfl.bean.Article;
 import com.nightwind.tcfl.bean.Comment;
 import com.nightwind.tcfl.bean.User;
+import com.nightwind.tcfl.exception.AuthenticationException;
 import com.nightwind.tcfl.server.ServerConfig;
 import com.nightwind.tcfl.tool.BaseTools;
 import com.nightwind.tcfl.tool.encryptionUtil.RSAUtils;
@@ -16,11 +17,14 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -317,6 +321,7 @@ public class ArticleController {
     static public final int GET_ARTICLE_TYPE_NORMAL = 0;
     static public final int GET_ARTICLE_TYPE_MY_ARTICLE = 1;
     static public final int GET_ARTICLE_TYPE_MY_COLLECTION = 2;
+    static public final int GET_ARTICLE_TYPE_REVIEW = 3;
 
     /**
      *
@@ -716,4 +721,43 @@ public class ArticleController {
         return commentList;
     }
 
+    public boolean uploadReview() throws AuthenticationException, IOException {
+
+        Auth auth = new Auth(mContext);
+        int uid = auth.getUid();
+        String token = auth.getToken();
+
+        if (token == null || token.equals("")|| uid == -1) {
+            throw new AuthenticationException();
+        }
+
+        String url = ServerConfig.getServer() + "MyLogin/ReviewUpload";
+        HttpPost request = new HttpPost(url);
+
+        request.setHeader("Authorization", uid + ":" + token);
+
+        HttpClient client = ServerConfig.getHttpClient();
+        HttpResponse response = client.execute(request);
+
+        boolean ok = false;
+        //判断是否请求成功
+        final int statusCode = response.getStatusLine().getStatusCode();
+        if (statusCode == 200) {
+            String responseMsg = EntityUtils.toString(response.getEntity());
+            try {
+                JSONObject jo = new JSONObject(responseMsg);
+                int errorCode = jo.getInt("errorCode");
+                if (errorCode == 0) {
+                    ok = true;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                throw new IOException();
+            }
+
+        } else if (statusCode == 403) {
+            throw new AuthenticationException();
+        }
+        return ok;
+    }
 }

@@ -1,0 +1,64 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="32dp"
+    tools:context="com.nightwind.tcfl.activity.ForgetPwdActivity">
+
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tel"
+        android:maxLength="11"
+        android:ems="9"
+        android:inputType="number"
+        android:singleLine="true"
+        android:hint="手机号码"/>
+
+    <Button
+        android:layout_marginLeft="8dp"
+        android:layout_toRightOf="@id/tel"
+        android:id="@+id/getCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_primary_button"
+        android:textColor="@android:color/white"
+        android:onClick="onGetCode"
+        android:text="@string/getVerificationCode"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:inputType="textPassword"
+        android:maxLength="18"
+        android:id="@+id/password"
+        android:layout_below="@+id/tel"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:hint="新密码"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/password"
+        android:layout_marginTop="16dp"
+        android:inputType="number"
+        android:id="@+id/code"
+        android:ems="9"
+        android:singleLine="true"
+        android:hint="验证码"/>
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/code"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/background_primary_button"
+        android:textColor="@android:color/white"
+        android:onClick="onChangePwd"
+        android:text="修改密码" />
+
+
+</RelativeLayout>

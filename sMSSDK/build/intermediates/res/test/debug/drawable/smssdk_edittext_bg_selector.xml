@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:drawable="@drawable/smssdk_input_bg_normal"/>
+    <item android:drawable="@drawable/smssdk_input_bg_focus" android:state_focused="true" android:state_pressed="false"/>
+    <item android:drawable="@drawable/smssdk_input_bg_focus" android:state_pressed="true"/>
+    <item android:drawable="@drawable/smssdk_input_bg_focus" android:state_selected="true"/>
+
+</selector><!-- From: file:/media/Data/AndroidStudioProjects/TCFL/sMSSDK/src/main/res/drawable/smssdk_edittext_bg_selector.xml --><!-- From: file:/media/Data/AndroidStudioProjects/TCFL/sMSSDK/build/intermediates/bundles/debug/res/drawable/smssdk_edittext_bg_selector.xml -->

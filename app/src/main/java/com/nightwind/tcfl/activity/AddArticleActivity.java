@@ -146,7 +146,7 @@ public class AddArticleActivity extends ActionBarActivity {
     }
 
 
-    class AddArticleTask extends AsyncTask<Article, Void, Integer> {
+    public class AddArticleTask extends AsyncTask<Article, Void, Integer> {
 
         @Override
         protected Integer doInBackground(Article... params) {

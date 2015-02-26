@@ -139,7 +139,8 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
      * @param type
      */
     public ArticleAdapter(Context context, ArrayList<Article> articleList, int type) {
-        if (type == ArticleRecyclerFragment.TYPE_COLLECTION || type ==ArticleRecyclerFragment.TYPE_MY_ARTICLE) {
+        if (type == ArticleRecyclerFragment.TYPE_COLLECTION || type ==ArticleRecyclerFragment.TYPE_MY_ARTICLE
+                || type ==ArticleRecyclerFragment.TYPE_REVIEW) {
             mContext = context;
             mListItems = articleList;
             mType = type;

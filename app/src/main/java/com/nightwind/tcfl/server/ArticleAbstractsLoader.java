@@ -49,6 +49,9 @@ public class ArticleAbstractsLoader extends DataLoader<ArrayList<Article>> {
 //            result = ArticleController.getMyArticleList();
             String username = new Auth(getContext()).getUsername();
             result =  ac.getMyArticleAbstracts(username, mBeginPage, mEndPage, ArticleController.GET_ARTICLE_TYPE_MY_ARTICLE);
+        } else if (mType == ArticleRecyclerFragment.TYPE_REVIEW) {
+            String username = new Auth(getContext()).getUsername();
+            result =  ac.getMyArticleAbstracts(username, mBeginPage, mEndPage, ArticleController.GET_ARTICLE_TYPE_REVIEW);
         }
         return result;
     }
